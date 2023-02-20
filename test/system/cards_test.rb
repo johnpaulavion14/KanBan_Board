@@ -14,6 +14,7 @@ class CardsTest < ApplicationSystemTestCase
     visit cards_url
     click_on "New card"
 
+    fill_in "Card title", with: @card.card_title
     click_on "Create Card"
 
     assert_text "Card was successfully created"
@@ -24,6 +25,7 @@ class CardsTest < ApplicationSystemTestCase
     visit card_url(@card)
     click_on "Edit this card", match: :first
 
+    fill_in "Card title", with: @card.card_title
     click_on "Update Card"
 
     assert_text "Card was successfully updated"
