@@ -9,12 +9,12 @@ default: &default
 
 development:
   <<: *default
-  database: journal_postgresql
+  database: kanban_board_postgresql
   
 test:
   <<: *default
-  database: journal_test
+  database: kanban_board_test
 
 production:
   <<: *default
-  database: journal_prod
+  database: kanban_board_prod
