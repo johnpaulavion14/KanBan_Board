@@ -4,11 +4,12 @@
 
 <div id="cards">
   <% @cards.each do |card| %>
+    <div class="card_bg" >
     <%= render card %>
-    <p>
-      <%= link_to "Show this card", card %>
-    </p>
+    </div>
   <% end %>
 </div>
 
-<%= link_to "New card", new_card_path %>
+<%= link_to "+ Add another list", new_card_path, class:"btn btn-info" %>
+
+

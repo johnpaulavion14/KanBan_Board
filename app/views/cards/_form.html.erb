@@ -11,12 +11,13 @@
     </div>
   <% end %>
 
-  <div>
+  <div class="pb-1">
     <%= form.label :card_title, style: "display: block" %>
-    <%= form.text_field :card_title %>
+    <%= form.text_field :card_title, placeholder: "Enter list title...", class:"input_border" %>
   </div>
 
   <div>
-    <%= form.submit %>
+    <%= form.submit "Add list", class:"btn btn-primary" %>
+    <%= link_to "X", cards_path, class:"btn btn-primary" %>
   </div>
 <% end %>

@@ -13,3 +13,25 @@
  *= require_tree .
  *= require_self
  */
+
+ .add_list_btn {
+   background-color: #3d88b5;
+
+ }
+ .new_card {
+  width: fit-content;
+  padding: 0.5em;
+  background-color: #ebecf0;
+  border-radius: 6px;
+ }
+ .input_border {
+  border-color: blue;
+  padding: 5px 10px;
+ }
+ .card_bg {
+  width: 15%;
+  padding: 1em;
+  background-color: #ebecf0;
+  margin: 1em;
+  border-radius: 6px;
+ }
