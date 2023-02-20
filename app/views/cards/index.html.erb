@@ -2,14 +2,14 @@
 
 <h1>Cards</h1>
 
-<div id="cards">
+<div id="cards" class="card_container">
   <% @cards.each do |card| %>
     <div class="card_bg" >
     <%= render card %>
     </div>
   <% end %>
+  <%= link_to "+ Add another list", new_card_path, class:"add_list_btn" %>
 </div>
 
-<%= link_to "+ Add another list", new_card_path, class:"btn btn-info" %>
 
 

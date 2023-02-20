@@ -13,16 +13,25 @@
  *= require_tree .
  *= require_self
  */
-
+  .card_container {
+    display: flex;
+  }
  .add_list_btn {
+   color: white;
+   text-decoration: none;
    background-color: #3d88b5;
+   border-radius: 5px;
+   padding: 1em;
+   height: min-content;
+   width: 15%;
+   margin: .5em;
 
  }
  .new_card {
   width: fit-content;
   padding: 0.5em;
   background-color: #ebecf0;
-  border-radius: 6px;
+  border-radius: 5px;
  }
  .input_border {
   border-color: blue;
@@ -32,6 +41,9 @@
   width: 15%;
   padding: 1em;
   background-color: #ebecf0;
-  margin: 1em;
-  border-radius: 6px;
+  margin: .5em;
+  border-radius: 5px;
+ }
+ .card_title:hover{
+  cursor: pointer;
  }
