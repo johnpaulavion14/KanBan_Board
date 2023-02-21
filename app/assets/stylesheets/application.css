@@ -99,4 +99,18 @@
 .back-btn {
   color: blue;
 }
-
+/* Navbar */
+.navbar {
+  font-family: 'Roboto', sans-serif;
+  color: white;
+  height: 60px;
+  background-color: #0066a0;
+}
+.search-bar {
+  color: white;
+  background-color: #3385b3;
+  font-size: 1rem;
+  border: 0;
+  border-radius: 7px;
+  padding-left: 10px;
+}
