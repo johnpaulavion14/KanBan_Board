@@ -1,0 +1,35 @@
+<div class="login_bg">
+  <h1 class="login-title">CEM KanBan Board</h1>
+  <div class="login_container">
+    <p>Sign up to CEMBoard</p>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <%= render "users/shared/error_messages", resource: resource %>
+    
+      <div class="field">
+        <%= f.label :email %><br />
+        <%= f.email_field :email, autofocus: true, autocomplete: "email",class:"w-100", placeholder:"Enter email" %>
+      </div>
+    
+      <div class="field mt-2">
+        <%= f.label :password %>
+        <% if @minimum_password_length %>
+        <em>(<%= @minimum_password_length %> characters minimum)</em>
+        <% end %><br />
+        <%= f.password_field :password, autocomplete: "new-password",class:"w-100", placeholder:"Enter password" %>
+      </div>
+    
+      <div class="field mt-2">
+        <%= f.label :password_confirmation %><br />
+        <%= f.password_field :password_confirmation, autocomplete: "new-password",class:"w-100",placeholder:"Confirm password" %>
+      </div>
+    
+      <div class="actions mt-3">
+        <%= f.submit "Sign up", class:"continue-btn" %>
+      </div>
+    <% end %>
+    <div class="mt-3">
+      <%= link_to "<-- go back", root_path, method: :ge, class:"back-btn" %>
+    </div>
+  </div>
+
+</div>

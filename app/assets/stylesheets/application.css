@@ -41,9 +41,62 @@
   width: 15%;
   padding: 1em;
   background-color: #ebecf0;
-  margin: .5em;
+  margin-left: 1em;
   border-radius: 5px;
  }
  .card_title:hover{
   cursor: pointer;
  }
+
+/* Login Page */
+.login_bg {
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ebecf0;
+  width: 100vw;
+  height: 100vh;
+  padding-top: 2em;
+
+}
+.login-title {
+  color: #253858;
+  font-weight: 700;
+}
+.login_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 2em;
+  border-radius: 2px;
+  box-shadow: 0 0 5px 5px rgb(153, 146, 146);
+  margin-top: 2em;
+}
+.login_container p {
+  color:#5e6c84;
+  font-weight: 500;
+}
+.continue-btn {
+  width: 100%;
+  color: white;
+  background-color: #5aac44;
+  padding: 0.5rem 0;
+  border: 1px;
+  border-radius: 7px;
+  font-weight: 700;
+}
+.signup-btn {
+  color: blue;
+  width: 100%;
+  border:0;
+  background-color: #ffffff;
+  margin-top: 3em;
+  font-weight: 200;
+
+}
+.back-btn {
+  color: blue;
+}
+

@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :cards
-  devise_for :users
+  devise_for :users, path: 'users', controllers: { sessions: "users/sessions", registrations: 'users/registrations'  }
   get 'dashboard/index'
 
 

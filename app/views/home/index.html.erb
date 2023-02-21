@@ -1,6 +1,11 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<div class="login_bg">
+  <h1 class="login-title">CEM KanBan Board</h1>
+  <div class="login_container">
+    <p>Welcome to CEM Board</p>
+    <div>
+    <%= button_to "Login", dashboard_index_path, method: :get, class:"continue-btn" %>
+    <%= button_to "Can't log in? - Sign up for an account", new_user_registration_path, method: :get, class:"signup-btn" %>
+    </div>
+  </div>
 
-<%= button_to "Log In", dashboard_index_path, method: :get%>
-<%= button_to "Register", new_user_registration_path, method: :get%>
-
+</div>
