@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @addcard %>
+
+<div>
+  <%= link_to "Edit this addcard", edit_addcard_path(@addcard) %> |
+  <%= link_to "Back to addcards", addcards_path %>
+
+  <%= button_to "Destroy this addcard", @addcard, method: :delete %>
+</div>
