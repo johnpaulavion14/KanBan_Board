@@ -29,9 +29,12 @@
  }
  .new_card {
   width: fit-content;
-  padding: 0.5em;
+  padding: 1em;
   background-color: #ebecf0;
   border-radius: 5px;
+ }
+ .card-heading{
+  font-weight: 600;
  }
  .input_border {
   border-color: blue;
@@ -44,9 +47,17 @@
   margin-left: 1em;
   border-radius: 5px;
  }
- .card_title:hover{
-  cursor: pointer;
+ .card_title .section-name{
+  color: black;
+  text-decoration: none;
  }
+ .pencil-con {
+  display: none;
+}
+.card_title:hover + .pencil-con{
+  display: block;
+  cursor: pointer;
+}
 
 /* Login Page */
 .login_bg {

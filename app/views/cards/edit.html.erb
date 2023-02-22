@@ -1,10 +1,11 @@
-<h1>Editing card</h1>
+<div class="new_card mx-auto mt-5">
+  <h3 class="card-heading">Editing Card</h3>
+  <%= render "form", card: @card %>
+  <div>
 
-<%= render "form", card: @card %>
-
-<br>
-
-<div>
-  <%= link_to "Show this card", @card %> |
-  <%= link_to "Back to cards", cards_path %>
+  <div>
+    <%= button_to "Delete Card", @card, method: :delete, class:"btn btn-danger mt-2"%> 
+  </div>
 </div>
+</div>
+

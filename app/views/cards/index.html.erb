@@ -1,13 +1,16 @@
-<%= render 'navbar' %>
-
 <div id="cards" class="card_container">
   <% @cards.each do |card| %>
     <div class="card_bg" >
-    <%= render card %>
+      <div class="d-flex justify-content-between">
+        <p class="card_title">
+          <%=link_to card.card_title,edit_card_path(card), class:"section-name" %>
+        </p>
+        <div class="pencil-con">    
+          <span class="fa fa-pencil"></span>
+        </div>
+      </div>
     </div>
   <% end %>
   <%= link_to "+ Add another list", new_card_path, class:"add_list_btn" %>
 </div>
-
-
 
