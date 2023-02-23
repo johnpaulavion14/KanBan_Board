@@ -1,10 +1,17 @@
-<h1>Editing addcard</h1>
-
-<%= render "form", addcard: @addcard %>
-
-<br>
-
-<div>
-  <%= link_to "Show this addcard", @addcard %> |
-  <%= link_to "Back to addcards", addcards_path %>
+<div class="new_card mx-auto mt-5">
+  <h3 class="card-heading">Editing Addcard</h3>
+  <%= form_with scope: :addcard, url:update_addcard_path(params[:card_id],params[:addcard_id]),  method: :patch, local: true do |form| %>
+    <div class="pb-1">
+      <%= form.label :card_name, style: "display: block" %>
+      <%= form.text_field :card_name , value:@addcard.card_name%>
+    </div>
+  
+    <div>
+      <%= form.submit "Update card", class:"btn btn-primary" %>
+      <%= link_to "X", cards_path, class:"btn btn-primary" %>
+    </div>
+  <% end %>
+  <div>
+    <%= button_to "Delete Card", delete_addcard_path(params[:card_id],params[:addcard_id]), method: :delete, class:"btn btn-danger mt-2"%> 
+  </div>
 </div>

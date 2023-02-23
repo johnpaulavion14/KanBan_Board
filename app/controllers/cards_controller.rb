@@ -5,6 +5,8 @@ class CardsController < ApplicationController
   # GET /cards or /cards.json
   def index
     @cards = current_user.cards.all
+    @addcards = current_user.addcards.all
+
   end
 
   # GET /cards/1 or /cards/1.json

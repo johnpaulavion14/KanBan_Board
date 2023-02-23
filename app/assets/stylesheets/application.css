@@ -15,6 +15,8 @@
  */
   .card_container {
     display: flex;
+    min-width: 100vw;
+    overflow: scroll;
   }
  .add_list_btn {
    color: white;
@@ -41,7 +43,7 @@
   padding: 5px 10px;
  }
  .card_bg {
-  width: 15%;
+  width: 320px;
   padding: 1em;
   background-color: #ebecf0;
   margin-left: 1em;
@@ -124,3 +126,38 @@
   border-radius: 7px;
   padding-left: 10px;
 }
+
+/* Add Card feature */
+.addcard-bg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.addcard {
+  padding: 6px 12px;
+  width: 100%;
+  text-decoration: none;
+  color: gray;
+  font-family:Roboto ;
+  font-weight: 400;
+}
+.addcard:hover {
+   color: black;
+   background-color: #dbdde0;
+   border-radius: 5px;
+}
+
+
+/* Add Card section */
+.addcard-con {
+  padding: 1rem;
+  background-color: #ffffff;
+  border-radius: 5px;
+  margin-top: .7rem;
+  min-height: 80px;
+  cursor: pointer;
+ }
+ .addcard-name {
+  text-decoration: none;
+  color: black;
+ }

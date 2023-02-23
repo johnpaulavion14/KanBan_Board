@@ -1,6 +1,7 @@
 <div id="cards" class="card_container">
   <% @cards.each do |card| %>
     <div class="card_bg" >
+
       <div class="d-flex justify-content-between">
         <p class="card_title">
           <%=link_to card.card_title,edit_card_path(card), class:"section-name" %>
@@ -9,6 +10,21 @@
           <span class="fa fa-pencil"></span>
         </div>
       </div>
+
+      <div class="d-flex flex-column">
+      <% @addcards.each do |addcard| %>
+        <% if card.id == addcard.card_id %>
+          <div class="addcard-con">
+            <%= link_to addcard.card_name, edit_addcard_path(card.id, addcard.id), class:"addcard-name" %>
+          </div>
+        <% end %>
+      <% end %>
+      </div>
+
+      <div class="addcard-bg mt-3">
+        <%= link_to "+ Add a card", newcard_path(card.id, card.card_title),class:"addcard"%>
+      </div>
+
     </div>
   <% end %>
   <%= link_to "+ Add another list", new_card_path, class:"add_list_btn" %>
