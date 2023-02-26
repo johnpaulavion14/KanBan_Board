@@ -13,6 +13,11 @@
  *= require_tree .
  *= require_self
  */
+  .board-con{
+    background-color: #0079bf;
+    min-height: 100vh;
+    
+  }
   .card_container {
     display: flex;
     min-width: 100vw;
@@ -119,6 +124,20 @@
   height: 60px;
   background-color: #0066a0;
 }
+.cem-logo {
+  display: flex;
+  width: 30px;
+  height: 30px;
+}
+.nav-element {
+  padding: .5rem 1em;
+  border-radius: 5px;
+  margin-left: 1rem;
+}
+.nav-element:hover {
+  background-color: #2c9ada;
+  cursor: pointer;
+}
 .search-bar {
   background-color: white;
   font-size: 1rem;
@@ -126,7 +145,18 @@
   border-radius: 7px;
   padding-left: 10px;
 }
+.logout {
+  margin-left: 5px;
+}
+.user-log {
+  display: flex;
+  align-items: center;
+  background-color: #2c9ada;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-left: 5px;
 
+}
 /* Add Card feature */
 .addcard-bg {
   display: flex;
