@@ -59,6 +59,8 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
+  config.middleware.insert_after ActionDispatch::Static, Rack::LiveReload
+
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 
