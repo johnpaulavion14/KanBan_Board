@@ -26,6 +26,36 @@
         </div>
       </div>
     <% end %>
-      <%= link_to "+ Add another list" , new_card_path, class:"add_list_btn" %>
+      <div class="clickAddList add_list_btn">+ Add another list</div>
+      <div class="toggleCard">
+        <%= form_with scope: :card, url:create_card_path,  method: :post, local: true do |form| %>
+          <div class="pb-1">
+            <%= form.hidden_field :card_title, style: "display: block" %>
+            <%= form.text_field :card_title,required: true,placeholder: "Enter list title..." , class:"input_border" %>
+          </div>
+
+          <div>
+            <%= form.submit "Add list" , class:"btn btn-primary" %>
+            <div class="clickX btn btn-primary">X</div>
+          </div>
+        <% end %>
+      </div>
   </div>
 </div>
+
+<script>
+  const clickAddList = document.querySelector(".clickAddList")
+const card_container = document.querySelector(".card_container")
+const toggleCard = document.querySelector(".toggleCard")
+const clickX = document.querySelector(".clickX")
+
+clickAddList.addEventListener("click",function(e){
+   clickAddList.style.display ="none";
+   toggleCard.style.display = "block";
+})
+
+clickX.addEventListener("click",function(e){
+  toggleCard.style.display = "none";
+  clickAddList.style.display = "block";
+})
+</script>

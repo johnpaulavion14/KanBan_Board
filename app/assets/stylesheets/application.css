@@ -32,13 +32,24 @@
    height: min-content;
    width: 15%;
    margin: .5em;
-
+ }
+ .add_list_btn:hover {
+  cursor:pointer
  }
  .new_card {
   width: fit-content;
   padding: 1em;
   background-color: #ebecf0;
   border-radius: 5px;
+ }
+ .toggleCard {
+  display: none;
+  background-color: #ebecf0;
+  border-radius: 5px;
+  padding: 1rem;
+  height: min-content;
+  width: 15%;
+  margin: .5em;
  }
  .card-heading{
   font-weight: 600;
