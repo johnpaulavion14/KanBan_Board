@@ -3,7 +3,7 @@
   <%= form_with scope: :addcard, url:create_addcard_path(params[:id]),  method: :post, local: true do |form| %>
     <div class="pb-1">
       <%= form.label :card_name, style: "display: block" %>
-      <%= form.text_field :card_name %>
+      <%= form.text_field :card_name, required: true %>
     </div>
   
     <div>
