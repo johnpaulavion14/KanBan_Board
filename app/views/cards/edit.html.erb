@@ -1,10 +1,20 @@
 <div class="pt-3 board-con">
   <div class="new_card mx-auto mt-5">
     <h3 class="card-heading">Editing Card</h3>
-    <%= render "form" , card: @card %>
+    <%= form_with scope: :card, url:update_card_path, method: :patch, local: true do |form| %>
+      <div class="pb-1">
+        <%= form.label :card_title, style: "display: block" %>
+        <%= form.text_field :card_title,required: true,value:@card.card_title, class:"input_border" %>
+      </div>
+
+      <div>
+        <%= form.submit "Add list" , class:"btn btn-primary" %>
+        <%= link_to "X" , view_cards_path, class:"btn btn-primary" %>
+      </div>
+    <% end %>
       <div>
         <div>
-          <%= button_to "Delete Card" , @card, method: :delete, class:"btn btn-danger mt-2"%>
+          <%= button_to "Delete Card" ,delete_card_path, method: :delete, class:"btn btn-danger mt-2"%>
         </div>
       </div>
   </div>

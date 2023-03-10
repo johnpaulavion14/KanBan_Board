@@ -20,7 +20,7 @@ class AddcardsController < ApplicationController
 
   # GET /addcards/1/edit
   def edit
-    @addcard = @card.addcards.find(params[:addcard_id])
+    @addcard = @card.addcards.find(params[:id])
   end
 
   # POST /addcards or /addcards.json
@@ -29,7 +29,7 @@ class AddcardsController < ApplicationController
 
     respond_to do |format|
       if @addcard.save
-        format.html { redirect_to cards_path, notice: "Addcard was successfully created." }
+        format.html { redirect_to view_cards_path(params[:cb_id]), notice: "Addcard was successfully created." }
         format.json { render :show, status: :created, location: @addcard }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -40,10 +40,10 @@ class AddcardsController < ApplicationController
 
   # PATCH/PUT /addcards/1 or /addcards/1.json
   def update
-    @addcard = @card.addcards.find(params[:addcard_id])
+    @addcard = @card.addcards.find(params[:id])
     respond_to do |format|
       if @addcard.update(addcard_params)
-        format.html { redirect_to cards_path, notice: "Addcard was successfully updated." }
+        format.html { redirect_to view_cards_path(params[:cb_id]), notice: "Addcard was successfully updated." }
         format.json { render :show, status: :ok, location: @addcard }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -54,11 +54,11 @@ class AddcardsController < ApplicationController
 
   # DELETE /addcards/1 or /addcards/1.json
   def destroy
-    @deletecard = @card.addcards.find(params[:addcard_id])
+    @deletecard = @card.addcards.find(params[:id])
     @deletecard.destroy
 
     respond_to do |format|
-      format.html { redirect_to cards_path, notice: "Addcard was successfully destroyed." }
+      format.html { redirect_to view_cards_path(params[:cb_id]), notice: "Addcard was successfully destroyed." }
       format.json { head :no_content }
     end
   end

@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @create_board %>
+
+<div>
+  <%= link_to "Edit this create board", edit_create_board_path(@create_board) %> |
+  <%= link_to "Back to create boards", create_boards_path %>
+
+  <%= button_to "Destroy this create board", @create_board, method: :delete %>
+</div>

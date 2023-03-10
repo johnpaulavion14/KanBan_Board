@@ -4,6 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   
+  has_many :create_boards
   has_many :cards
-  has_many :addcards, through: :cards 
+  has_many :cards, through: :create_boards
 end

@@ -1,6 +1,16 @@
 <div class="pt-3 board-con">
   <div class="new_card mx-auto mt-5">
     <h3 class="card-heading">Adding New Card</h3>
-    <%= render "form" , card: @card %>
+    <%= form_with scope: :card, url:create_card_path(params[:cb_id],), method: :post, local: true do |form| %>
+      <div class="pb-1">
+        <%= form.label :card_title, style: "display: block" %>
+        <%= form.text_field :card_title,required: true,placeholder: "Enter list title..." , class:"input_border" %>
+      </div>
+
+      <div>
+        <%= form.submit "Add list" , class:"btn btn-primary" %>
+        <%= link_to "X" , view_cards_path(params[:cb_id]), class:"btn btn-primary" %>
+      </div>
+    <% end %>
   </div>
 </div>

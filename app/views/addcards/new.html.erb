@@ -3,7 +3,7 @@
     <h3 class="card-heading">
       <%= params[:card_title] %>
     </h3>
-    <%= form_with scope: :addcard, url:create_addcard_path(params[:id]), method: :post, local: true do |form| %>
+    <%= form_with scope: :addcard, url:create_addcard_path, method: :post, local: true do |form| %>
       <div class="pb-1">
         <%= form.label :card_name, style: "display: block" %>
         <%= form.text_field :card_name, required: true %>
@@ -11,7 +11,7 @@
 
       <div>
         <%= form.submit "Add card" , class:"btn btn-primary" %>
-        <%= link_to "X" , cards_path, class:"btn btn-primary" %>
+        <%= link_to "X" ,view_cards_path(params[:cb_id]), class:"btn btn-primary" %>
       </div>
     <% end %>
   </div>

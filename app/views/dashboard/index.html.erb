@@ -1,0 +1,11 @@
+<h4 class="your-boards">Your boards</h4>
+<hr class="page-line" />
+<div class="d-flex p-2">
+  <% @create_boards.each do |create_board| %>
+    <div class="create-board">
+      <b><%= link_to create_board.board_title, view_cards_path(create_board.id),class:"board-title" %></b>
+      <br>
+      <i><%= create_board.board_desc %></i>
+    </div>
+  <% end %>
+</div>

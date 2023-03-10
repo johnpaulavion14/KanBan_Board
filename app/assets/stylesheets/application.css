@@ -13,11 +13,46 @@
  *= require_tree .
  *= require_self
  */
-  .board-con{
+ /* Dashboard */
+  .your-boards {
+    font-family: 'Roboto', sans-serif;;
+    font-weight: 500;
+    margin-top: 1rem;
+    margin-left: 1rem;
+  }
+  .page-line {
+    border: 1px inset;
+    margin: 0 1rem;
+  
+  }
+  .board-con {
     background-color: #0079bf;
     min-height: 100vh;
     
   }
+  .create-board {
+    font-size: 1.2rem;
+    background-color: #0067a3;
+    color: white;
+    width: 230px;
+    height: 125px;
+    padding: 1rem;
+    margin-left: 1rem;
+    border-radius: 3px;
+   }
+  .create-board:hover {
+    cursor: pointer;
+  }
+  /* Create Board */
+  .board-title {
+    color: white;
+    text-decoration: none;
+  }
+  .board-title:hover {
+    color: white;
+  }
+
+  /* Cards */
   .card_container {
     display: flex;
     min-width: 100vw;
@@ -33,6 +68,9 @@
    width: 15%;
    margin: .5em;
 
+ }
+ .add_list_btn:hover{
+  color:black;
  }
  .new_card {
   width: fit-content;
@@ -121,7 +159,7 @@
 .navbar {
   font-family: 'Roboto', sans-serif;
   color: white;
-  height: 60px;
+  /* height: 60px; */
   background-color: #0066a0;
 }
 .cem-logo {
@@ -129,10 +167,28 @@
   width: 30px;
   height: 30px;
 }
+.cem-kanban {
+  text-decoration: none;
+  color: white;
+}
+.cem-kanban:hover {
+  color: white;
+}
+.create-btn {
+  text-decoration: none;
+  color: white;
+}
+.create-btn:hover {
+  color: white;
+}
 .nav-element {
-  padding: .5rem 1em;
+  display: flex;
+  align-items: center;
+  padding: .5rem 1rem;
   border-radius: 5px;
   margin-left: 1rem;
+  text-decoration: none;
+
 }
 .nav-element:hover {
   background-color: #2c9ada;
