@@ -101,8 +101,9 @@
   color:black;
  }
  .new_card {
-  width: fit-content;
-  padding: 1em;
+  width: 760px;
+  min-height: 700px;
+  padding: 2rem;
   background-color: #ebecf0;
   border-radius: 5px;
  }

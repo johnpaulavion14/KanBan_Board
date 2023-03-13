@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_13_050741) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_13_083642) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,6 +19,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_13_050741) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "card_id"
+    t.text "desc"
     t.index ["card_id"], name: "index_addcards_on_card_id"
   end
 

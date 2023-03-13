@@ -1,6 +1,7 @@
 <div class="pt-3 board-con">
   <div class="new_card mx-auto mt-5">
-    <h3 class="card-heading">Editing Addcard</h3>
+    <h4 class="card-heading"><%= @addcard.card_name %></h4>
+    <p>in list <u>adsfadsf</u></p>
     <%= form_with scope: :addcard, url:update_addcard_path, method: :patch, local:true do |form| %>
       <div class="pb-1">
         <%= form.label :card_name, style: "display: block" %>
