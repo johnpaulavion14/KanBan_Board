@@ -1,14 +1,25 @@
 class CreateBoardsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_create_board, only: %i[ show edit update destroy ]
+  before_action :set_create_board, only: %i[ show update_group edit update destroy ]
 
   # GET /create_boards or /create_boards.json
   def index
-    @create_boards = current_user.create_boards.all
+    @create_boards = current_user.create_boards.where(group:false)
   end
 
   # GET /create_boards/1 or /create_boards/1.json
+  def update_group
+    @create_board.update(group:params[:group])
+    redirect_to dashboard_path
+  end
+
   def show
+    if current_user.create_boards.where(id:params[:id]) == []
+      @private = false
+      @user = CreateBoard.find_by(id:params[:id]).user.email
+    else
+      @private = true
+    end
   end
 
   # GET /create_boards/new
@@ -61,7 +72,7 @@ class CreateBoardsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_create_board
-      @create_board = current_user.create_boards.find(params[:id])
+      @create_board = CreateBoard.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

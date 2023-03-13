@@ -2,25 +2,47 @@
 <hr class="page-line" />
 <div class="d-flex p-2">
   <% @create_boards.each do |create_board| %>
-    <div class="create-board">
-      <section class="d-flex justify-content-between align-items-center">
-        <b><%= link_to create_board.board_title, view_cards_path(create_board.id),class:"board-title" %></b>
-        <div>
-          <%= link_to edit_create_board_path(create_board.id), class:"three-dots" do %>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-              <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-            </svg>
-          <% end %>
+      <div class="create-board">
+        <section class="d-flex justify-content-between align-items-center">
+          <b><%= link_to create_board.board_title,edit_create_board_path(create_board.id), class:"board-title" %></b>
+          <div>
+            <%= link_to show_board_path(create_board.id,{from:"private"}), class:"three-dots" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+              </svg>
+            <% end %>
+          </div>
+        </section>
+        <div class="mt-2">
+          <i><%= link_to create_board.board_desc, view_cards_path(create_board.id),class:"link-cards"%></i>
         </div>
-      </section>
-      <div class="mt-2">
-        <i><%= create_board.board_desc %></i>
       </div>
-    </div>
   <% end %>
 </div>
+
+
 <div class="mt-5">
   <h4 class="your-boards">Group boards</h4>
   <hr class="page-line" />
+  <div class="d-flex p-2">
+    <% @group_boards.each do |group_board| %>
+        <div class="create-board">
+          <section class="d-flex justify-content-between align-items-center">
+            <b><%= link_to group_board.board_title,edit_create_board_path(group_board.id), class:"board-title" %></b>
+            <div>
+              <%= link_to create_board_path(group_board.id), class:"three-dots" do %>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                  <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                </svg>
+              <% end %>
+            </div>
+          </section>
+          <div class="mt-2">
+            <i><%= link_to group_board.board_desc, view_cards_path(group_board.id),class:"link-cards"%></i>
+          </div>
+        </div>
+    <% end %>
+  </div>
 
 </div>
+

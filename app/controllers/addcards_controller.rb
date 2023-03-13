@@ -70,7 +70,7 @@ class AddcardsController < ApplicationController
     # end
 
     def get_card
-      @card = current_user.cards.find(params[:card_id])
+      @card = Card.find(params[:card_id])
     end
 
     # Only allow a list of trusted parameters through.

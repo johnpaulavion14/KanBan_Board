@@ -5,8 +5,8 @@ class CardsController < ApplicationController
   # GET /cards or /cards.json
   def index
     # @cards = current_user.create_boards.find(params[:cb_id]).cards
-    @cards = current_user.create_boards.find(params[:cb_id]).cards
-    @addcards = current_user.create_boards.find(params[:cb_id]).addcards
+    @cards = CreateBoard.find(params[:cb_id]).cards
+    @addcards = CreateBoard.find(params[:cb_id]).addcards
     
   end
 
@@ -21,12 +21,12 @@ class CardsController < ApplicationController
 
   # GET /cards/1/edit
   def edit
-    @card = current_user.create_boards.find(params[:cb_id]).cards.find(params[:card_id])
+    @card = CreateBoard.find(params[:cb_id]).cards.find(params[:card_id])
   end
 
   # POST /cards or /cards.json
   def create
-    @card = current_user.create_boards.find(params[:cb_id]).cards.new(card_params)
+    @card = CreateBoard.find(params[:cb_id]).cards.new(card_params)
 
     respond_to do |format|
       if @card.save
@@ -42,7 +42,7 @@ class CardsController < ApplicationController
   # PATCH/PUT /cards/1 or /cards/1.json
   def update
     respond_to do |format|
-      @card = current_user.create_boards.find(params[:cb_id]).cards.find(params[:card_id])
+      @card = CreateBoard.find(params[:cb_id]).cards.find(params[:card_id])
       if @card.update(card_params)
         format.html { redirect_to view_cards_path(params[:cb_id]), notice: "Card was successfully updated." }
         format.json { render :show, status: :ok, location: @card }
@@ -55,7 +55,7 @@ class CardsController < ApplicationController
 
   # DELETE /cards/1 or /cards/1.json
   def destroy
-    @card = current_user.create_boards.find(params[:cb_id]).cards.find(params[:card_id])
+    @card = CreateBoard.find(params[:cb_id]).cards.find(params[:card_id])
     @card.destroy
 
     respond_to do |format|

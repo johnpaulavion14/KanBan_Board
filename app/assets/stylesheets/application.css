@@ -39,6 +39,7 @@
     padding: .5rem;
     margin-left: 1rem;
     border-radius: 3px;
+    
    }
   .create-board:hover {
     cursor: pointer;
@@ -56,6 +57,19 @@
     color: white;
     background-color: #0b80c4;
   }
+  .board-line {
+    color: black;
+    border: 1px inset;
+    margin: 0 10px;
+  
+  }
+  .link-cards {
+    text-decoration: none;
+    color: white;
+  }
+  .link-cards:hover {
+    color: white;
+  }
   /* Create Board */
   .board-title {
     color: white;
@@ -70,7 +84,7 @@
   .card_container {
     display: flex;
     min-width: 100vw;
-    overflow: scroll;
+    /* overflow: scroll; */
   }
  .add_list_btn {
    color: white;
