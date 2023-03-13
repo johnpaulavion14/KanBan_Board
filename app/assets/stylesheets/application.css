@@ -36,17 +36,31 @@
     color: white;
     width: 230px;
     height: 125px;
-    padding: 1rem;
+    padding: .5rem;
     margin-left: 1rem;
     border-radius: 3px;
    }
   .create-board:hover {
     cursor: pointer;
   }
+  .three-dots {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    border-radius: 5px;
+    padding: .7rem;
+    
+  }
+  .three-dots:hover {
+    color: white;
+    background-color: #0b80c4;
+  }
   /* Create Board */
   .board-title {
     color: white;
     text-decoration: none;
+    margin-left: .5rem;
   }
   .board-title:hover {
     color: white;

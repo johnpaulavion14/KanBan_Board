@@ -39,7 +39,7 @@ class CreateBoardsController < ApplicationController
   def update
     respond_to do |format|
       if @create_board.update(create_board_params)
-        format.html { redirect_to create_board_url(@create_board), notice: "Create board was successfully updated." }
+        format.html { redirect_to dashboard_index_path, notice: "Create board was successfully updated." }
         format.json { render :show, status: :ok, location: @create_board }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -53,7 +53,7 @@ class CreateBoardsController < ApplicationController
     @create_board.destroy
 
     respond_to do |format|
-      format.html { redirect_to create_boards_url, notice: "Create board was successfully destroyed." }
+      format.html { redirect_to dashboard_index_path, notice: "Create board was successfully destroyed." }
       format.json { head :no_content }
     end
   end

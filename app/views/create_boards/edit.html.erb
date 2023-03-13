@@ -1,10 +1,26 @@
-<h1>Editing create board</h1>
+<div class="pt-3 board-con">
+  <div class="new_card mx-auto mt-5">
+    <h3 class="card-heading">Editing Board</h3>
+    <%= form_with scope: :create_board, url:update_board_path(params[:id]), method: :patch, local: true do |form| %>
+      <div class="pb-1">
+        <%= form.label :board_title, style: "display: block" %>
+        <%= form.text_field :board_title,required: true,value:@create_board.board_title, class:"input_border" %>
+      </div>
+      <div class="pb-1">
+        <%= form.label :board_desc, style: "display: block" %>
+        <%= form.text_field :board_desc,value:@create_board.board_desc, class:"input_border" %>
+      </div>
 
-<%= render "form", create_board: @create_board %>
-
-<br>
-
-<div>
-  <%= link_to "Show this create board", @create_board %> |
-  <%= link_to "Back to create boards", create_boards_path %>
+      <div>
+        <%= form.submit "Add board" , class:"btn btn-primary" %>
+        <%= link_to "X" , dashboard_index_path, class:"btn btn-primary" %>
+      </div>
+    <% end %>
+      <div>
+        <div>
+          <%= button_to "Delete Board" ,delete_board_path, method: :delete, class:"btn btn-danger mt-2"%>
+        </div>
+      </div>
+  </div>
 </div>
+

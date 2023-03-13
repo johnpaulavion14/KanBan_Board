@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   get 'dashboard' => 'dashboard#index', as: 'dashboard'
   root 'home#index'
   #create_board
+  patch	'create_boards/:id' => 'create_boards#update', as: 'update_board'
+  delete 'create_boards/:id' => 'create_boards#destroy', as: 'delete_board'
   resources :create_boards
 
   #cards
