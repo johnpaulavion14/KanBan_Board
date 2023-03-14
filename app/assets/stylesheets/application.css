@@ -88,17 +88,19 @@
   }
  .add_list_btn {
    color: white;
-   text-decoration: none;
+   /* text-decoration: none; */
    background-color: #3d88b5;
    border-radius: 5px;
    padding: 1em;
    height: min-content;
    width: 15%;
-   margin: .5em;
-
+   margin: 0 .5rem;
+   transition: height 2s;
  }
  .add_list_btn:hover{
-  color:black;
+  color:white;
+  cursor: pointer;
+  background-color: #4997c7;
  }
  .new_card {
   width: 760px;
@@ -113,7 +115,13 @@
  .input_border {
   border-color: blue;
   padding: 5px 10px;
+  border-radius: 3px;
+  /* border: 2px solid red; */
  }
+ /* input[type=text] {
+  border: 2px solid red;
+  border-radius: 4px;
+} */
  .card_bg {
   width: 320px;
   padding: 1em;
@@ -131,6 +139,15 @@
 .card_title:hover + .pencil-con{
   display: block;
   cursor: pointer;
+}
+.toggleCard {
+  display: none;
+  width: 15%;
+  padding: 1em;
+  height: min-content;
+  background-color: #ebecf0;
+  margin: 0 .5rem;
+  border-radius: 5px;
 }
 
 /* Login Page */

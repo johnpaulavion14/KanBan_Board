@@ -26,6 +26,22 @@
         </div>
       </div>
     <% end %>
-    <%= link_to "+ Add another list" , new_card_path, class:"add_list_btn" %>
+  <div class="clickAddList add_list_btn">+ Add another list</div>
+    <div class="toggleCard">
+      <%= form_with scope: :card, url:create_card_path(params[:cb_id],), method: :post, local: true do |form| %>
+        <div class="pb-1">
+          <%= form.text_field :card_title,required: true,type:"text",placeholder: "Enter list title..." , class:"input_border" %>
+        </div>
+        <div>
+          <%= form.submit "Add list" , class:"btn btn-primary" %>
+          <div class="clickX btn btn-primary">X</div>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>
+
+
+
+
+
