@@ -13,7 +13,12 @@
 
         <div>
           <%= form.submit "Create board" , class:"btn btn-primary" %>
-          <%= link_to "X" , dashboard_path, class:"btn btn-primary" %>
+
+          <% if params[:board_id] %>
+            <%= link_to "X" , view_cards_path(params[:board_id]), class:"btn btn-primary" %>
+          <% else %>
+            <%= link_to "X" , dashboard_path, class:"btn btn-primary" %>
+          <% end %>
         </div>
       <% end %>
   </div>

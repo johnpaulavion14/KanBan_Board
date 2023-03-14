@@ -5,7 +5,7 @@
       <div class="m-auto"><%= link_to 'CEM KanBan',dashboard_path, class:"cem-kanban" %></div>
     </div>
     <div class="nav-element ">
-      <%= link_to 'Create', new_create_board_path, class:"create-btn" %>
+      <%= link_to 'Create', new_create_board_path({board_id:params[:cb_id]}), class:"create-btn" %>
     </div>
   </div>
   <div class="d-flex align-items-center">

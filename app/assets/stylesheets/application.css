@@ -124,6 +124,7 @@
 } */
  .card_bg {
   width: 320px;
+  height: min-content;
   padding: 1em;
   background-color: #ebecf0;
   margin-left: 1em;
