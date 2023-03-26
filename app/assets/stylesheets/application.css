@@ -110,7 +110,14 @@
   border-radius: 5px;
  }
  .card-heading{
+  font-size: 2rem;
   font-weight: 600;
+ }
+ .addcards_X{
+  font-size: 2rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: black;
  }
  .input_border {
   border-color: blue;

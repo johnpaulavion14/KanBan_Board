@@ -15,7 +15,7 @@
           <% @addcards.each do |addcard| %>
             <% if card.id==addcard.card_id %>
               <div class="addcard-con">
-                <%= link_to addcard.card_name, edit_addcard_path(params[:cb_id],card.id, addcard.id), class:"addcard-name" %>
+                <%= link_to addcard.card_name, view_addcards_path(params[:cb_id],card.id, addcard.id), class:"addcard-name" %>
               </div>
             <% end %>
           <% end %>

@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   delete 'card/:cb_id/:card_id' => 'cards#destroy', as: 'delete_card'
   resources :cards
   # addcards
+  get 'addcards/view/:cb_id/:card_id/:id' => 'addcards#index', as: 'view_addcards'
   get 'newcard/:cb_id/:card_id' => 'addcards#new', as: 'newcard'
   post 'addcards/:cb_id/:card_id' => 'addcards#create', as: 'create_addcard'
   get 'addcards/edit/:cb_id/:card_id/:id' => 'addcards#edit', as: 'edit_addcard'

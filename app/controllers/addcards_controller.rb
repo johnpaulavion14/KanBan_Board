@@ -1,12 +1,12 @@
 class AddcardsController < ApplicationController
   before_action :authenticate_user!
-  before_action :get_card, only: %i[ edit create update destroy ]
+  before_action :get_card, only: %i[ index edit create update destroy ]
   # before_action :set_addcard, only: %i[ show edit update destroy ]
 
   # GET /addcards or /addcards.json
   def index
-    # @addcards = current_user.cards.find(10).addcards.all
-    # @addcards = Addcard.all
+    @addcard = @card.addcards.find(params[:id])
+    @card_name = @addcard.card
   end
 
   # GET /addcards/1 or /addcards/1.json

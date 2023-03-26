@@ -1,14 +1,12 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Addcards</h1>
-
-<div id="addcards">
-  <% @addcards.each do |addcard| %>
-    <%= render addcard %>
-    <p>
-      <%= link_to "Show this addcard", addcard %>
-    </p>
-  <% end %>
+<div class="pt-3 board-con">
+  <div class="new_card mx-auto mt-5">
+    <div class="d-flex align-items-center justify-content-between">
+      <span class="card-heading"><%= @addcard.card_name %></span>
+      <span><%= link_to "X" , view_cards_path, class:"addcards_X" %></span>
+    </div>
+    <p>in list <u><%= @card_name.card_title %></u></p>
+    <div>
+      <%= button_to "Delete Card" , delete_addcard_path, method: :delete,class:"btn btn-danger mt-2"%>
+    </div>
+  </div>
 </div>
-
-<%= link_to "New addcard", new_addcard_path %>
