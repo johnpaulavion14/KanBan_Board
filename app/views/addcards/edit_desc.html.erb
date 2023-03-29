@@ -1,0 +1,15 @@
+<div class="pt-3 board-con">
+  <div class="new_card mx-auto mt-5">
+    <p><u>Edit Description</u></p>
+    <%= form_with scope: :addcard, url:update_addcard_path, method: :patch, local:true do |form| %>
+      <div class="pb-1">
+        <%= form.text_area :desc , value:@addcard.desc, size: "70x10"%>
+      </div>
+
+      <div>
+        <%= form.submit "Save" , class:"btn btn-primary" %>
+        <%= link_to "Cancel" , view_addcards_path, class:"btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

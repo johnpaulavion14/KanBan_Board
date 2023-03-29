@@ -110,14 +110,14 @@
   border-radius: 5px;
  }
  .card-heading{
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 600;
  }
  .addcards_X{
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 600;
   text-decoration: none;
-  color: black;
+  color:black;
  }
  .input_border {
   border-color: blue;
@@ -300,4 +300,18 @@
  .addcard-name {
   text-decoration: none;
   color: black;
+ }
+ .edit-desc{
+  background-color: #ddddddd7;
+  color: black;
+  padding: .5rem 1rem;
+  border-radius: 5px;
+  margin-left: .6rem;
+
+ }
+ .edit-desc:hover{
+  color:black
+ }
+ .desc-area {
+  height: 100px;
  }

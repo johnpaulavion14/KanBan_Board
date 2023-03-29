@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   get 'newcard/:cb_id/:card_id' => 'addcards#new', as: 'newcard'
   post 'addcards/:cb_id/:card_id' => 'addcards#create', as: 'create_addcard'
   get 'addcards/edit/:cb_id/:card_id/:id' => 'addcards#edit', as: 'edit_addcard'
+  get 'addcards/edit_desc/:cb_id/:card_id/:id' => 'addcards#edit_desc', as: 'edit_desc'
   patch 'addcards/:cb_id/:card_id/:id' => 'addcards#update', as: 'update_addcard'
   delete 'addcards/:cb_id/:card_id/:id' => 'addcards#destroy', as: 'delete_addcard'
   resources :addcards
