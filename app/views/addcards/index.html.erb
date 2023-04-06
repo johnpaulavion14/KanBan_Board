@@ -14,7 +14,47 @@
     </div>
 
     <div>
-      <%= button_to "Delete Card" , delete_addcard_path, method: :delete,class:"btn btn-danger mt-2"%>
+      <%= form_with scope: :addcomment, url:create_addcomment_path, method: :post, local: true do |form| %>
+        <%= form.hidden_field :addcard_id, value: @addcard.id %>
+        <%= form.hidden_field :user_name, value: current_user.email %>
+        <span>JP</span>
+        <span>
+          <%= form.text_field :comment,required: true,type:"text",placeholder: "Write a comment..." %>
+        </span>
+        <span>
+          <%= form.submit "Save" , class:"btn btn-primary" %>
+        </span>
+      <% end %>
     </div>
+
+    <div>
+      <% @comments.each do |comment| %>
+        <div class="mt-3">
+          <div>
+            <span><%= comment.user_name %></span>
+            <span><%= comment.updated_at.strftime("%b %d at %I:%M%p") %></span>
+          </div>
+          <div class="comment-area">
+            <%= comment.comment %>
+          </div>
+          <% if comment.user_name == current_user.email%>
+            <div>
+              <span><%= link_to "Edit",edit_comment_path({comment_id:comment.id}) %> </span>
+              <span><%= link_to 'Delete', delete_addcomment_path({comment_id:comment.id}),
+                data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %>
+              </span>
+            </div>
+            <% else %>
+              <div>
+                <span><%= link_to "Reply"%> </span>
+              </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- <div>
+      <%= button_to "Delete Card" , delete_addcard_path, method: :delete,class:"btn btn-danger mt-2"%>
+    </div> -->
   </div>
 </div>

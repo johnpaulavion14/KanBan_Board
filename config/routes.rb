@@ -26,10 +26,15 @@ Rails.application.routes.draw do
   post 'addcards/:cb_id/:card_id' => 'addcards#create', as: 'create_addcard'
   get 'addcards/edit/:cb_id/:card_id/:id' => 'addcards#edit', as: 'edit_addcard'
   get 'addcards/edit_desc/:cb_id/:card_id/:id' => 'addcards#edit_desc', as: 'edit_desc'
+  get 'addcomment/edit/:cb_id/:card_id/:id' => 'addcards#edit_comment', as: 'edit_comment'
   patch 'addcards/:cb_id/:card_id/:id' => 'addcards#update', as: 'update_addcard'
   delete 'addcards/:cb_id/:card_id/:id' => 'addcards#destroy', as: 'delete_addcard'
   resources :addcards
- 
+
+  # addcomments
+  post 'addcomments/:cb_id/:card_id/:id' => 'addcomments#create', as: 'create_addcomment'
+  patch 'addcomments/:cb_id/:card_id/:id' => 'addcomments#update', as: 'update_addcomment'
+  delete 'addcomments/:cb_id/:card_id/:id' => 'addcomments#destroy', as: 'delete_addcomment'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

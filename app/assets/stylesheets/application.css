@@ -313,5 +313,13 @@
   color:black
  }
  .desc-area {
-  height: 100px;
+  min-height: 100px;
  }
+
+ /* Comments Section */
+  .comment-area {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 3px;
+    box-shadow: 0 0 1px 1px rgb(206, 206, 206);
+  }

@@ -1,0 +1,2 @@
+class Addcomment < ApplicationRecord
+end

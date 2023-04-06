@@ -1,0 +1,29 @@
+<div class="pt-3 board-con">
+  <div class="new_card mx-auto mt-5">
+    <p><u>Edit Comment</u></p>
+    <%= form_with scope: :addcomment, url:update_addcomment_path({comment_id:params[:comment_id]}), method: :patch, local:true do |form| %>
+      <div class="pb-1">
+        <%= form.text_area :comment , value:@edit_comment.comment, size: "70x10"%>
+      </div>
+
+      <div>
+        <%= form.submit "Save" , class:"btn btn-primary" %>
+        <%= link_to "Cancel" , view_addcards_path, class:"btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

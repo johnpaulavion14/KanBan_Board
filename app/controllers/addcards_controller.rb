@@ -8,6 +8,8 @@ class AddcardsController < ApplicationController
     @addcard = @card.addcards.find(params[:id])
     @card_name = @addcard.card
     @desc_value = @addcard.desc.to_s.gsub(/\n/, '<br/>').html_safe
+    @comments = Addcomment.all.where(addcard_id: params[:id]).order("created_at asc")
+
   end
 
   # GET /addcards/1 or /addcards/1.json
@@ -26,6 +28,10 @@ class AddcardsController < ApplicationController
 
   def edit_desc
     @addcard = @card.addcards.find(params[:id])
+  end
+
+  def edit_comment
+    @edit_comment = Addcomment.find(params[:comment_id])
   end
 
   # POST /addcards or /addcards.json
