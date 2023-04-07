@@ -3,6 +3,9 @@
   <div class="login_container">
     <p>Log in to CEMBoard</p>
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+
+      <%= content_tag(:div, flash[:alert], :id => "flash_alert") if flash[:alert] %>
+
       <div class="field">
         <b><%= f.label :email %></b>
         <div><%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder:"Enter email",class:"w-100 px-2" %></div>
@@ -30,3 +33,14 @@
   </div>
 
 </div>
+
+<script>
+  var error = document.querySelector("#flash_alert");
+
+  if (error.childNodes.length === 0) {
+    console.log('Element is empty');
+  } else {
+    error.classList.add("alert");
+    error.classList.add("alert-danger");
+  }
+</script>
