@@ -36,7 +36,7 @@ class AddcommentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def addcomment_params
-      params.require(:addcomment).permit(:comment, :addcard_id, :user_name)
+      params.require(:addcomment).permit(:comment, :addcard_id, :first_name, :last_name)
     end
 
 

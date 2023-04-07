@@ -28,7 +28,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_07_043309) do
     t.integer "addcard_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "user_name"
+    t.string "first_name"
+    t.string "last_name"
   end
 
   create_table "cards", force: :cascade do |t|

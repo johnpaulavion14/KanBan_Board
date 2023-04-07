@@ -10,6 +10,8 @@ class AddcardsController < ApplicationController
     @desc_value = @addcard.desc.to_s.gsub(/\n/, '<br/>').html_safe
     @comments = Addcomment.all.where(addcard_id: params[:id]).order("created_at asc")
 
+    @name_initial = current_user.first_name.chr + current_user.last_name.chr
+
   end
 
   # GET /addcards/1 or /addcards/1.json
