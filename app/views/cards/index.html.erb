@@ -41,7 +41,21 @@
   </div>
 </div>
 
+<script>
+  var clickAddList = document.querySelector(".clickAddList")
+  var toggleCard = document.querySelector(".toggleCard")
+  var clickX = document.querySelector(".clickX")
 
+  clickAddList.addEventListener("click",function(e){
+  clickAddList.style.display ="none";
+  toggleCard.style.display = "block";
+  })
+
+  clickX.addEventListener("click",function(e){
+  toggleCard.style.display = "none";
+  clickAddList.style.display = "block";
+  })
+</script>
 
 
 

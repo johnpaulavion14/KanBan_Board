@@ -5,7 +5,7 @@ class CardsController < ApplicationController
   # GET /cards or /cards.json
   def index
     # @cards = current_user.create_boards.find(params[:cb_id]).cards
-    @cards = CreateBoard.find(params[:cb_id]).cards
+    @cards = CreateBoard.find(params[:cb_id]).cards.order("created_at asc")
     @addcards = CreateBoard.find(params[:cb_id]).addcards
     
   end
