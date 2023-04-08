@@ -4,11 +4,15 @@
       <div class="card_bg">
         <div class="d-flex justify-content-between">
           <p class="card_title">
-            <b><%=link_to card.card_title,edit_card_path(params[:cb_id],card.id ), class:"section-name" %></b>
+            <b><%= card.card_title %></b>
           </p>
-          <div class="pencil-con">
-            <span class="fa fa-pencil"></span>
-          </div>
+          <%= link_to edit_card_path(params[:cb_id],card.id ) do %>
+            <div class="addcard-pencon">
+              <div class="addcard-penbox"></div>
+              <div class="addcard-pencil"><span class="fa fa-pencil"></span></div>
+            </div>
+          <% end %>
+
         </div>
 
         <div class="d-flex flex-column">
@@ -16,6 +20,12 @@
             <% if card.id==addcard.card_id %>
               <div class="addcard-con">
                 <%= link_to addcard.card_name, view_addcards_path(params[:cb_id],card.id, addcard.id), class:"addcard-name" %>
+                <%= link_to delete_addcard_path(params[:cb_id],card.id,addcard.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+                  <div class="addcard-pencon">
+                    <div class="addcard-penbox"></div>
+                    <div class="addcard-pencil"><%= image_tag ("delete.png"),class:"addcard-pen" %></div>
+                  </div>
+                <% end %>
               </div>
             <% end %>
           <% end %>
@@ -26,7 +36,7 @@
         </div>
       </div>
     <% end %>
-  <div class="clickAddList add_list_btn">+ Add another list</div>
+    <div class="clickAddList add_list_btn">+ Add another list</div>
     <div class="toggleCard">
       <%= form_with scope: :card, url:create_card_path(params[:cb_id],), method: :post, local: true do |form| %>
         <div class="pb-1">

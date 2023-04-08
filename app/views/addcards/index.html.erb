@@ -1,7 +1,15 @@
 <div class="py-5 board-con">
   <div class="new_card mx-auto">
     <div class="d-flex align-items-center justify-content-between">
-      <span class="card-heading"><%= @addcard.card_name %></span>
+      <span class="card-heading clickAddcard"><%= @addcard.card_name %></span>
+      <span class="toggleAddcard">
+        <%= form_with scope: :addcard, url:update_addcard_path, method: :patch, local: true do |form| %>
+          <span class="pb-1">
+            <%= form.text_field :card_name,required: true, class:"input_border",value:@addcard.card_name %>
+          </span>
+          <span class="clickX btn btn-primary">X</span>
+        <% end %>
+      </span>
       <span><%= link_to "X" , view_cards_path, class:"addcards_X" %></span>
     </div>
     <p>in list <u><%= @card_name.card_title %></u></p>
@@ -69,8 +77,28 @@
 
 
 <script>
+  // auto adjust comment field height
   function auto_grow(element) {
     element.style.height = "5px";
     element.style.height = (element.scrollHeight)+"px";
-}
+  }
+
+  // edit addcard name
+  var clickAddcard = document.querySelector(".clickAddcard")
+  var toggleAddcard = document.querySelector(".toggleAddcard")
+  var clickX = document.querySelector(".clickX")
+
+  toggleAddcard.style.display = "none"
+
+  clickAddcard.addEventListener("click",function(e){
+  clickAddcard.style.display ="none";
+  toggleAddcard.style.display = "block";
+  })
+
+  clickX.addEventListener("click",function(e){
+  toggleAddcard.style.display = "none";
+  clickAddcard.style.display = "block";
+  })
+
+
 </script>
