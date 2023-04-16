@@ -52,19 +52,19 @@
 </div>
 
 <script>
-  var clickAddList = document.querySelector(".clickAddList")
-  var toggleCard = document.querySelector(".toggleCard")
-  var clickX = document.querySelector(".clickX")
+  $(document).ready(function(){
+    $(".clickAddList").click(function(){
+      $(this).hide();
+      $(".toggleCard").show();
+    });
+  });
 
-  clickAddList.addEventListener("click",function(e){
-  clickAddList.style.display ="none";
-  toggleCard.style.display = "block";
-  })
-
-  clickX.addEventListener("click",function(e){
-  toggleCard.style.display = "none";
-  clickAddList.style.display = "block";
-  })
+  $(document).ready(function(){
+    $(".clickX").click(function(){
+      $(".toggleCard").hide();
+      $(".clickAddList").show();
+    });
+  });
 </script>
 
 

@@ -28,10 +28,6 @@ class AddcardsController < ApplicationController
     @addcard = @card.addcards.find(params[:id])
   end
 
-  def edit_desc
-    @addcard = @card.addcards.find(params[:id])
-  end
-
   def edit_comment
     @edit_comment = Addcomment.find(params[:comment_id])
   end

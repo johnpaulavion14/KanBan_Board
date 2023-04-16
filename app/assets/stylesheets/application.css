@@ -325,17 +325,38 @@
  }
  .edit-desc{
   background-color: #ddddddd7;
-  color: black;
   padding: .5rem 1rem;
   border-radius: 5px;
   margin-left: .6rem;
-
+  cursor: pointer;
  }
  .edit-desc:hover{
-  color:black
+  background-color: #b9b9b9d7;
  }
  .desc-area {
   min-height: 100px;
+ }
+ .save-desc {
+  font-size: 1rem;
+  color: white;
+  background-color: #0079bf;
+  padding: 6px 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+ }
+ .save-desc:hover {
+  background-color: #026299;  
+ }
+ .cancel-desc {
+  font-size: 1rem;
+  color: black;
+  padding: .5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+ }
+ .cancel-desc:hover {
+  background-color: #ddddddd7;
  }
 
  /* Comments Section */

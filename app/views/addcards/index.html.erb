@@ -15,28 +15,44 @@
     <p>in list <u><%= @card_name.card_title %></u></p>
     <div>
       <div>
-        <span class="h5">Description</span>
-        <%= link_to "Edit" , edit_desc_path, class:"h6 text-decoration-none edit-desc" %>
+        <div>
+          <span class="h5">Description</span>
+          <span class="edit-desc">Edit</span>
+        </div>
+        <div class="mt-3 desc-form">
+          <%= form_with scope: :addcard, url:update_addcard_path, method: :patch, local:true do |form| %>
+            <div class="pb-1">
+              <%= form.text_area :desc , value:@addcard.desc, size: "73x10", class:"p-3"%>
+            </div>
+      
+            <div>
+              <%= form.submit "Save" , class:"save-desc" %>
+              <span class="cancel-desc">Cancel</span>
+            </div>
+          <% end %>
+        </div>
+        <p class="mt-3 desc-area"><%= @desc_value %></p>
       </div>
-      <p class="mt-3 desc-area"><%= @desc_value %></p>
     </div>
 
-    <%= form_with scope: :addcomment, url:create_addcomment_path, method: :post, local: true do |form| %>
-      <%= form.hidden_field :addcard_id, value: @addcard.id %>
-      <%= form.hidden_field :first_name, value: current_user.first_name %>
-      <%= form.hidden_field :last_name, value: current_user.last_name %>
-      <div class="comment-header">
-        <div class="circle">
-          <span class="circle-inner"><%= @name_initial %></span>
-        </div>
-        <span>
-          <%= form.text_area :comment,required: true,placeholder: "Write a comment...",class:"comment-field",oninput:"auto_grow(this)", id:"comment" %>
-        </span>
-        <span class="mx-2">
-          <%= form.submit "Save" , class:"btn btn-primary" %>
-        </span>
-      </div>
-    <% end %>
+    <div class="mt-3">
+      <%= form_with scope: :addcomment, url:create_addcomment_path, method: :post, local: true do |form| %>
+        <%= form.hidden_field :addcard_id, value: @addcard.id %>
+        <%= form.hidden_field :first_name, value: current_user.first_name %>
+        <%= form.hidden_field :last_name, value: current_user.last_name %>
+          <div class="comment-header">
+            <div class="circle">
+              <span class="circle-inner"><%= @name_initial %></span>
+            </div>
+            <span>
+              <%= form.text_area :comment,required: true,placeholder: "Write a comment...",class:"comment-field",oninput:"auto_grow(this)", id:"comment" %>
+            </span>
+            <span class="mx-2">
+              <%= form.submit "Save" , class:"btn btn-primary" %>
+            </span>
+          </div>
+      <% end %>
+    </div>
     
     <div>
       <% @comments.each do |comment| %>
@@ -84,21 +100,38 @@
   }
 
   // edit addcard name
-  var clickAddcard = document.querySelector(".clickAddcard")
-  var toggleAddcard = document.querySelector(".toggleAddcard")
-  var clickX = document.querySelector(".clickX")
+  $(".toggleAddcard").css("display", "none")
 
-  toggleAddcard.style.display = "none"
+  $(document).ready(function(){
+    $(".clickAddcard").click(function(){
+      $(this).hide();
+      $(".toggleAddcard").show();
+    });
+  });
 
-  clickAddcard.addEventListener("click",function(e){
-  clickAddcard.style.display ="none";
-  toggleAddcard.style.display = "block";
-  })
+  $(document).ready(function(){
+    $(".clickX").click(function(){
+      $(".toggleAddcard").hide();
+      $(".clickAddcard").show();
+    });
+  });
 
-  clickX.addEventListener("click",function(e){
-  toggleAddcard.style.display = "none";
-  clickAddcard.style.display = "block";
-  })
+  //edit description
+  $(".desc-form").css("display", "none")
+  $(document).ready(function(){
+    $(".edit-desc").click(function(){
+      $(".desc-area").hide();
+      $(".desc-form").show();
+      $(".edit-desc").hide();
+    });
+  });
 
+  $(document).ready(function(){
+    $(".cancel-desc").click(function(){
+      $(".desc-form").hide();
+      $(".desc-area").show();
+      $(".edit-desc").show();
+    });
+  });
 
 </script>
