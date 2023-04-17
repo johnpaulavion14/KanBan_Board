@@ -260,20 +260,15 @@
 
 }
 /* Add Card feature */
-.addcard-bg {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 .addcard {
   padding: 6px 12px;
   width: 100%;
-  text-decoration: none;
   color: gray;
   font-family:Roboto ;
   font-weight: 400;
 }
 .addcard:hover {
+  cursor: pointer;
    color: black;
    background-color: #dbdde0;
    border-radius: 5px;
@@ -358,7 +353,15 @@
  .cancel-desc:hover {
   background-color: #ddddddd7;
  }
-
+ .form-con {
+  width: 100%;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-radius: 5px;
+  margin-top: .7rem;
+  min-height: 80px;
+  border: none;
+ }
  /* Comments Section */
   .comment-header {
     display: flex;
