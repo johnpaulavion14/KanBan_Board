@@ -259,6 +259,19 @@
   margin-left: 5px;
 
 }
+.create-relative {
+  position: relative;
+}
+.new-board {
+  position: absolute;
+  top: 50px;
+  color: black;
+  background-color:white;
+  padding: 1rem;
+  border-radius: 8px;
+  z-index: 9;
+  box-shadow: 0 0 1px 1px rgb(206, 206, 206);
+}
 /* Add Card feature */
 .addcard {
   padding: 6px 12px;
