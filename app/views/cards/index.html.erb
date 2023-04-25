@@ -1,19 +1,28 @@
 <div class="pt-3 board-con">
+  <!-- Edit Card -->
   <div id="cards" class="card_container">
     <% @cards.each do |card| %>
       <div class="card_bg">
-        <div class="d-flex justify-content-between">
-          <p class="card_title">
-            <b><%= card.card_title %></b>
-          </p>
-          <%= link_to edit_card_path(params[:cb_id],card.id ) do %>
+        <div class="card-con">
+          <b class="card_title">
+            <%= card.card_title %>
+          </b>
+          <%= link_to delete_card_path({card_id:card.id}),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
             <div class="addcard-pencon">
               <div class="addcard-penbox"></div>
-              <div class="addcard-pencil"><span class="fa fa-pencil"></span></div>
+              <div class="addcard-pencil"><%= image_tag ("delete.png"),class:"addcard-pen" %></div>
             </div>
           <% end %>
-
         </div>
+        <div class="toggleCard">
+          <%= form_with scope: :card, url:update_card_path({card_id:card.id}), method: :patch, local: true do |form| %>
+            <span class="pb-1">
+              <%= form.text_field :card_title,required: true, class:"input_border",id:"card-input" %>
+            </span>
+            <span class="cardX btn btn-primary">X</span>
+          <% end %>
+        </div>
+        <!-- Addcard feature -->
         <div class="d-flex flex-column">
           <% @addcards.each do |addcard| %>
             <% if card.id==addcard.card_id %>
@@ -46,9 +55,9 @@
         </div>
       </div>
     <% end %>
-    
+    <!-- Addlist feature -->
     <div class="clickAddList add_list_btn">+ Add another list</div>
-    <div class="toggleCard">
+    <div class="toggleAddCard">
       <%= form_with scope: :card, url:create_card_path(params[:cb_id],), method: :post, local: true do |form| %>
         <div class="pb-1">
           <%= form.text_field :card_title,required: true,type:"text",placeholder: "Enter list title..." , class:"input_border" %>
@@ -64,22 +73,22 @@
 
 
 <script>
+  // Addlist feature
   $(document).ready(function(){
     $(".clickAddList").click(function(){
       $(this).hide();
-      $(".toggleCard").show();
+      $(".toggleAddCard").show();
     });
   });
-
   $(document).ready(function(){
     $(".clickX").click(function(){
-      $(".toggleCard").hide();
+      $(".toggleAddCard").hide();
       $(".clickAddList").show();
     });
   });
 
+  // Addcard feature
   $(".addcard-form").css("display", "none")
-
   $(document).ready(function(){
     $(".addcard").click(function(){
       $(".addcard").show();
@@ -88,13 +97,30 @@
       $(this).siblings(".addcard-form").show();
     });
   });
-
   $(document).ready(function(){
     $(".cancel-desc").click(function(){
       $(".addcard-form").hide();
       $(".addcard").show();
     });
   });
+
+  // Edit Card
+  $(".toggleCard").css("display", "none")
+  $(document).ready(function(){
+    $(".card_title").click(function(){
+      $(".card-con").show();
+      $(".toggleCard").hide();
+      $(this).parent(".card-con").hide();
+      $(this).parent(".card-con").siblings(".toggleCard").show();
+    });
+  });
+  $(document).ready(function(){
+    $(".cardX").click(function(){
+      $(".toggleCard").hide();
+      $(this).parents(".toggleCard").siblings(".card-con").show();
+    });
+  });
+
 
 </script>
 

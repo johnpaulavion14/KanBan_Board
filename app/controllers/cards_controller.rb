@@ -19,11 +19,6 @@ class CardsController < ApplicationController
     @card = current_user.cards.new
   end
 
-  # GET /cards/1/edit
-  def edit
-    @card = CreateBoard.find(params[:cb_id]).cards.find(params[:card_id])
-  end
-
   # POST /cards or /cards.json
   def create
     @card = CreateBoard.find(params[:cb_id]).cards.new(card_params)
