@@ -5,12 +5,21 @@
       <div class="create-board">
         <section class="d-flex justify-content-between align-items-center">
           <b><%= link_to create_board.board_title,edit_create_board_path(create_board.id), class:"board-title" %></b>
-          <div>
-            <%= link_to show_board_path(create_board.id,{from:"private"}), class:"three-dots" do %>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-              </svg>
-            <% end %>
+          <div class="three-dots">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+              <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+            </svg>
+
+            <div class="dots-modal">
+              <div class="d-flex flex-column align-items-center">
+                <%= link_to delete_board_path(create_board.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+                  <div class="down-pic-con"><%= image_tag ("delete.png"),class:"down-pic" %></div>
+                <% end %>
+                <%= link_to update_group_path({group:"true", id:create_board.id}),method: :patch do %>
+                  <div class="down-pic-con"><%= image_tag ("down-arrow.png"),class:"down-pic mt-2" %></div>
+                <% end %>
+              </div>
+            </div>
           </div>
         </section>
         <div class="mt-2">
@@ -45,4 +54,16 @@
   </div>
 
 </div>
+
+<script>
+  $(".dots-modal").css("display", "none")
+
+  $(document).ready(function(){
+    $(".three-dots").click(function(){
+      $(this).children(".dots-modal").toggle();
+    });
+  });
+</script>
+
+
 

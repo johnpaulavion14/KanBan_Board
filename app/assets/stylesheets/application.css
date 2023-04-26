@@ -46,6 +46,7 @@
     cursor: pointer;
   }
   .three-dots {
+    position: relative;
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -71,6 +72,27 @@
   .link-cards:hover {
     color: white;
   }
+  .dots-modal {
+    position: absolute;
+    right: 5px;
+    top: 43px;
+    z-index: 9;
+    background-color:white;
+    padding: 5px;
+    border-radius: 7px;
+    box-shadow: 0 0 1px 1px rgb(206, 206, 206);
+  }
+  .down-pic-con {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  } 
+  .down-pic {
+    width: 20px;
+    height: 20px;
+    margin: auto;
+  }
+
   /* Create Board */
   .board-title {
     color: white;

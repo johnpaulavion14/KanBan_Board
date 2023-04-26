@@ -22,11 +22,6 @@ class CreateBoardsController < ApplicationController
     end
   end
 
-  # GET /create_boards/new
-  def new
-    @create_board = current_user.create_boards.new
-  end
-
   # GET /create_boards/1/edit
   def edit
   end
