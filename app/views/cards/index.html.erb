@@ -108,10 +108,12 @@
   $(".toggleCard").css("display", "none")
   $(document).ready(function(){
     $(".card_title").click(function(){
+      let input_value = $(this).text().replace(/\s/g, '');
       $(".card-con").show();
       $(".toggleCard").hide();
       $(this).parent(".card-con").hide();
       $(this).parent(".card-con").siblings(".toggleCard").show();
+      $(this).parent(".card-con").siblings(".toggleCard").find("#card-input").val(input_value);
     });
   });
   $(document).ready(function(){

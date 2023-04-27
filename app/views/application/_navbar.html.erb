@@ -2,7 +2,7 @@
   <div class="mx-2 d-flex ">
     <div class="m-auto d-flex nav-element ">
       <div class="cem-logo"><%= image_tag ("cem-logo.png") %></div>
-      <div class="m-auto"><%= link_to 'CEM KanBan',dashboard_path, class:"cem-kanban" %></div>
+      <div class="m-auto"><%= link_to 'ITS L10 MEETING',dashboard_path, class:"cem-kanban" %></div>
     </div>
     <div class="create-relative">
       <div class="nav-element create-btn">Create</div>
@@ -15,9 +15,9 @@
           </div>
           <div class="pb-1">
             <%= form.label 'Board descrition(optional)', style: "display: block" %>
-            <%= form.text_field :board_desc %>
+            <%= form.text_field :board_desc, required: true %>
           </div>
-          <%= form.submit "Save", class:"btn btn-success w-100 mt-1"%>
+          <%= form.submit "Save", class:"btn btn-primary w-100 mt-1"%>
         <% end %>
       </div>
       

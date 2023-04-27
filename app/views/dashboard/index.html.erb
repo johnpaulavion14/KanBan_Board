@@ -1,21 +1,22 @@
 <h4 class="your-boards">Your boards</h4>
 <hr class="page-line" />
 <div class="d-flex p-2">
+<span style="display:none" class="current_username"><%= current_user.id %></span>
   <% @create_boards.each do |create_board| %>
       <div class="create-board">
         <section class="d-flex justify-content-between align-items-center">
           <b><%= link_to create_board.board_title,edit_create_board_path(create_board.id), class:"board-title" %></b>
-          <div class="three-dots">
+          <div class="private-modal three-dots">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
               <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
             </svg>
 
             <div class="dots-modal">
               <div class="d-flex flex-column align-items-center">
-                <%= link_to delete_board_path(create_board.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+                <%= link_to delete_board_path(create_board.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure you want to delete?'} do %>
                   <div class="down-pic-con"><%= image_tag ("delete.png"),class:"down-pic" %></div>
                 <% end %>
-                <%= link_to update_group_path({group:"true", id:create_board.id}),method: :patch do %>
+                <%= link_to update_group_path({group:"true", id:create_board.id}),data: {turbo_method: :patch, turbo_confirm: 'Are you sure you want to move to group boards?'} do %>
                   <div class="down-pic-con"><%= image_tag ("down-arrow.png"),class:"down-pic mt-2" %></div>
                 <% end %>
               </div>
@@ -38,12 +39,25 @@
         <div class="create-board">
           <section class="d-flex justify-content-between align-items-center">
             <b><%= link_to group_board.board_title,edit_create_board_path(group_board.id), class:"board-title" %></b>
-            <div>
-              <%= link_to create_board_path(group_board.id), class:"three-dots" do %>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                  <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-                </svg>
-              <% end %>
+            <div class="group-modal three-dots">
+              <span style="display:none" class="username"><%= group_board.user_id %></span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+              </svg>
+              
+              <div class="dots-modal">
+                <div class="d-flex flex-column align-items-center">
+                  <%= link_to update_group_path({group:"false", id:group_board.id}),data: {turbo_method: :patch, turbo_confirm: 'Are you sure you want to move to your boards?'} do %>
+                  <div class="down-pic-con"><%= image_tag ("up-arrow.png"),class:"down-pic" %></div>
+                  <% end %>
+                  <%= link_to delete_board_path(group_board.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure you want to delete?'} do %>
+                  <div class="down-pic-con"><%= image_tag ("delete.png"),class:"down-pic mt-2" %></div>
+                  <% end %>
+                </div>
+              </div>
+              <div class="host-modal">
+                <span>Host: <%= group_board.user.first_name %></span> 
+              </div>
             </div>
           </section>
           <div class="mt-2">
@@ -52,17 +66,37 @@
         </div>
     <% end %>
   </div>
-
+</div>
+<!-- edit board modal -->
+<div class="pt-3 editboard-outer">
+  <div class="edit-board-con mx-auto mt-5">
+    <h3 class="card-heading">Editing Board</h3>
+  </div>
 </div>
 
 <script>
   $(".dots-modal").css("display", "none")
-
+  $(".host-modal").css("display", "none")
+// your board modal
   $(document).ready(function(){
-    $(".three-dots").click(function(){
-      $(this).children(".dots-modal").toggle();
+    $(".private-modal").click(function(){
+        $(this).children(".dots-modal").toggle();
     });
   });
+// group modal
+  $(document).ready(function(){
+    $(".group-modal").click(function(){
+      let username = $(this).find(".username").text();
+      let current_username = $(".current_username").text();
+
+      if (current_username == username) {
+        $(this).children(".dots-modal").toggle();
+      }else {
+        $(this).children(".host-modal").toggle();
+      }
+    });
+  });
+  
 </script>
 
 

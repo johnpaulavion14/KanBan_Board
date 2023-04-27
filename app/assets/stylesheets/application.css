@@ -14,6 +14,17 @@
  *= require_self
  */
  /* Dashboard */
+  body {
+    overflow: hidden;
+  }
+  .title-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .title {
+    font-family: 'Rowdies', cursive;
+  }
   .your-boards {
     font-family: 'Roboto', sans-serif;;
     font-weight: 500;
@@ -26,7 +37,7 @@
   
   }
   .board-con {
-    background-color: #0079bf;
+    background-color: #fafbfc;
     min-height: 100vh;
     min-width: 100vw;
     
@@ -82,6 +93,19 @@
     border-radius: 7px;
     box-shadow: 0 0 1px 1px rgb(206, 206, 206);
   }
+  .host-modal {
+    width: max-content;
+    position: absolute;
+    right: 5px;
+    top: 50px;
+    z-index: 9;
+    background-color:white;
+    color: black;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 7px;
+    box-shadow: 0 0 1px 1px rgb(206, 206, 206);
+  }
   .down-pic-con {
     display: flex;
     width: 100%;
@@ -102,21 +126,41 @@
   .board-title:hover {
     color: white;
   }
+  .edit-board-con {
+    color: white;
+    position: relative;
+    top: 2rem;
+    width: max-content;
+    padding: 2rem;
+    background-color: #026299;
+    border-radius: 5px;
+  }
+  .editboard-outer{
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    min-height: 100vh;
+    min-width: 100vw;
+    background-color: #fafbfc;
+    background-color: rgba(0,0,0,.5);
+
+  }
 
   /* Cards */
   .card_container {
     display: flex;
     min-width: 100vw;
-    /* overflow: scroll; */
+    height: 90vh;
+    overflow-x: auto;
   }
  .add_list_btn {
    color: white;
-   /* text-decoration: none; */
-   background-color: #3d88b5;
+   background-color: #026299;
    border-radius: 5px;
    padding: 1em;
    height: min-content;
-   width: 15%;
+   min-width: 250px;
    margin: 0 .5rem;
    transition: height 2s;
  }
@@ -148,13 +192,18 @@
   padding: 5px 10px;
   border-radius: 3px;
  }
+ #card-input {
+  text-align: left;
+ }
  .card_bg {
-  width: 320px;
+  min-width: 320px;
   height: min-content;
+  max-height: 70vh;
   padding: 1em;
   background-color: #ebecf0;
   margin-left: 1em;
   border-radius: 5px;
+  overflow: auto;
  }
  .card_title{
   color: black;
@@ -225,10 +274,10 @@
 .navbar {
   position: fixed;
   width: 100vw;
+  height: 65px;
   font-family: 'Roboto', sans-serif;
-  color: white;
-  /* height: 60px; */
-  background-color: #0066a0;
+  background-color: #ebecf0;
+  border-bottom: solid white 2px;
 }
 .cem-logo {
   display: flex;
@@ -237,7 +286,8 @@
 }
 .cem-kanban {
   text-decoration: none;
-  color: white;
+  color: black;
+  font-weight: bold;
 }
 .cem-kanban:hover {
   color: white;
@@ -250,16 +300,17 @@
   color: white;
 }
 .nav-element {
-  display: flex;
-  align-items: center;
+  color: black;
+  font-weight: bold;
+  text-align: center;
   padding: .5rem 1rem;
   border-radius: 5px;
-  margin-left: 1rem;
+  margin: auto;
   text-decoration: none;
 
 }
 .nav-element:hover {
-  background-color: #2c9ada;
+  background-color: #0067a3;
   cursor: pointer;
 }
 .search-bar {
@@ -273,9 +324,10 @@
   margin-left: 5px;
 }
 .user-log {
+  color: white;
   display: flex;
   align-items: center;
-  background-color: #2c9ada;
+  background-color: #0067a3;
   border-radius: 5px;
   padding: 5px 10px;
   margin-left: 5px;
@@ -283,6 +335,9 @@
 }
 .create-relative {
   position: relative;
+  margin-left: 1rem;
+  display: flex;
+  align-items: center;
 }
 .new-board {
   position: absolute;
@@ -350,7 +405,7 @@
   background-color: #ffffff;
   border-radius: 5px;
   margin-top: .7rem;
-  min-height: 80px;
+  height: 100px;
   cursor: pointer;
  }
  .addcard-name {

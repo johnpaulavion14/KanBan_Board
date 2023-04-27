@@ -1,0 +1,29 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: postgres
+  password: asdf
+  host: localhost
+  port: 5432
+
+development:
+  <<: *default
+  database: kanban_board_postgresql
+  
+test:
+  <<: *default
+  database: kanban_board_test
+
+production:
+  <<: *default
+  database: kanban_board_prod
+
+# development:
+#   adapter: postgresql
+#   encoding: unicode
+#   database: kanban_board_development
+#   pool: 5
+#   username: postgres
+#   password: asdf
+#   host: localhost

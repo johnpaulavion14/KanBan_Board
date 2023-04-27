@@ -14,12 +14,6 @@ class CreateBoardsController < ApplicationController
   end
 
   def show
-    if current_user.create_boards.where(id:params[:id]) == []
-      @private = false
-      @user = CreateBoard.find_by(id:params[:id]).user.email
-    else
-      @private = true
-    end
   end
 
   # GET /create_boards/1/edit
