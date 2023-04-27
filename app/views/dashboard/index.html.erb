@@ -1,33 +1,35 @@
-<h4 class="your-boards">Your boards</h4>
-<hr class="page-line" />
-<div class="d-flex p-2">
-<span style="display:none" class="current_username"><%= current_user.id %></span>
-  <% @create_boards.each do |create_board| %>
-      <div class="create-board">
-        <section class="d-flex justify-content-between align-items-center">
-          <b><%= link_to create_board.board_title,edit_create_board_path(create_board.id), class:"board-title" %></b>
-          <div class="private-modal three-dots">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-              <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-            </svg>
-
-            <div class="dots-modal">
-              <div class="d-flex flex-column align-items-center">
-                <%= link_to delete_board_path(create_board.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure you want to delete?'} do %>
-                  <div class="down-pic-con"><%= image_tag ("delete.png"),class:"down-pic" %></div>
-                <% end %>
-                <%= link_to update_group_path({group:"true", id:create_board.id}),data: {turbo_method: :patch, turbo_confirm: 'Are you sure you want to move to group boards?'} do %>
-                  <div class="down-pic-con"><%= image_tag ("down-arrow.png"),class:"down-pic mt-2" %></div>
-                <% end %>
+<div style="height:200px">
+  <h4 class="your-boards">Your boards</h4>
+  <hr class="page-line" />
+  <div class="d-flex p-2">
+    <span style="display:none" class="current_username"><%= current_user.id %></span>
+    <% @create_boards.each do |create_board| %>
+        <div class="create-board">
+          <section class="d-flex justify-content-between align-items-center">
+            <b><%= link_to create_board.board_title,edit_create_board_path(create_board.id), class:"board-title" %></b>
+            <div class="private-modal three-dots">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+              </svg>
+  
+              <div class="dots-modal">
+                <div class="d-flex flex-column align-items-center">
+                  <%= link_to delete_board_path(create_board.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure you want to delete?'} do %>
+                    <div class="down-pic-con"><%= image_tag ("delete.png"),class:"down-pic" %></div>
+                  <% end %>
+                  <%= link_to update_group_path({group:"true", id:create_board.id}),data: {turbo_method: :patch, turbo_confirm: 'Are you sure you want to move to group boards?'} do %>
+                    <div class="down-pic-con"><%= image_tag ("down-arrow.png"),class:"down-pic mt-2" %></div>
+                  <% end %>
+                </div>
               </div>
             </div>
+          </section>
+          <div class="mt-2">
+            <i><%= link_to create_board.board_desc, view_cards_path(create_board.id),class:"link-cards"%></i>
           </div>
-        </section>
-        <div class="mt-2">
-          <i><%= link_to create_board.board_desc, view_cards_path(create_board.id),class:"link-cards"%></i>
         </div>
-      </div>
-  <% end %>
+    <% end %>
+  </div>
 </div>
 
 

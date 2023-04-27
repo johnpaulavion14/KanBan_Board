@@ -1,93 +1,108 @@
-<div class="py-5 board-con">
+<div class="py-3 board-con">
   <div class="new_card mx-auto">
-    <div class="d-flex align-items-center justify-content-between">
-      <span class="card-heading clickAddcard"><%= @addcard.card_name %></span>
-      <span class="toggleAddcard">
-        <%= form_with scope: :addcard, url:update_addcard_path, method: :patch, local: true do |form| %>
-          <span class="pb-1">
-            <%= form.text_field :card_name,required: true, class:"input_border",value:@addcard.card_name %>
-          </span>
-          <span class="clickX btn btn-primary">X</span>
-        <% end %>
-      </span>
+    <div class="d-flex align-flex-start justify-content-between">
+      <div>
+        <div class="d-flex align-flex-start">
+          <span><%= image_tag ("title.png"),style:"width:30px; height:25px;" %></span>
+          <div class="mx-3" style="margin-top:-8px;">
+            <div class="card-heading clickAddcard"><%= @addcard.card_name %></div>
+            <span class="toggleAddcard">
+              <%= form_with scope: :addcard, url:update_addcard_path, method: :patch, local: true do |form| %>
+                <span class="pb-1">
+                  <%= form.text_field :card_name,required: true, class:"input_border",value:@addcard.card_name %>
+                </span>
+                <span class="clickX btn btn-primary">X</span>
+              <% end %>
+            </span>
+            <p>in list <u><%= @card_name.card_title %></u></p>
+          </div>
+        </div>
+      </div>
+
       <span><%= link_to "X" , view_cards_path, class:"addcards_X" %></span>
     </div>
-    <p>in list <u><%= @card_name.card_title %></u></p>
-    <div>
-      <div>
+
+    <div class="d-flex justify-content-between mt-2">
+      <section>
         <div>
-          <span class="h5">Description</span>
-          <span class="edit-desc">Edit</span>
-        </div>
-        <div class="mt-3 desc-form">
-          <%= form_with scope: :addcard, url:update_addcard_path, method: :patch, local:true do |form| %>
-            <div class="pb-1">
-              <%= form.text_area :desc , value:@addcard.desc, size: "73x7", class:"p-3"%>
+          <div>
+            <div class="d-flex align-items-center">
+              <span><%= image_tag ("description.png"),style:"width:30px; height:25px;" %></span>
+              <span style="font-weight:bold; margin-left: 18px; font-size: 20px;">Description</span>
+              <span class="edit-desc">Edit</span>
             </div>
-      
-            <div>
-              <%= form.submit "Save" , class:"save-desc" %>
-              <span class="cancel-desc">Cancel</span>
+            <div class="mt-3 desc-form">
+              <%= form_with scope: :addcard, url:update_addcard_path, method: :patch, local:true do |form| %>
+                <div class="pb-1">
+                  <%= form.text_area :desc , value:@addcard.desc, size: "68x10", style:"margin-left:43px; padding:10px 15px;"%>
+                </div>
+          
+                <div style="margin-left: 43px;">
+                  <%= form.submit "Save" , class:"save-desc" %>
+                  <span class="cancel-desc">Cancel</span>
+                </div>
+              <% end %>
+            </div>
+            <p class="mt-3 desc-area"><%= @desc_value %></p>
+          </div>
+        </div>
+    
+        <div class="mt-3">
+          <%= form_with scope: :addcomment, url:create_addcomment_path, method: :post, local: true do |form| %>
+            <%= form.hidden_field :addcard_id, value: @addcard.id %>
+            <%= form.hidden_field :first_name, value: current_user.first_name %>
+            <%= form.hidden_field :last_name, value: current_user.last_name %>
+              <div class="comment-header">
+                <div class="circle">
+                  <span class="circle-inner"><%= @name_initial %></span>
+                </div>
+                <span>
+                  <%= form.text_area :comment,required: true,placeholder: "Write a comment...",class:"comment-field",oninput:"auto_grow(this)", id:"comment" %>
+                </span>
+                <span class="mx-2">
+                  <%= form.submit "Save" , class:"btn btn-primary" %>
+                </span>
+              </div>
+          <% end %>
+        </div>
+        
+        <div>
+          <% @comments.each do |comment| %>
+            <div class="d-flex mt-3">
+              <div class="circle">
+                <span class="circle-inner"><%= comment.first_name.chr + comment.last_name.chr %></span>
+              </div>
+              <div style="margin-left: 10px;">
+                <div>
+                  <b><%= "#{comment.first_name} #{comment.last_name}" %></b>
+                  <span><%= comment.updated_at.strftime("%b %d at %I:%M%p") %></span>
+                </div>
+                <div class="comments-list">
+                  <%= comment.comment.to_s.gsub(/\n/, '<br/>').html_safe %>
+                </div>
+                <% if "#{comment.first_name} #{comment.last_name}" == "#{current_user.first_name} #{current_user.last_name}" %>
+                  <div>
+                    <span><%= link_to "Edit",edit_comment_path({comment_id:comment.id}) %> </span>
+                    <span><%= link_to 'Delete', delete_addcomment_path({comment_id:comment.id}),
+                      data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %>
+                    </span>
+                  </div>
+                  <% else %>
+                    <div>
+                      <a href="#comment">Reply</a>
+                    </div>
+                <% end %>
+              </div>
             </div>
           <% end %>
         </div>
-        <p class="mt-3 desc-area"><%= @desc_value %></p>
+      </section>
+      
+      <div class="addcard-right">
+        
       </div>
     </div>
 
-    <div class="mt-3">
-      <%= form_with scope: :addcomment, url:create_addcomment_path, method: :post, local: true do |form| %>
-        <%= form.hidden_field :addcard_id, value: @addcard.id %>
-        <%= form.hidden_field :first_name, value: current_user.first_name %>
-        <%= form.hidden_field :last_name, value: current_user.last_name %>
-          <div class="comment-header">
-            <div class="circle">
-              <span class="circle-inner"><%= @name_initial %></span>
-            </div>
-            <span>
-              <%= form.text_area :comment,required: true,placeholder: "Write a comment...",class:"comment-field",oninput:"auto_grow(this)", id:"comment" %>
-            </span>
-            <span class="mx-2">
-              <%= form.submit "Save" , class:"btn btn-primary" %>
-            </span>
-          </div>
-      <% end %>
-    </div>
-    
-    <div>
-      <% @comments.each do |comment| %>
-        <div class="d-flex mt-3">
-          <div class="circle">
-            <span class="circle-inner"><%= comment.first_name.chr + comment.last_name.chr %></span>
-          </div>
-          <div style="margin-left: 10px;">
-            <div>
-              <b><%= "#{comment.first_name} #{comment.last_name}" %></b>
-              <span><%= comment.updated_at.strftime("%b %d at %I:%M%p") %></span>
-            </div>
-            <div class="comments-list">
-              <%= comment.comment.to_s.gsub(/\n/, '<br/>').html_safe %>
-            </div>
-            <% if "#{comment.first_name} #{comment.last_name}" == "#{current_user.first_name} #{current_user.last_name}" %>
-              <div>
-                <span><%= link_to "Edit",edit_comment_path({comment_id:comment.id}) %> </span>
-                <span><%= link_to 'Delete', delete_addcomment_path({comment_id:comment.id}),
-                  data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %>
-                </span>
-              </div>
-              <% else %>
-                <div>
-                  <a href="#comment">Reply</a>
-                </div>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
-    </div>
-
-    <!-- <div>
-      <%= button_to "Delete Card" , delete_addcard_path, method: :delete,class:"btn btn-danger mt-2"%>
-    </div> -->
   </div>
 </div>
 

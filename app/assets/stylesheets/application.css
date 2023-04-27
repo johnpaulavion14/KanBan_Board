@@ -171,10 +171,12 @@
  }
  .new_card {
   width: 760px;
-  min-height: 700px;
-  padding: 2rem;
+  min-height: 900px;
+  max-height: 900px;
+  padding: 20px;
   background-color: #ebecf0;
   border-radius: 5px;
+  overflow-y: auto;
  }
  .card-heading{
   font-size: 1.5rem;
@@ -186,6 +188,12 @@
   font-weight: 600;
   text-decoration: none;
   color:black;
+  padding: .5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+ }
+ .addcards_X:hover {
+  background-color: #ddddddd7;
  }
  .input_border {
   border-color: blue;
@@ -354,6 +362,11 @@
   display: flex;
   justify-content: space-between;
 }
+.addcard-right {
+  border: solid 1px rgb(161, 161, 161);
+  border-radius: 5px;
+  width: 100px;
+}
 .addcard {
   padding: 6px 12px;
   width: 100%;
@@ -414,7 +427,7 @@
  }
  .edit-desc{
   background-color: #ddddddd7;
-  padding: .5rem 1rem;
+  padding:5px 1rem;
   border-radius: 5px;
   margin-left: .6rem;
   cursor: pointer;
@@ -424,6 +437,7 @@
  }
  .desc-area {
   min-height: 100px;
+  margin-left:43px
  }
  .save-desc {
   font-size: 1rem;
@@ -464,6 +478,7 @@
   .comment-field {
     width: 500px;
     height: 40px;
+    max-height: 300px;
     border: none;
     padding: 0.3rem 1rem;
     border-radius: 3px;
@@ -471,6 +486,7 @@
     margin-left: 10px;
   }
   .comments-list {
+    width: 550px;
     background-color: white;
     padding: 1rem;
     border-radius: 3px;
