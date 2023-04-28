@@ -1,6 +1,6 @@
 class AddcardsController < ApplicationController
   before_action :authenticate_user!
-  before_action :get_card, only: %i[ index edit edit_desc create update destroy ]
+  before_action :get_card, only: %i[ index edit edit_desc create update destroy attendance]
   # before_action :set_addcard, only: %i[ show edit update destroy ]
 
   # GET /addcards or /addcards.json
@@ -57,6 +57,21 @@ class AddcardsController < ApplicationController
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @addcard.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def attendance
+    @present = @card.addcards.find(params[:id])
+    if @present.desc.blank?
+      @present.update(desc:current_user.first_name + " - " + "Present")
+      redirect_to view_addcards_path
+    else
+      if @present.desc.include? current_user.first_name
+        redirect_to view_addcards_path
+      else
+        @present.update(desc:@present.desc + "\n" + current_user.first_name + " - " + "Present")
+        redirect_to view_addcards_path
       end
     end
   end

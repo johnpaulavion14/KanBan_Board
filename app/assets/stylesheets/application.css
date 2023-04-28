@@ -204,14 +204,12 @@
   text-align: left;
  }
  .card_bg {
-  min-width: 320px;
+  width: 320px;
   height: min-content;
-  max-height: 70vh;
   padding: 1em;
   background-color: #ebecf0;
   margin-left: 1em;
   border-radius: 5px;
-  overflow: auto;
  }
  .card_title{
   color: black;
@@ -358,6 +356,10 @@
   box-shadow: 0 0 1px 1px rgb(206, 206, 206);
 }
 /* Add Card feature */
+.addcard-outercon {
+  max-height: 70vh;
+  overflow-y: auto;
+}
 .card-con {
   display: flex;
   justify-content: space-between;
@@ -434,6 +436,19 @@
  }
  .edit-desc:hover{
   background-color: #b9b9b9d7;
+ }
+ .present{
+  font-weight: bold;
+  background-color: #079732d7;
+  padding:5px 1rem;
+  border-radius: 5px;
+  margin-left: .6rem;
+  cursor: pointer;
+  border: none;
+ }
+ .present:hover{
+  color: white;
+  background-color: #25b309d7;
  }
  .desc-area {
   min-height: 100px;

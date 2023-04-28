@@ -18,35 +18,59 @@
           </div>
         </div>
       </div>
-
       <span><%= link_to "X" , view_cards_path, class:"addcards_X" %></span>
     </div>
-
     <div class="d-flex justify-content-between mt-2">
       <section>
-        <div>
+        <!-- Description/Attendance Section -->
+        <% if @card_name.card_title == "Attendance" %>
           <div>
-            <div class="d-flex align-items-center">
-              <span><%= image_tag ("description.png"),style:"width:30px; height:25px;" %></span>
-              <span style="font-weight:bold; margin-left: 18px; font-size: 20px;">Description</span>
-              <span class="edit-desc">Edit</span>
+            <div>
+              <div class="d-flex align-items-center">
+                <span><%= image_tag ("description.png"),style:"width:30px; height:25px;" %></span>
+                <span style="font-weight:bold; margin-left: 18px; font-size: 20px;">Attendance</span>
+                <%= button_to "Present",attendance_path,method: :patch, class:"present" %>
+              </div>
+              <div class="mt-3 desc-form">
+                <%= form_with scope: :addcard, url:update_addcard_path, method: :patch, local:true do |form| %>
+                  <div class="pb-1">
+                    <%= form.text_area :desc , value:@addcard.desc, size: "68x10", style:"margin-left:43px; padding:10px 15px;"%>
+                  </div>
+            
+                  <div style="margin-left: 43px;">
+                    <%= form.submit "Save" , class:"save-desc" %>
+                    <span class="cancel-desc">Cancel</span>
+                  </div>
+                <% end %>
+              </div>
+              <p class="mt-3 desc-area"><%= @desc_value %></p>
             </div>
-            <div class="mt-3 desc-form">
-              <%= form_with scope: :addcard, url:update_addcard_path, method: :patch, local:true do |form| %>
-                <div class="pb-1">
-                  <%= form.text_area :desc , value:@addcard.desc, size: "68x10", style:"margin-left:43px; padding:10px 15px;"%>
-                </div>
-          
-                <div style="margin-left: 43px;">
-                  <%= form.submit "Save" , class:"save-desc" %>
-                  <span class="cancel-desc">Cancel</span>
-                </div>
-              <% end %>
-            </div>
-            <p class="mt-3 desc-area"><%= @desc_value %></p>
           </div>
-        </div>
-    
+        <% else %>
+          <div>
+            <div>
+              <div class="d-flex align-items-center">
+                <span><%= image_tag ("description.png"),style:"width:30px; height:25px;" %></span>
+                <span style="font-weight:bold; margin-left: 18px; font-size: 20px;">Description</span>
+                <span class="edit-desc">Edit</span>
+              </div>
+              <div class="mt-3 desc-form">
+                <%= form_with scope: :addcard, url:update_addcard_path, method: :patch, local:true do |form| %>
+                  <div class="pb-1">
+                    <%= form.text_area :desc , value:@addcard.desc, size: "68x10", style:"margin-left:43px; padding:10px 15px;"%>
+                  </div>
+            
+                  <div style="margin-left: 43px;">
+                    <%= form.submit "Save" , class:"save-desc" %>
+                    <span class="cancel-desc">Cancel</span>
+                  </div>
+                <% end %>
+              </div>
+              <p class="mt-3 desc-area"><%= @desc_value %></p>
+            </div>
+          </div>
+        <% end %>
+        <!-- Add comment section -->
         <div class="mt-3">
           <%= form_with scope: :addcomment, url:create_addcomment_path, method: :post, local: true do |form| %>
             <%= form.hidden_field :addcard_id, value: @addcard.id %>
