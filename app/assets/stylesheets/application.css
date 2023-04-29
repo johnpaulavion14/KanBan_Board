@@ -204,7 +204,7 @@
   text-align: left;
  }
  .card_bg {
-  width: 320px;
+  min-width: 320px;
   height: min-content;
   padding: 1em;
   background-color: #ebecf0;
@@ -437,9 +437,9 @@
  .edit-desc:hover{
   background-color: #b9b9b9d7;
  }
- .present{
+ .present, .undo{
   font-weight: bold;
-  background-color: #079732d7;
+  background-color: #29d65dd7;
   padding:5px 1rem;
   border-radius: 5px;
   margin-left: .6rem;
@@ -448,7 +448,14 @@
  }
  .present:hover{
   color: white;
-  background-color: #25b309d7;
+  background-color: #2fa816d7;
+ }
+ .undo{
+  background-color: rgb(218, 29, 29);
+ }
+ .undo:hover{
+  color: white;
+  background-color: rgb(173, 3, 3);
  }
  .desc-area {
   min-height: 100px;

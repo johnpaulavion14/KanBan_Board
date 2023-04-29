@@ -63,22 +63,30 @@ class AddcardsController < ApplicationController
 
   def attendance
     @present = @card.addcards.find(params[:id])
-    if @present.desc.blank?
-      @present.update(desc:current_user.first_name + " - " + "Present")
-      redirect_to view_addcards_path
-    else
-      if @present.desc.include? current_user.first_name
+    if params[:status] == "present"
+      if @present.desc.blank?
+        @present.update(desc:Date.current.strftime("%B %d, %Y") + "\n" + current_user.first_name + " - " + "Present")
         redirect_to view_addcards_path
       else
-        @present.update(desc:@present.desc + "\n" + current_user.first_name + " - " + "Present")
-        redirect_to view_addcards_path
+        if @present.desc.include? current_user.first_name
+          redirect_to view_addcards_path
+        else
+          @present.update(desc:@present.desc + "\n" + current_user.first_name + " - " + "Present")
+          redirect_to view_addcards_path
+        end
       end
+    else
+      @present.update(desc:"")
+      redirect_to view_addcards_path
     end
   end
 
   # DELETE /addcards/1 or /addcards/1.json
   def destroy
     @deletecard = @card.addcards.find(params[:id])
+    # delete all comments inside the addcard
+    @deletecard.addcomments.destroy_all
+    # delete addcard
     @deletecard.destroy
 
     respond_to do |format|

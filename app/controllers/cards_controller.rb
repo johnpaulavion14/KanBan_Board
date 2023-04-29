@@ -51,7 +51,16 @@ class CardsController < ApplicationController
   # DELETE /cards/1 or /cards/1.json
   def destroy
     @card = CreateBoard.find(params[:cb_id]).cards.find(params[:card_id])
+    # destroy all comment
+    alladdcards = @card.addcards
+    alladdcards.each do |addcard|
+      addcard.addcomments.destroy_all
+    end
+    # destroy all addcards
+    @card.addcards.destroy_all
+    # destroy card
     @card.destroy
+    
 
     respond_to do |format|
       format.html { redirect_to view_cards_path(params[:cb_id]), notice: "Card was successfully destroyed." }

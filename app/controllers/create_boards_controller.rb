@@ -50,6 +50,15 @@ class CreateBoardsController < ApplicationController
 
   # DELETE /create_boards/1 or /create_boards/1.json
   def destroy
+    # destroy comments,addcards and cards
+    @create_board.cards.each do |card|
+      card.addcards.each do |addcard|
+        addcard.addcomments.destroy_all
+        addcard.destroy
+      end
+      card.destroy
+    end
+    # destroy board
     @create_board.destroy
 
     respond_to do |format|
