@@ -163,6 +163,7 @@
    min-width: 250px;
    margin: 0 .5rem;
    transition: height 2s;
+   margin-top: 1rem;
  }
  .add_list_btn:hover{
   color:white;
@@ -174,9 +175,10 @@
   min-height: 900px;
   max-height: 900px;
   padding: 20px;
-  background-color: #ebecf0;
+  background-color: white;
   border-radius: 5px;
   overflow-y: auto;
+  box-shadow: 0 0 5px 5px rgb(153, 146, 146);
  }
  .card-heading{
   font-size: 1.5rem;
@@ -204,12 +206,14 @@
   text-align: left;
  }
  .card_bg {
+  margin-top: 1rem;
   min-width: 320px;
   height: min-content;
   padding: 1em;
-  background-color: #ebecf0;
+  background-color: white;
   margin-left: 1em;
   border-radius: 5px;
+  box-shadow: 0 0 5px 5px rgb(153, 146, 146);
  }
  .card_title{
   color: black;
@@ -223,6 +227,9 @@
   background-color: #ebecf0;
   margin: 0 .5rem;
   border-radius: 5px;
+}
+#addcard_card_name {
+  border: solid 1px black;
 }
 
 /* Login Page */
@@ -249,7 +256,7 @@
   padding: 2em 5em;
   border-radius: 2px;
   box-shadow: 0 0 5px 5px rgb(153, 146, 146);
-  margin-top: 2em;
+  margin-top: 1rem;
 }
 .login_container p {
   color:#5e6c84;
@@ -415,9 +422,15 @@
 
 
 /* Add Card section */
+.addcard-bg {
+  background-image: url("kanban_bg.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 .addcard-con {
   padding: 1rem;
-  background-color: #ffffff;
+  background-color: #ddddddd7;
   border-radius: 5px;
   margin-top: .7rem;
   height: 100px;
