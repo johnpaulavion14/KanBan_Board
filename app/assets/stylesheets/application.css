@@ -227,6 +227,7 @@
   background-color: #ebecf0;
   margin: 0 .5rem;
   border-radius: 5px;
+  margin-top: 1rem;
 }
 #addcard_card_name {
   border: solid 1px black;
@@ -333,19 +334,6 @@
   border-radius: 7px;
   padding-left: 10px;
 }
-.logout {
-  margin-left: 5px;
-}
-.user-log {
-  color: white;
-  display: flex;
-  align-items: center;
-  background-color: #0067a3;
-  border-radius: 5px;
-  padding: 5px 10px;
-  margin-left: 5px;
-
-}
 .create-relative {
   position: relative;
   margin-left: 1rem;
@@ -361,6 +349,39 @@
   border-radius: 8px;
   z-index: 9;
   box-shadow: 0 0 1px 1px rgb(206, 206, 206);
+}
+/* account section */
+.account-section {
+  position: relative;
+  margin-left: 1rem;
+}
+.account-con, .edit-account-con {
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  z-index: 9;
+  background-color:white;
+  border-radius: 7px;
+  width: 250px;
+  height: min-content;
+  box-shadow: 0 0 5px 5px rgb(214, 214, 214);
+}
+.account-menu {
+  cursor: pointer;
+}
+.account-menu:hover {
+  background-color: rgb(236, 235, 235);
+}
+.logout {
+  text-decoration: none;
+  color:black;
+}
+.logout:hover {
+  color: red;
+}
+
+.edit-account-con {
+  padding: 1.3rem;
 }
 /* Add Card feature */
 .addcard-outercon {
@@ -534,6 +555,7 @@
     padding: 5px;
     height: 35px;
     width: 35px;  
+    cursor: pointer;
   }
   .circle-inner {
     margin: auto;

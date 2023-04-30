@@ -37,6 +37,9 @@ Rails.application.routes.draw do
   patch 'addcomments/:cb_id/:card_id/:id' => 'addcomments#update', as: 'update_addcomment'
   delete 'addcomments/:cb_id/:card_id/:id' => 'addcomments#destroy', as: 'delete_addcomment'
 
+  # Edit User Account
+  patch 'editaccounts' => 'editaccounts#update', as: 'update_account'
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

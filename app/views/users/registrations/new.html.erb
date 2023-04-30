@@ -9,12 +9,12 @@
       
       <div class="field">
         <b><%= f.label 'First Name' %></b>
-        <div><%= f.text_field :first_name, autofocus: true, autocomplete: "first_name",class:"w-100 px-2", placeholder:"Enter first name" %></div>
+        <div><%= f.text_field :first_name, autofocus: true, autocomplete: "first_name",class:"w-100 px-2", placeholder:"Enter first name",required:true %></div>
       </div>
 
       <div class="field">
         <b><%= f.label 'Last Name' %></b>
-        <div><%= f.text_field :last_name, autofocus: true, autocomplete: "last_name",class:"w-100 px-2", placeholder:"Enter last name" %></div>
+        <div><%= f.text_field :last_name, autofocus: true, autocomplete: "last_name",class:"w-100 px-2", placeholder:"Enter last name",required:true %></div>
       </div>
     
       <div class="field mt-4">

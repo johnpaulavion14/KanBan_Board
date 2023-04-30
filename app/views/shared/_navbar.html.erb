@@ -1,0 +1,127 @@
+<div class="navbar d-flex justify-content-between">
+  <div class="mx-2 d-flex ">
+    <div class="m-auto d-flex nav-element ">
+      <div class="cem-logo"><%= image_tag ("cem-logo.png") %></div>
+      <div class="m-auto"><%= link_to 'ITS L10 MEETING',dashboard_path, class:"cem-kanban" %></div>
+    </div>
+    <div class="create-relative">
+      <div class="nav-element create-btn">Create</div>
+        <!-- create board modal -->
+      <div class="new-board">
+        <%= form_with scope: :create_board, url:create_boards_path, method: :post, local: true do |form| %>
+          <div class="pb-1">
+            <%= form.label 'Board title*', style: "display: block" %>
+            <%= form.text_field :board_title, required: true %>
+          </div>
+          <div class="pb-1">
+            <%= form.label 'Board descrition(optional)', style: "display: block" %>
+            <%= form.text_field :board_desc, required: true %>
+          </div>
+          <%= form.submit "Save", class:"btn btn-primary w-100 mt-1"%>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center mx-4">
+    <div>
+      <input type="text" placeholder="&#xF002; Search" style="font-family: Roboto, 'Font Awesome 5 Free';" class="search-bar" />
+    </div>
+    <div class="account-section">
+      <div class="circle">
+        <span class="circle-inner"><%= @name_initial %></span>
+      </div>
+      <div class="account-con">
+        <div class="mx-4 mt-4">
+          <h5>Account</h5>
+          <div><%= current_user.first_name + " " + current_user.last_name %></div>
+          <div><i><%= current_user.email %></i></div>
+        </div>
+        <hr style="margin-top: 20px; margin-bottom: 10px;"/>
+        <div class="edit-account account-menu px-4 py-2">Edit Account</div>
+        <hr style="margin:10px 0;"/>
+        <div class="account-menu px-4 py-2" style="margin-bottom:10px;">
+          <%= link_to 'Logout', destroy_user_session_path,data: {turbo_method: :delete, turbo_confirm: 'Are you sure you want to logout?'}, class:"logout" %>
+        </div>
+      </div>
+      <div class="edit-account-con">
+        <%= form_with url:update_account_path, method: :patch, local: true do |f| %>
+          <div style="font-weight: bold; font-size: 1.5rem;text-align: center;">-Edit Account-</div>
+          <div class="field mt-2">
+            <b><%= f.label 'First Name' %></b>
+            <div><%= f.text_field :first_name, autofocus: true, autocomplete: "first_name",class:"w-100 px-2", placeholder:"Enter first name",value:current_user.first_name,required:true %></div>
+          </div>
+    
+          <div class="field">
+            <b><%= f.label 'Last Name' %></b>
+            <div><%= f.text_field :last_name, autofocus: true, autocomplete: "last_name",class:"w-100 px-2", placeholder:"Enter last name",value:current_user.last_name,required:true %></div>
+          </div>
+        
+          <div class="field mt-4">
+            <b><%= f.label :email %></b>
+            <div><%= f.email_field :email, autofocus: true, autocomplete: "email",class:"w-100 px-2", placeholder:"Enter email",value:current_user.email,required:true %></div>
+          </div>
+        
+          <div class="field">
+            <b><%= f.label :password %></b>
+            <div><%= f.password_field :password, autofocus: true, autocomplete: "password",class:"w-100 px-2",id:"my-password", placeholder:"Enter password",required:true,minlength:"6" %></div>
+            <div class="d-flex align-items-center mt-1">
+              <input type="checkbox" onclick="showPassword()">
+              <span style="margin-left: 10px; font-size: 12px;">Show Password</span> 
+            </div>
+          </div>
+        
+          <div class="actions mt-3">
+            <%= f.submit "Submit", class:"continue-btn" %>
+          </div>
+        <% end %>
+        <div class="mt-2" id="back" style="cursor:pointer; color:blue; text-align: center;"><u><--back</u></div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+<script>
+  // create board toggle
+  $(".new-board").css("display", "none")
+  $(document).ready(function(){
+    $(".create-btn").click(function(){
+      $(".new-board").toggle();
+    });
+  });
+  
+  // account toggle
+  $(".account-con").css("display", "none")
+  $(document).ready(function(){
+    $(".circle").click(function(){
+      $(".account-con").toggle();
+      $(".edit-account-con").hide();
+    });
+  });
+
+  $(".edit-account-con").css("display", "none")
+  $(document).ready(function(){
+    $(".edit-account").click(function(){
+      $(".account-con").hide();
+      $(".edit-account-con").show();
+    });
+  });
+
+  $(document).ready(function(){
+    $("#back").click(function(){
+      $(".account-con").show();
+      $(".edit-account-con").hide();
+    });
+  });
+  // show password
+  function showPassword() {
+    var x = document.getElementById("my-password");
+    console.log("hellooooo")
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+  }
+</script>
