@@ -40,6 +40,12 @@ Rails.application.routes.draw do
   # Edit User Account
   patch 'editaccounts' => 'editaccounts#update', as: 'update_account'
 
+  # Profile pic
+  post 'create/profilepic' => 'profilepics#create', as: 'create_pic'
+  patch 'update/profilepic' => 'profilepics#update', as: 'update_pic'
+  delete 'delete/profilepic' => 'profilepics#destroy', as: 'delete_pic'
+
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

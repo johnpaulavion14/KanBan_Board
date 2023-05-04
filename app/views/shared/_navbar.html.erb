@@ -32,10 +32,29 @@
         <span class="circle-inner"><%= @name_initial %></span>
       </div>
       <div class="account-con">
-        <div class="mx-4 mt-4">
-          <h5>Account</h5>
-          <div><%= current_user.first_name + " " + current_user.last_name %></div>
-          <div><i><%= current_user.email %></i></div>
+        <h5 class="mx-4 mt-4">Account</h5>
+        <div class="d-flex justify-content-center">
+          <div class="profile-pic">
+            <%= form_with url:create_pic_path, method: :post, local: true do |f| %>
+                <%= f.hidden_field :avatar, value: "" %>
+                <% if !@profilepic.blank? %>
+                  <%= image_tag @profilepic.pic, style:"width:50px; height:50px;" %>
+                <% else %>
+                  <%= image_tag ("profile-pic.png"), style:"width:50px; height:50px;" %>
+                <% end %>
+                <div class="align-items-center align-items-center pic-button"> 
+                  <label for="pic" style="margin-right:10px;">
+                    <%= image_tag ("upload.png"),style:"cursor:pointer" %>
+                    <%= f.file_field :pic, class:"d-none", id:"pic", required:true %>
+                  </label>
+                  <%= image_submit_tag("submit.png") %>
+                </div>
+            <% end %>
+          </div>
+          <div>
+            <div><%= current_user.first_name + " " + current_user.last_name %></div>
+            <div><i><%= current_user.email %></i></div>
+          </div>
         </div>
         <hr style="margin-top: 20px; margin-bottom: 10px;"/>
         <div class="edit-account account-menu px-4 py-2">Edit Account</div>
@@ -123,5 +142,18 @@
     } else {
       x.type = "password";
     }
+    // hover pic buttons
   }
+  $(".pic-button").css("display", "none")
+
+  $( ".profile-pic" ).hover(
+    // $(".pic-button").show()
+    function() {
+    $( this ).find(".pic-button").css("display", "flex")
+    },
+    function() {
+    $( this ).find(".pic-button").hide()
+    } 
+  );
+
 </script>

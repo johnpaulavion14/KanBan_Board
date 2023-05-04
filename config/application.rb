@@ -22,3 +22,5 @@ module KanBanBoard
     config.active_record.default_timezone = :local
   end
 end
+
+require "active_storage/engine"
