@@ -69,6 +69,34 @@
     <% end %>
   </div>
 </div>
+
+<% if current_user.email == "jpbocatija@cem.com" %>
+  <div>
+    <h4 class="your-boards">All Users</h4>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">confirmation_token</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @all_users.each_with_index do |user,index| %>
+          <tr>
+            <th scope="row"><%= index + 1%></th>
+            <td><%= user.first_name %></td>
+            <td>http://192.168.0.16:3000/users/confirmation?confirmation_token=<%= user.confirmation_token %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  </div>
+<% end %>
+
+
 <!-- edit board modal -->
 <div class="pt-3 editboard-outer">
   <div class="edit-board-con mx-auto mt-5">

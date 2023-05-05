@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
       if !current_user.profilepics.blank?
         @profilepic = current_user.profilepics.last
       end
+
     end
   end
 
