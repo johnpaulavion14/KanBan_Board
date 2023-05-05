@@ -33,7 +33,7 @@
       </div>
       <div class="account-con">
         <h5 class="mx-4 mt-4">Account</h5>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center px-3">
           <div class="profile-pic">
             <%= form_with url:create_pic_path, method: :post, local: true do |f| %>
                 <%= f.hidden_field :avatar, value: "" %>
