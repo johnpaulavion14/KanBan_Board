@@ -7,6 +7,9 @@ class CardsController < ApplicationController
     # @cards = current_user.create_boards.find(params[:cb_id]).cards
     @cards = CreateBoard.find(params[:cb_id]).cards.order("created_at asc")
     @addcards = CreateBoard.find(params[:cb_id]).addcards.order("created_at asc")
+    @board = CreateBoard.find(params[:cb_id])
+    @hosts = User.where(host:"true").order("created_at asc").pluck(:first_name)
+    @scribes = User.where(scribe:"true").order("created_at asc").pluck(:first_name)
     
   end
 

@@ -45,6 +45,11 @@ Rails.application.routes.draw do
   patch 'update/profilepic' => 'profilepics#update', as: 'update_pic'
   delete 'delete/profilepic' => 'profilepics#destroy', as: 'delete_pic'
 
+  # All Users
+  get 'allusers' => 'allusers#index', as: 'view_allusers'
+  patch 'update/role/:id' => 'allusers#update', as: 'update_role'
+  patch 'update/admin/:id/:admin' => 'allusers#updateadmin', as: 'update_admin'
+
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

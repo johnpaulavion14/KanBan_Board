@@ -1,0 +1,56 @@
+<div>
+  <h4 class="your-boards">All Users</h4>
+
+  <table class="table text-center">
+    <thead>
+      <tr>
+        <th scope="col"><u>#</u></th>
+        <th scope="col"><u>Name</u></th>
+        <th scope="col"><u>confirmation_token</u></th>
+        <th scope="col"><u>Role</u></th>
+        <th scope="col"><u>Admin</u></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @all_users.each_with_index do |user,index| %>
+        <tr>
+          <th scope="row"><%= index + 1%></th>
+          <td>
+            <div><b><%= user.first_name %> <%= user.last_name %></b></div>
+            <div><i><%= user.email %></i></div>
+          </td>
+          <td>http://192.168.0.16:3000/users/confirmation?confirmation_token=<%= user.confirmation_token %></td>
+          <td>
+            <%= form_with url:update_role_path(user.id), method: :patch, local: true do |f| %>
+              <%= f.hidden_field :host, value: false %>
+              <%= f.hidden_field :scribe, value: false %>
+              <div class="d-flex align-items-center justify-content-center">
+                <div>
+                  <div>
+                    <%= check_box_tag "host", "true", user.host, style:"cursor:pointer; margin-right:10px;" %>Host
+                  </div>
+                  <div>
+                    <%= check_box_tag "scribe", "true", user.scribe, style:"cursor:pointer; margin-right:10px;"  %>Scribe
+                  </div>
+                </div>
+                <div class="mx-3"><%= f.submit "Save" ,class:"btn btn-success" %></div>
+              </div>
+            <% end %>
+          </td>
+          <td>
+            <% if user.email == "jpbocatija@cem.com" %>
+              <span class="btn btn-primary">Super Admin</span>
+            <% elsif user.admin == true %>
+              <div class="d-flex justify-content-center">
+                <span class="btn btn-secondary" style="margin-right: 10px;">Approved</span>
+                <span><%= button_to "X" , update_admin_path(user.id,"false"), method: :patch,class:"btn btn-danger" %></span>
+              </div>
+            <% else %>
+              <%= button_to "Approve?" , update_admin_path(user.id,"true"), method: :patch,class:"btn btn-warning" %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

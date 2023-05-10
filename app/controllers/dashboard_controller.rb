@@ -11,7 +11,5 @@ class DashboardController < ApplicationController
     # else
     #   @private = true
     # end
-    @all_users = User.all
-
   end
 end

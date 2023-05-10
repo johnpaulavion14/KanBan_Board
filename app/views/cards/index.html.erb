@@ -1,6 +1,19 @@
 <div class="board-con">
-  <div>
-    
+  <span id="username" style="display: none;"><%= current_user.first_name %></span>
+  <span id="group" style="display: none;"><%= @board.group %></span>
+  <div style="margin-left:1rem" class="hs">
+    <b>Host:</b>
+    <span>
+      <% @hosts.each do |host| %>
+        | <span class="host"><%= host %></span> |
+      <% end %>
+    </span>
+    <b style="margin-left:1rem">Scribe:</b>
+    <span>
+      <% @scribes.each do |scribe| %>
+        | <span class="scribe"><%= scribe %></span> |
+      <% end %>      
+    </span>
   </div>
   <!-- Edit Card -->
   <div id="cards" class="card_container">
@@ -76,54 +89,63 @@
 
 
 <script>
-  // Addlist feature
   $(document).ready(function(){
+    // Addlist feature
     $(".clickAddList").click(function(){
       $(this).hide();
       $(".toggleAddCard").show();
     });
-  });
-  $(document).ready(function(){
+
     $(".clickX").click(function(){
       $(".toggleAddCard").hide();
       $(".clickAddList").show();
     });
-  });
 
-  // Addcard feature
-  $(".addcard-form").css("display", "none")
-  $(document).ready(function(){
+    // Addcard feature
+    $(".addcard-form").css("display", "none")
     $(".addcard").click(function(){
       $(".addcard").show();
       $(".addcard-form").hide();
       $(this).hide();
       $(this).siblings(".addcard-form").show();
     });
-  });
-  $(document).ready(function(){
+
     $(".cancel-desc").click(function(){
       $(".addcard-form").hide();
       $(".addcard").show();
     });
-  });
 
-  // Edit Card
-  $(".toggleCard").css("display", "none")
-  $(document).ready(function(){
+    // Edit Card
+    $(".toggleCard").css("display", "none")
     $(".card_title").click(function(){
       let input_value = $(this).text().replace(/\s/g, '');
-      $(".card-con").show();
-      $(".toggleCard").hide();
-      $(this).parent(".card-con").hide();
-      $(this).parent(".card-con").siblings(".toggleCard").show();
-      $(this).parent(".card-con").siblings(".toggleCard").find("#card-input").val(input_value);
+        $(".card-con").show();
+        $(".toggleCard").hide();
+        $(this).parent(".card-con").hide();
+        $(this).parent(".card-con").siblings(".toggleCard").show();
+        $(this).parent(".card-con").siblings(".toggleCard").find("#card-input").val(input_value);
     });
-  });
-  $(document).ready(function(){
+
     $(".cardX").click(function(){
       $(".toggleCard").hide();
       $(this).parents(".toggleCard").siblings(".card-con").show();
     });
+
+    // Disable non host or scribe
+    let hosts = $(".host").text();
+    let scribes = $(".scribe").text();
+    let username = $("#username").text();
+    let group = $("#group").text();
+    if (hosts.includes(username) || scribes.includes(username)){
+    }else if(group == "true"){
+      $(".card-con").css("pointer-events", "none") // disable edit & delete card for non host and scribe
+      $(".addcard-pencon").css("pointer-events", "none") // disable edit & delete addcard for non host and scribe
+      $(".addcard").css("pointer-events", "none") // disable adding card for non host and scribe
+      $(".clickAddList").css("pointer-events", "none") // disable adding card for non host and scribe
+    } else if (group == "false"){
+      $(".hs").hide();
+    }
+
   });
 
 

@@ -306,13 +306,6 @@
 .cem-kanban:hover {
   color: white;
 }
-.create-btn {
-  text-decoration: none;
-  color: white;
-}
-.create-btn:hover {
-  color: white;
-}
 .nav-element {
   color: black;
   font-weight: bold;
@@ -321,11 +314,11 @@
   border-radius: 5px;
   margin: auto;
   text-decoration: none;
-
 }
 .nav-element:hover {
   background-color: #0067a3;
   cursor: pointer;
+  color: white;
 }
 .search-bar {
   background-color: white;

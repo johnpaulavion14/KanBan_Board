@@ -5,12 +5,16 @@ class AddcardsController < ApplicationController
 
   # GET /addcards or /addcards.json
   def index
+    @board = CreateBoard.find(params[:cb_id])
     @addcard = @card.addcards.find(params[:id])
     @card_name = @addcard.card
     @desc_value = @addcard.desc.to_s.gsub(/\n/, '<br/>').html_safe
     @comments = Addcomment.all.where(addcard_id: params[:id]).order("created_at desc")
 
     @name_initial = current_user.first_name.chr + current_user.last_name.chr
+
+    @hosts = User.where(host:"true").order("created_at asc").pluck(:first_name)
+    @scribes = User.where(scribe:"true").order("created_at asc").pluck(:first_name)
 
   end
 
