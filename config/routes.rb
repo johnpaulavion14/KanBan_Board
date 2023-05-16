@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
   devise_for :users, path: 'users', controllers: { sessions: "users/sessions", registrations: 'users/registrations'  }
+  # home
+  root 'home#index'
+  get 'home/reset_password' => 'home#reset_password', as: 'reset_password'
+  patch 'home/update_reset_password' => 'home#update_reset_password', as: 'send_reset_password'
 
   #dashboard
   get 'dashboard/index'
   get 'dashboard' => 'dashboard#index', as: 'dashboard'
-  root 'home#index'
   #create_board
   get 'showboard/:id/:from' => 'create_boards#show', as: 'show_board'
   patch	'create_boards/:id' => 'create_boards#update', as: 'update_board'

@@ -11,7 +11,7 @@ class EditaccountsController < ApplicationController
       end
     end
   end
-  
+
   private
 
   def account_params

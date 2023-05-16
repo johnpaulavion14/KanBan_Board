@@ -101,6 +101,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_09_082441) do
     t.boolean "host", default: false
     t.boolean "scribe", default: false
     t.boolean "admin", default: false
+    t.string "password_token"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

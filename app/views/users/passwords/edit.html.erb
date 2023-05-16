@@ -1,25 +1,44 @@
-<h2>Change your password</h2>
+<div class="login_bg">
+  <div><%= image_tag ("cem-logo-full.png") %></div>
+  <h1 class="login-title title mt-4">CEM ITS L10 MEETING</h1>
+  <div class="login_container">
+    <h3>Change your password</h3>
+    <div>
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+        <div class="reg-error"><%= render "users/shared/error_messages", resource: resource %></div>
+        <%= f.hidden_field :reset_password_token %>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "users/shared/error_messages", resource: resource %>
-  <%= f.hidden_field :reset_password_token %>
+        <div class="field text-center">
+          <b><%= f.label :password, "New password" %></b><br />
+          <% if @minimum_password_length %>
+            <em>(<%= @minimum_password_length %> characters minimum)</em><br />
+          <% end %>
+          <%= f.password_field :password, autofocus: true, autocomplete: "new-password",class:"w-100 px-2", placeholder:"Enter password" %>
+        </div>
 
-  <div class="field">
-    <%= f.label :password, "New password" %><br />
-    <% if @minimum_password_length %>
-      <em>(<%= @minimum_password_length %> characters minimum)</em><br />
-    <% end %>
-    <%= f.password_field :password, autofocus: true, autocomplete: "new-password" %>
+        <div class="field text-center" style="margin-top: 10px;">
+          <b><%= f.label :password_confirmation, "Confirm new password" %></b><br />
+          <%= f.password_field :password_confirmation, autocomplete: "new-password",class:"w-100 px-2",placeholder:"Confirm password" %>
+        </div>
+
+        <div class="actions my-3">
+          <%= f.submit "Change my password", class:"continue-btn px-3" %>
+        </div>
+      <% end %>
+    </div>
+    <div>
+      <%= link_to "<-- go back", root_path, method: :get, class:"back-btn" %>
+    </div>
   </div>
+</div>
 
-  <div class="field">
-    <%= f.label :password_confirmation, "Confirm new password" %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
+<script>
+  var error = document.querySelector(".reg-error");
 
-  <div class="actions">
-    <%= f.submit "Change my password" %>
-  </div>
-<% end %>
-
-<%= render "users/shared/links" %>
+  if (error.childNodes.length === 0) {
+    console.log('Element is empty');
+  } else {
+    error.classList.add("alert");
+    error.classList.add("alert-danger");
+  }
+</script>

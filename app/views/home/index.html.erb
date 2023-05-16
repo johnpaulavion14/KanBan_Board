@@ -3,9 +3,13 @@
   <h1 class="login-title title mt-4">CEM ITS L10 MEETING</h1>
   <div class="login_container">
     <p>Welcome to ITS L10 Meeting !</p>
+    <% if notice  %>
+      <div class="alert alert-success"><%= notice %></div>
+    <% end %>
     <div>
     <%= button_to "Login", dashboard_path, method: :get, class:"continue-btn" %>
     <%= button_to "Can't log in? - Sign up for an account", new_user_registration_path, method: :get, class:"signup-btn" %>
+    <%= button_to "forgot password?", reset_password_path, method: :get, class:"forgot-pass" %>
     </div>
   </div>
 

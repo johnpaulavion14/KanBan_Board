@@ -279,7 +279,20 @@
   background-color: #ffffff;
   margin-top: 3em;
   font-weight: 200;
-
+}
+.signup-btn:hover {
+  text-decoration: underline;
+}
+.forgot-pass {
+  color: blue;
+  width: 100%;
+  border:0;
+  background-color: #ffffff;
+  margin-top: 1em;
+  font-weight: 200;
+}
+.forgot-pass:hover {
+  text-decoration: underline;
 }
 .back-btn {
   color: blue;
