@@ -39,7 +39,7 @@
     <div class="d-flex justify-content-between mt-2">
       <section>
         <!-- Description/Attendance Section -->
-        <% if @card_name.card_title == "Attendance" %>
+        <% if @card_name.card_title == "Attendance" && !@addcard.card_name.downcase.include?("scribe") %>
           <div>
             <div>
               <div class="d-flex align-items-center">
