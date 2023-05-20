@@ -578,3 +578,13 @@
     color: white;
     font-family: 'Roboto', sans-serif;
   }
+
+  /* Project Section */
+  .project-icon {
+    width: 15px;
+    height: 15px;
+    margin-left: 10px;
+  }
+  .project-icon:hover {
+    cursor: pointer;
+  }

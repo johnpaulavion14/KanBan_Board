@@ -5,7 +5,7 @@ class EditaccountsController < ApplicationController
     @user = User.find(current_user.id)
     respond_to do |format|
       if @user.update(account_params)
-        redirect_to dashboard_path
+        format.html { redirect_to root_path, notice: "You have successfully updated your account" }
       else
         redirect_to dashboard_path
       end

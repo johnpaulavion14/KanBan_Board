@@ -53,6 +53,11 @@ Rails.application.routes.draw do
   patch 'update/role/:id' => 'allusers#update', as: 'update_role'
   patch 'update/admin/:id/:admin' => 'allusers#updateadmin', as: 'update_admin'
 
+  # Projects
+  get 'projects' => 'projects#index', as: 'view_projects'
+  # patch 'update/role/:id' => 'allusers#update', as: 'update_role'
+  # patch 'update/admin/:id/:admin' => 'allusers#updateadmin', as: 'update_admin'
+
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
