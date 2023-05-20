@@ -58,6 +58,9 @@ Rails.application.routes.draw do
   # patch 'update/role/:id' => 'allusers#update', as: 'update_role'
   # patch 'update/admin/:id/:admin' => 'allusers#updateadmin', as: 'update_admin'
 
+ # Rocks
+  post 'create/rocks' => 'projects#create_rocks', as: 'create_rocks'
+
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

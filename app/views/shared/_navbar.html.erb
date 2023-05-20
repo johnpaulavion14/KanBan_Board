@@ -75,6 +75,7 @@
           <%= link_to 'Logout', destroy_user_session_path,data: {turbo_method: :delete, turbo_confirm: 'Are you sure you want to logout?'}, class:"logout" %>
         </div>
       </div>
+      <!-- Edit Account -->
       <div class="edit-account-con">
         <%= form_with url:update_account_path, method: :patch, local: true do |f| %>
           <div style="font-weight: bold; font-size: 1.5rem;text-align: center;">-Edit Account-</div>

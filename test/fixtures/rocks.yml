@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  task_name: MyString
+  start: 2023-05-20
+  finish: 2023-05-20
+  assigned: MyString
+  complete: 1
+  status: MyString
+  remarks: MyText
+
+two:
+  task_name: MyString
+  start: 2023-05-20
+  finish: 2023-05-20
+  assigned: MyString
+  complete: 1
+  status: MyString
+  remarks: MyText

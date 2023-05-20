@@ -1,32 +1,78 @@
-<table class="table table-hover text-center">
-  <thead>
-    <tr>
-      <th scope="col"></th>
-      <th scope="col">Task Name</th>
-      <th scope="col">Duration</th>
-      <th scope="col">Start</th>
-      <th scope="col">Finish</th>
-      <th scope="col">Assigned To</th>
-      <th scope="col">% Complete</th>
-      <th scope="col">Status</th>
-      <th scope="col">Remarks</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <%= image_tag ("message.png"), class:"project-icon" %>
-        <%= image_tag ("edit.png"), class:"project-icon" %>
-        <%= image_tag ("delete.png"), class:"project-icon" %>
-      </td>
-      <td>text</td>
-      <td>number of days</td>
-      <td>date</td>
-      <td>date</td>
-      <td>select email</td>
-      <td>select %</td>
-      <td>select status</td>
-      <td>text</td>
-    </tr>
-  </tbody>
-</table>
+<div style="overflow-x: auto;">
+  <table class="table table-hover text-center" style="overflow-x: auto;">
+    <thead>
+      <tr>
+        <th scope="col" style="width:100px;"></th>
+        <th scope="col">Task Name</th>
+        <th scope="col">Duration</th>
+        <th scope="col">Start</th>
+        <th scope="col">Finish</th>
+        <th scope="col">Assigned To</th>
+        <th scope="col">% Complete</th>
+        <th scope="col">Status</th>
+        <th scope="col" style="width:300px;">Remarks</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @rocks.each do |rock| %>
+      <tr>
+        <td class="d-flex">
+          <%= image_tag ("message.png"), class:"project-icon" %>
+          <%= image_tag ("edit.png"), class:"project-icon" %>
+          <%= image_tag ("delete.png"), class:"project-icon" %>
+        </td>
+        <td><%= rock.task_name %></td>
+        <td>days</td>
+        <td><%= rock.start %></td>
+        <td><%= rock.finish %></td>
+        <td><%= rock.assigned %></td>
+        <td><%= rock.complete %></td>
+        <td><%= rock.status %></td>
+        <td><%= rock.remarks %></td>
+      </tr>
+      <% end %>
+      <tr class="new-rock">
+        <%= form_with url:create_rocks_path, method: :post, local: true do |f| %>
+        <td></td>
+        <td><%= f.text_field :task_name, required:true %></td>
+        <td></td>
+        <td><%= f.date_field :start, required:true %></td>
+        <td><%= f.date_field :finish, required:true %></td>
+        <td><%= f.text_field :assigned, required:true %></td>
+        <td><%= f.number_field :complete, required:true %></td>
+        <td><%= f.text_field :status, required:true %></td>
+        <td><%= f.text_field :remarks, required:true %></td>
+        <td><%= image_submit_tag("check.png")%></td>
+        <td class="x"><%= image_tag ("x.png")%></td>
+      <% end %>
+      </tr>
+    </tbody>
+  </table>
+  <div role="button" class="new-project mx-4 mb-3">
+    Add new project here !
+  </div>
+
+</div>
+
+<script>
+
+$(".new-rock").css("display", "none")
+  $(document).ready(function(){
+
+    $(".new-project").click(function(){
+      $(".new-rock").show();
+      $(this).hide();
+    });
+
+    $(".x").click(function(){
+      $(".new-rock").hide();
+      $(".new-project").show();
+    });
+
+
+
+
+  });
+
+
+</script>

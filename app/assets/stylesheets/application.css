@@ -588,3 +588,12 @@
   .project-icon:hover {
     cursor: pointer;
   }
+  .new-project {
+    text-align: center;
+    font-weight: bold;
+    padding: 10px 0;
+    border: 3px dashed gray;
+  }
+  .new-project:hover {
+    background-color: rgb(193, 191, 191);
+  }
