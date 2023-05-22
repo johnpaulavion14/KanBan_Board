@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
   before_action :authenticate_user!
   
   def index
-    @rocks = Rock.all
+    @rocks = Rock.all.order("created_at asc")
 
   end
 
@@ -10,11 +10,33 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if Rock.create(rock_params)
         format.html { redirect_to view_projects_path, notice: "You have successfully create a new project" }
+        format.html { redirect_to request.referrer, notice: "User was successfully WHATEVER." }
       else
         redirect_to view_projects_path
       end
     end
     
+  end
+
+  def update_rocks
+    respond_to do |format|
+      if Rock.find(params[:id]).update(rock_params)
+        format.html { redirect_to view_projects_path, notice: "You have successfully updated your project" }
+      else
+        redirect_to view_projects_path
+      end
+    end
+    
+  end
+
+  def delete_rocks
+    respond_to do |format|
+      if Rock.find(params[:id]).destroy
+        format.html { redirect_to view_projects_path, notice: "You have successfully deleted you rock" }
+      else
+        redirect_to view_projects_path
+      end
+    end
   end
 
   private

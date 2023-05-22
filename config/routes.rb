@@ -60,6 +60,8 @@ Rails.application.routes.draw do
 
  # Rocks
   post 'create/rocks' => 'projects#create_rocks', as: 'create_rocks'
+  patch 'update/rocks' => 'projects#update_rocks', as: 'update_rocks'
+  delete 'delete/rocks/:id' => 'projects#delete_rocks', as: 'delete_rocks'
 
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
