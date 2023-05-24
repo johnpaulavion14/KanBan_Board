@@ -10,12 +10,13 @@
         <th scope="col">Assigned To</th>
         <th scope="col">% Complete</th>
         <th scope="col">Status</th>
-        <th scope="col" style="width:300px;">Remarks</th>
+        <th scope="col">Remarks</th>
       </tr>
     </thead>
     <tbody>
       <% @rocks.each do |rock| %>
-        <tr class="all-rocks">
+      
+      <tr class="all-rocks">
           <td class="d-flex align-items-center">
             <%= image_tag ("message.png"), class:"project-icon" %>
             <%= image_tag ("edit.png"), class:"project-icon edit-rock" %>
@@ -24,15 +25,18 @@
             <% end %>
           </td>
           <td style="display: none;" id="rock-id"><%= rock.id %></td>
-          <td class="task-name"><%= rock.task_name %></td>
-          <td>days</td>
+          <td class="task-name">
+            <%= image_tag ("plus.png"),role:"button" %>
+            <%= rock.task_name %>
+          </td>
+          <td><%= (rock.finish.to_date - rock.start.to_date).to_i %> days</td>
           <td class="start"><%= rock.start %></td>
           <td class="finish"><%= rock.finish %></td>
           <td class="assigned"><%= rock.assigned %></td>
-          <td class="complete"><%= rock.complete %></td>
-          <td class="status"><%= rock.status %></td>
-          <td class="remarks"><%= rock.remarks %></td>
-        </tr>
+          <td><span class="complete"><%= rock.complete %></span> %</td>
+          <td class="status com-status"><%= rock.status %></td>
+          <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= rock.remarks %></td>
+      </tr>
       <% end %>
       <tr class="new-rock">
         <%= form_with url:create_rocks_path, method: :post, local: true do |f| %>
@@ -40,14 +44,14 @@
             <%= image_submit_tag("check.png")%>
             <span class="x-create mb-1 mx-2" role="button"><%= image_tag ("x.png")%></span>
           </td>
-          <td><%= f.text_field :task_name, required:true %></td>
+          <td><%= f.text_field :task_name, required:true, class:"px-2" %></td>
           <td></td>
-          <td><%= f.date_field :start, required:true %></td>
-          <td><%= f.date_field :finish, required:true %></td>
-          <td><%= f.text_field :assigned, required:true %></td>
-          <td><%= f.number_field :complete, required:true %></td>
-          <td><%= f.text_field :status, required:true %></td>
-          <td><%= f.text_field :remarks, required:true %></td>
+          <td><%= f.date_field :start, required:true, class:"px-2" %></td>
+          <td><%= f.date_field :finish, required:true, class:"px-2" %></td>
+          <td><%= f.select :assigned,@users, required:true, class:"px-2" %></td>
+          <td><%= f.select :complete, [10,20,30,40,50,60,70,80,90,100], required:true, class:"px-2" %> %</td>
+          <td><%= f.select :status, ["Not Started", "In Progress", "Complete"], required:true, class:"px-2" %></td>
+          <td><%= f.text_field :remarks, required:true, class:"px-2" %></td>
         <% end %>
       </tr>
       <tr class="update-rock">
@@ -57,14 +61,14 @@
             <span class="x-update mb-1 mx-2" role="button"><%= image_tag ("x.png")%></span>
           </td>
           <td style="display: none;"><%= f.number_field :id, required:true,id:"rock-id" %></td>
-          <td><%= f.text_field :task_name, required:true,id:"task-name" %></td>
+          <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2" %></td>
           <td></td>
-          <td><%= f.date_field :start, required:true,id:"start" %></td>
-          <td><%= f.date_field :finish, required:true,id:"finish" %></td>
-          <td><%= f.text_field :assigned, required:true,id:"assigned" %></td>
-          <td><%= f.number_field :complete, required:true,id:"complete" %></td>
-          <td><%= f.text_field :status, required:true,id:"status" %></td>
-          <td><%= f.text_field :remarks, required:true,id:"remarks" %></td>
+          <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
+          <td><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
+          <td><%= f.select :assigned,@users, required:true,id:"assigned", class:"px-2" %></td>
+          <td><%= f.select :complete, [10,20,30,40,50,60,70,80,90,100], required:true,id:"complete", class:"px-2" %> %</td>
+          <td><%= f.select :status, ["Not Started", "In Progress", "Complete"], required:true, id:"status", class:"px-2" %></td>
+          <td><%= f.text_field :remarks, required:true,id:"remarks", class:"px-2" %></td>
         <% end %>
       </tr>
     </tbody>
@@ -96,12 +100,13 @@
     $(".update-rock").css("display", "none")
     $(".edit-rock").each( function(index,value) {
       $(value).click(function(){
+        $(".all-rocks").show();
         // rock variables
         var task_name =  $(this).parents("tr").children(".task-name").text()
         var start =  $(this).parents("tr").children(".start").text()
         var finish =  $(this).parents("tr").children(".finish").text()
         var assigned =  $(this).parents("tr").children(".assigned").text()
-        var complete =  $(this).parents("tr").children(".complete").text()
+        var complete =  $(this).parents("tr").find(".complete").text()
         var status =  $(this).parents("tr").children(".status").text()
         var remarks =  $(this).parents("tr").children(".remarks").text()
         var rock_id =  $(this).parents("tr").children("#rock-id").text()
@@ -118,10 +123,6 @@
         $(this).parents("tr").hide()
         $(".update-rock").insertAfter($(this).parents("tr"))
         $(".update-rock").show();
-
-        
-
-        
       })
     })
     $(".x-update").click(function(){
@@ -129,12 +130,12 @@
       $(".all-rocks").show();
     });
 
-    
-   
-
-    
-
-
+    // Complete status
+    $(".com-status").each( function(index,value) {
+      if ($(value).text() == "Complete"){
+        $(value).parents(".all-rocks").css("text-decoration", "line-through")
+      }
+    });
 
   });
 

@@ -3,10 +3,14 @@ class ProjectsController < ApplicationController
   
   def index
     @rocks = Rock.all.order("created_at asc")
+    @users = User.all.pluck(:email)
 
   end
 
   def create_rocks
+    start_date = Date.parse params[:start] 
+    finish_date = Date.parse params[:finish] 
+    duration = (finish_date - start_date).to_i
     respond_to do |format|
       if Rock.create(rock_params)
         format.html { redirect_to view_projects_path, notice: "You have successfully create a new project" }
