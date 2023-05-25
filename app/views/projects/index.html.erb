@@ -1,7 +1,7 @@
 <div style="overflow-x: auto;">
-  <table class="table table-hover text-center" style="overflow-x: auto;">
+  <table class="table table-hover text-center">
     <thead>
-      <tr>
+      <tr style="color: rgb(43, 43, 251);">
         <th scope="col" style="width:100px;"></th>
         <th scope="col">Task Name</th>
         <th scope="col">Duration</th>
@@ -15,18 +15,21 @@
     </thead>
     <tbody>
       <% @rocks.each do |rock| %>
-      
-      <tr class="all-rocks">
-          <td class="d-flex align-items-center">
-            <%= image_tag ("message.png"), class:"project-icon" %>
-            <%= image_tag ("edit.png"), class:"project-icon edit-rock" %>
-            <%= link_to delete_rocks_path(rock.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
-              <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
-            <% end %>
+        <!-- All Rocks -->
+        <tr class="all-rocks" style="background-color: rgb(241, 241, 59); font-weight: bold;">
+          <td class="notif-con" role="button">
+            <div class="notif">
+              <%= image_tag ("message.png"), class:"project-icon" %>
+              <%= image_tag ("edit.png"), class:"project-icon edit-rock" %>
+              <%= link_to delete_rocks_path(rock.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+                <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
+              <% end %>
+            </div>
           </td>
           <td style="display: none;" id="rock-id"><%= rock.id %></td>
-          <td class="task-name">
-            <%= image_tag ("plus.png"),role:"button" %>
+          <td class="task-name" style="text-align: left; max-width: 150px;">
+            <%= image_tag ("plus.png"),role:"button", style:"margin-left:1rem",class:"plus-icon" %>
+            <%= image_tag ("minus.png"),role:"button", style:"margin-left:1rem",class:"minus-icon" %>
             <%= rock.task_name %>
           </td>
           <td><%= (rock.finish.to_date - rock.start.to_date).to_i %> days</td>
@@ -36,8 +39,73 @@
           <td><span class="complete"><%= rock.complete %></span> %</td>
           <td class="status com-status"><%= rock.status %></td>
           <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= rock.remarks %></td>
-      </tr>
+        </tr>
+        <!-- All Milestones -->
+        <% @milestones.each do |milestone| %>
+          <% if rock.id == milestone.rock_id %>
+            <tr class="all-milestones rock-<%= rock.id %>">
+              <td class="notif-con" role="button" >
+                <div class="notif">
+                  <%= image_tag ("message.png"), class:"project-icon" %>
+                  <%= image_tag ("edit.png"), class:"project-icon edit-milestone" %>
+                  <%= link_to delete_milestones_path(rock.id,milestone.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+                    <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
+                  <% end %>
+                </div>
+              </td>
+              <td style="display: none;" id="rock-id"><%= rock.id %></td>
+              <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
+              <td class="task-name" style="text-align: left; max-width: 100px; padding-left:4rem"><%= milestone.task_name %></td>
+              <td><%= (rock.finish.to_date - milestone.start.to_date).to_i %> days</td>
+              <td class="start"><%= milestone.start %></td>
+              <td class="finish"><%= milestone.finish %></td>
+              <td class="assigned"><%= milestone.assigned %></td>
+              <td><span class="complete"><%= milestone.complete %></span> %</td>
+              <td class="status com-status"><%= milestone.status %></td>
+              <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= milestone.remarks %></td>
+            </tr>
+          <% end %>
+        <% end %>
+        <tr class="blank-milestone rock-<%= rock.id %>" role="button">
+          <td></td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+        <tr class="new-milestone rock-<%= rock.id %>">
+          <%= form_with url:create_milestones_path(rock.id), method: :post, local: true do |f| %>
+            <td class="d-flex align-items-center justify-content-center">
+              <%= image_submit_tag("check.png")%>
+              <span class="x-new-milestone mb-1 mx-2" role="button"><%= image_tag ("x.png")%></span>
+            </td>
+            <td><%= f.text_field :task_name, required:true, class:"px-2" %></td>
+            <td></td>
+            <td><%= f.date_field :start, required:true, class:"px-2" %></td>
+            <td><%= f.date_field :finish, required:true, class:"px-2" %></td>
+            <td><%= f.select :assigned,@users, required:true, class:"px-2" %></td>
+            <td><%= f.select :complete, [10,20,30,40,50,60,70,80,90,100], required:true, class:"px-2" %> %</td>
+            <td><%= f.select :status, ["Not Started", "In Progress", "Complete"], required:true, class:"px-2" %></td>
+            <td><%= f.text_field :remarks, required:true, class:"px-2" %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
       <% end %>
+      <!-- Rocks Create and Update -->
       <tr class="new-rock">
         <%= form_with url:create_rocks_path, method: :post, local: true do |f| %>
           <td class="d-flex align-items-center justify-content-center">
@@ -70,6 +138,25 @@
           <td><%= f.select :status, ["Not Started", "In Progress", "Complete"], required:true, id:"status", class:"px-2" %></td>
           <td><%= f.text_field :remarks, required:true,id:"remarks", class:"px-2" %></td>
         <% end %>
+        <!-- Milstones Update -->
+        <tr class="update-milestone">
+          <%= form_with url:update_milestones_path(), method: :patch, local: true do |f| %>
+            <td class="d-flex align-items-center justify-content-center">
+              <%= image_submit_tag("check2.png")%>
+              <span class="x-update-milestone mb-1 mx-2" role="button"><%= image_tag ("x.png")%></span>
+            </td>
+            <td style="display: none;"><%= f.number_field :rock_id, required:true,id:"rock-id" %></td>
+            <td style="display: none;"><%= f.number_field :id, required:true,id:"milestone-id" %></td>
+            <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2" %></td>
+            <td></td>
+            <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
+            <td><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
+            <td><%= f.select :assigned,@users, required:true,id:"assigned", class:"px-2" %></td>
+            <td><%= f.select :complete, [10,20,30,40,50,60,70,80,90,100], required:true,id:"complete", class:"px-2" %> %</td>
+            <td><%= f.select :status, ["Not Started", "In Progress", "Complete"], required:true, id:"status", class:"px-2" %></td>
+            <td><%= f.text_field :remarks, required:true,id:"remarks", class:"px-2" %></td>
+          <% end %>
+        </tr>
       </tr>
     </tbody>
   </table>
@@ -82,6 +169,13 @@
 <script>
 
   $(document).ready(function(){
+    // -----Rock Section------
+
+    // hover message/edit/delete
+    $(".notif").css("display","none")
+    $(".notif-con").hover(function(){
+      $(this).children(".notif").toggle()
+    })
     
     // Create New Rock
     $(".new-rock").css("display", "none")
@@ -102,7 +196,7 @@
       $(value).click(function(){
         $(".all-rocks").show();
         // rock variables
-        var task_name =  $(this).parents("tr").children(".task-name").text()
+        var task_name =  $(this).parents("tr").children(".task-name").text().replace(/\s/g, '')
         var start =  $(this).parents("tr").children(".start").text()
         var finish =  $(this).parents("tr").children(".finish").text()
         var assigned =  $(this).parents("tr").children(".assigned").text()
@@ -133,8 +227,88 @@
     // Complete status
     $(".com-status").each( function(index,value) {
       if ($(value).text() == "Complete"){
-        $(value).parents(".all-rocks").css("text-decoration", "line-through")
+        $(value).parents("tr").children("td").not(".notif-con").css("text-decoration", "line-through")
       }
+    });
+
+    // -----Milestone Section------
+
+    // Show / Hide / Create Milestones
+    $(".minus-icon").css("display", "none")
+    $(".all-milestones").css("display", "none")
+    $(".new-milestone").css("display", "none")
+    $(".blank-milestone").css("display", "none")
+    $(".plus-icon").each( function(index,plus) {
+      $(plus).click(function(){
+        $(this).hide()
+        $(this).next(".minus-icon").show()
+        var id = $(plus).parents(".task-name").siblings("#rock-id").text()
+        var rock_id = ".rock-" + id
+        $(rock_id).show()
+        $(rock_id + ".new-milestone").hide()
+      });
+    });
+    $(".minus-icon").each( function(index,minus) {
+      $(minus).click(function(){
+        $(this).hide()
+        $(this).prev(".plus-icon").show()
+        var id = $(minus).parents(".task-name").siblings("#rock-id").text()
+        var rock_id = ".rock-" + id
+        $(rock_id).hide()
+      });
+    });
+    // Edit milestone
+    $(".update-milestone").hide()
+    $(".edit-milestone").each( function(index,value) {
+      $(value).click(function(){
+        // $(".all-rocks").show();
+        // milestone variables
+        var task_name =  $(this).parents("tr").children(".task-name").text().replace(/\s/g, '')
+        var start =  $(this).parents("tr").children(".start").text()
+        var finish =  $(this).parents("tr").children(".finish").text()
+        var assigned =  $(this).parents("tr").children(".assigned").text()
+        var complete =  $(this).parents("tr").find(".complete").text()
+        var status =  $(this).parents("tr").children(".status").text()
+        var remarks =  $(this).parents("tr").children(".remarks").text()
+        var rock_id =  $(this).parents("tr").children("#rock-id").text()
+        var milestone_id =  $(this).parents("tr").children("#milestone-id").text()
+        // milestone values
+        $(".update-milestone").find("#task-name").val(task_name)
+        $(".update-milestone").find("#start").val(start)
+        $(".update-milestone").find("#finish").val(finish)
+        $(".update-milestone").find("#assigned").val(assigned)
+        $(".update-milestone").find("#complete").val(complete)
+        $(".update-milestone").find("#status").val(status)
+        $(".update-milestone").find("#remarks").val(remarks)
+        $(".update-milestone").find("#rock-id").val(rock_id)
+        $(".update-milestone").find("#milestone-id").val(milestone_id)
+
+        $(this).parents("tr").hide()
+        $(".update-milestone").insertAfter($(this).parents("tr"))
+        $(".update-milestone").show();
+      })
+    })
+
+    $(".x-update-milestone").each( function(index,value) {
+
+    });
+    $(".x-update-milestone").click(function(){
+      $(this).parents(".update-milestone").prev(".all-milestones").show()
+      $(".update-milestone").hide();
+    });
+    // Show new milestone form
+    $(".blank-milestone").each( function(index,blank) {
+      $(blank).click(function(){
+        $(blank).next(".new-milestone").show()
+        $(blank).hide()
+      });
+    });
+    // exit new milestone form
+    $(".x-new-milestone").each( function(index,milestone) {
+      $(milestone).click(function(){
+        $(milestone).parents(".new-milestone").hide()
+        $(milestone).parents(".new-milestone").prev(".blank-milestone").show()
+      });
     });
 
   });

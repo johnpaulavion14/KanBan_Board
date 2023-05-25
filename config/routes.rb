@@ -63,6 +63,11 @@ Rails.application.routes.draw do
   patch 'update/rocks' => 'projects#update_rocks', as: 'update_rocks'
   delete 'delete/rocks/:id' => 'projects#delete_rocks', as: 'delete_rocks'
 
+  # Milestones
+  post 'create/milestones/:rock_id' => 'projects#create_milestones', as: 'create_milestones'
+  patch 'update/milestones' => 'projects#update_milestones', as: 'update_milestones'
+  delete 'delete/milestones/:rock_id/:id' => 'projects#delete_milestones', as: 'delete_milestones'
+
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
