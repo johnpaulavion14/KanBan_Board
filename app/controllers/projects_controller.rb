@@ -12,7 +12,7 @@ class ProjectsController < ApplicationController
   def create_rocks
     respond_to do |format|
       if Rock.create(rock_params)
-        format.html { redirect_to view_projects_path, notice: "You have successfully create a new project" }
+        format.html { redirect_to view_projects_path(), notice: "You have successfully create a new project" }
       else
         redirect_to view_projects_path
       end
@@ -46,7 +46,7 @@ class ProjectsController < ApplicationController
     @milestone = Rock.find(params[:rock_id]).milestones.new(milestone_params)
     respond_to do |format|
       if @milestone.save
-        format.html { redirect_to view_projects_path, notice: "You have successfully create a new milestone" }
+        format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully create a new milestone" }
       else
         redirect_to view_projects_path
       end
@@ -58,7 +58,7 @@ class ProjectsController < ApplicationController
     @milestone = Rock.find(params[:rock_id]).milestones.find(params[:id])
     respond_to do |format|
       if @milestone.update(milestone_params)
-        format.html { redirect_to view_projects_path, notice: "You have successfully updated your project" }
+        format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully updated your project" }
       else
         redirect_to view_projects_path
       end
@@ -70,7 +70,7 @@ class ProjectsController < ApplicationController
     @milestone = Rock.find(params[:rock_id]).milestones.find(params[:id])
     respond_to do |format|
       if @milestone.destroy
-        format.html { redirect_to view_projects_path, notice: "You have successfully deleted you milestone" }
+        format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully deleted you milestone" }
       else
         redirect_to view_projects_path
       end
