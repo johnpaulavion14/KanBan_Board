@@ -1,22 +1,22 @@
 <div style="height: 90vh;width: 100vw; overflow:scroll; ">
   <table class="table table-hover text-center">
     <thead>
-      <tr style="color: rgb(43, 43, 251);">
-        <th scope="col" style="width:100px;"></th>
-        <th scope="col">Task Name</th>
-        <th scope="col">Duration</th>
-        <th scope="col">Start</th>
-        <th scope="col">Finish</th>
-        <th scope="col">Assigned To</th>
-        <th scope="col">% Complete</th>
-        <th scope="col">Status</th>
-        <th scope="col">Remarks</th>
+      <tr style="color: #0067a3; border-bottom: 3px solid #0067a3; height: 50px; vertical-align: middle;">
+        <th scope="col" style="min-width:100px;"></th>
+        <th scope="col" style="min-width: 200px;">Task Name</th>
+        <th scope="col" >Duration</th>
+        <th scope="col" style="width: 120px;">Start</th>
+        <th scope="col" style="width: 120px;">Finish</th>
+        <th scope="col" >Assigned To</th>
+        <th scope="col" style="min-width: 150px;">% Complete</th>
+        <th scope="col" >Status</th>
+        <th scope="col" >Remarks</th>
       </tr>
     </thead>
     <tbody>
       <% @rocks.each do |rock| %>
         <!-- All Rocks -->
-        <tr class="all-rocks" style="background-color: rgb(241, 241, 59); font-weight: bold;">
+        <tr class="all-rocks" style="background-color: rgb(215, 215, 215); font-weight: bold; vertical-align: middle;">
           <td class="notif-con" role="button">
             <div class="notif">
               <%= image_tag ("message.png"), class:"project-icon" %>
@@ -27,7 +27,7 @@
             </div>
           </td>
           <td style="display: none;" id="rock-id"><%= rock.id %></td>
-          <td class="task-name" style="text-align: left; max-width: 150px;">
+          <td class="task-name" style="text-align: left; min-width: 100px;">
             <%= image_tag ("plus.png"),role:"button", style:"margin-left:1rem",class:"plus-icon" %>
             <%= image_tag ("minus.png"),role:"button", style:"margin-left:1rem",class:"minus-icon" %>
             <%= rock.task_name %>
@@ -43,7 +43,7 @@
         <!-- All Milestones -->
         <% @milestones.each do |milestone| %> 
           <% if rock.id == milestone.rock_id %>
-            <tr class="all-milestones rock-<%= rock.id %>">
+            <tr class="all-milestones rock-<%= rock.id %>" style="vertical-align: middle;">
               <td class="notif-con" role="button" >
                 <div class="notif">
                   <%= image_tag ("message.png"), class:"project-icon" %>
@@ -55,7 +55,7 @@
               </td>
               <td style="display: none;" id="rock-id"><%= rock.id %></td>
               <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
-              <td class="task-name" style="text-align: left; width: 100px; padding-left:4rem"><%= milestone.task_name %></td>
+              <td class="task-name" style="text-align: left; min-width: 100px; padding-left:4rem"><%= milestone.task_name %></td>
               <td><%= (milestone.finish.to_date - milestone.start.to_date).to_i %> days</td>
               <td class="start"><%= milestone.start %></td>
               <td class="finish"><%= milestone.finish %></td>
@@ -120,7 +120,7 @@
           <td><%= f.date_field :start, required:true, class:"px-2" %></td>
           <td><%= f.date_field :finish, required:true, class:"px-2" %></td>
           <td><%= f.select :assigned,@users, required:true, class:"px-2" %></td>
-          <td><%= f.select :complete, [10,20,30,40,50,60,70,80,90,100], required:true, class:"px-2" %> %</td>
+          <td><%= f.select :complete, [10,20,30,40,50,60,70,80,90,100], required:true, class:"px-2"%></td>
           <td><%= f.select :status, ["Not Started", "In Progress", "Complete"], required:true, class:"px-2" %></td>
           <td><%= f.text_field :remarks, required:true, class:"px-2" %></td>
         <% end %>

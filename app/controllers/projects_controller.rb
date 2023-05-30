@@ -9,10 +9,13 @@ class ProjectsController < ApplicationController
   end
 
   def allprojects
-    @rocks = Rock.all.order("created_at asc")
-    @milestones = Milestone.all.order("created_at asc")
-    @users = User.all.pluck(:email)
-
+    User.all.each do |user|
+      if user.admin == true || user.host == true || current_user.email == "jpbocatija@cem.com"
+        @rocks = Rock.all.order("created_at asc")
+        @milestones = Milestone.all.order("created_at asc")
+        @users = User.all.pluck(:email)
+      end
+    end
   end
   
   # Rock

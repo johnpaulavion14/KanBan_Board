@@ -2,7 +2,7 @@
   <!-- Left Section -->
   <div class="mx-2 d-flex ">
     <!-- Logo -->
-    <%= link_to dashboard_path(), class:"nav-element #{'nav-active' if current_page?(dashboard_path)}" do %>
+    <%= link_to dashboard_path(), class:"nav-element #{'nav-active' if request.original_url.include? "dashboard"}" do %>
       <div class="m-auto d-flex">
         <div class="cem-logo"><%= image_tag ("cem-logo.png") %></div>
         <div class="m-auto">ITS L10 MEETING</div>
@@ -27,19 +27,21 @@
       </div>
     </div>
     <!-- Projects Section -->
-    <%= link_to "Your Projects",view_projects_path, class:"nav-element #{'nav-active' if current_page?(view_projects_path + ".1")}"  %>
+    <%= link_to "Your Projects",view_projects_path, class:"nav-element #{'nav-active' if request.original_url.include? "yourprojects"}"  %>
 
     <!-- All Users Section -->
     <% if current_user.email == "jpbocatija@cem.com" %>
-      <%= link_to "All Users",view_allusers_path, class:"nav-element #{'nav-active' if current_page?(view_allusers_path)}" %>
+      <%= link_to "All Users",view_allusers_path, class:"nav-element #{'nav-active' if request.original_url.include? "allusers"}" %>
     <% elsif current_user.admin == true %>
-      <%= link_to "All Users",view_allusers_path, class:"nav-element #{'nav-active' if current_page?(view_allusers_path)}" %>
+      <%= link_to "All Users",view_allusers_path, class:"nav-element #{'nav-active' if request.original_url.include? "allusers"}" %>
     <% end %>
     <!-- All Projects Section -->
     <% if current_user.email == "jpbocatija@cem.com" %>
-      <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if current_page?(view_allprojects_path)}" %>
+      <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if request.original_url.include? "allprojects"}" %>
     <% elsif current_user.admin == true %>
-      <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if current_page?(view_allprojects_path)}" %>
+      <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if request.original_url.include? "allprojects"}" %>
+    <% elsif current_user.host == true %>
+      <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if request.original_url.include? "allprojects"}" %>
     <% end %>
   </div>
   <!-- Right Section -->

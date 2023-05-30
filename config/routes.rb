@@ -53,7 +53,7 @@ Rails.application.routes.draw do
   patch 'update/admin/:id/:admin' => 'allusers#updateadmin', as: 'update_admin'
 
   # Projects
-  get 'projects' => 'projects#index', as: 'view_projects'
+  get 'yourprojects' => 'projects#index', as: 'view_projects'
   get 'allprojects' => 'projects#allprojects', as: 'view_allprojects'
   # patch 'update/role/:id' => 'allusers#update', as: 'update_role'
   # patch 'update/admin/:id/:admin' => 'allusers#updateadmin', as: 'update_admin'
