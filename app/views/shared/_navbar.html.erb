@@ -25,13 +25,19 @@
       </div>
     </div>
     <!-- Projects Section -->
-    <%= link_to "Projects",view_projects_path, class:"nav-element" %>
+    <%= link_to "Your Projects",view_projects_path, class:"nav-element" %>
 
     <!-- All Users Section -->
     <% if current_user.email == "jpbocatija@cem.com" %>
       <%= link_to "All Users",view_allusers_path, class:"nav-element" %>
     <% elsif current_user.admin == true %>
       <%= link_to "All Users",view_allusers_path, class:"nav-element" %>
+    <% end %>
+    <!-- All Projects Section -->
+    <% if current_user.email == "jpbocatija@cem.com" %>
+      <%= link_to "All Projects",view_allprojects_path, class:"nav-element" %>
+    <% elsif current_user.admin == true %>
+      <%= link_to "All Projects",view_allprojects_path, class:"nav-element" %>
     <% end %>
   </div>
   <!-- Right Section -->

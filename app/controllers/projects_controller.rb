@@ -2,6 +2,13 @@ class ProjectsController < ApplicationController
   before_action :authenticate_user!
   
   def index
+    @rocks = current_user.rocks.order("created_at asc")
+    @milestones = Milestone.all.order("created_at asc")
+    @users = User.all.pluck(:email)
+
+  end
+
+  def allprojects
     @rocks = Rock.all.order("created_at asc")
     @milestones = Milestone.all.order("created_at asc")
     @users = User.all.pluck(:email)
@@ -11,7 +18,7 @@ class ProjectsController < ApplicationController
   # Rock
   def create_rocks
     respond_to do |format|
-      if Rock.create(rock_params)
+      if current_user.rocks.create(rock_params)
         format.html { redirect_to view_projects_path(), notice: "You have successfully create a new project" }
       else
         redirect_to view_projects_path
@@ -22,7 +29,7 @@ class ProjectsController < ApplicationController
 
   def update_rocks
     respond_to do |format|
-      if Rock.find(params[:id]).update(rock_params)
+      if current_user.rocks.find(params[:id]).update(rock_params)
         format.html { redirect_to view_projects_path, notice: "You have successfully updated your project" }
       else
         redirect_to view_projects_path
@@ -32,8 +39,9 @@ class ProjectsController < ApplicationController
   end
 
   def delete_rocks
+    current_user.rocks.find(params[:id]).milestones.destroy_all
     respond_to do |format|
-      if Rock.find(params[:id]).destroy
+      if current_user.rocks.find(params[:id]).destroy
         format.html { redirect_to view_projects_path, notice: "You have successfully deleted you rock" }
       else
         redirect_to view_projects_path
@@ -43,7 +51,7 @@ class ProjectsController < ApplicationController
 
   # Milestones
   def create_milestones
-    @milestone = Rock.find(params[:rock_id]).milestones.new(milestone_params)
+    @milestone = current_user.rocks.find(params[:rock_id]).milestones.new(milestone_params)
     respond_to do |format|
       if @milestone.save
         format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully create a new milestone" }
@@ -55,7 +63,7 @@ class ProjectsController < ApplicationController
   end
 
   def update_milestones
-    @milestone = Rock.find(params[:rock_id]).milestones.find(params[:id])
+    @milestone = current_user.rocks.find(params[:rock_id]).milestones.find(params[:id])
     respond_to do |format|
       if @milestone.update(milestone_params)
         format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully updated your project" }
@@ -67,7 +75,7 @@ class ProjectsController < ApplicationController
   end
 
   def delete_milestones
-    @milestone = Rock.find(params[:rock_id]).milestones.find(params[:id])
+    @milestone = current_user.rocks.find(params[:rock_id]).milestones.find(params[:id])
     respond_to do |format|
       if @milestone.destroy
         format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully deleted you milestone" }
