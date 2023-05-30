@@ -221,7 +221,7 @@
  }
 .toggleAddCard {
   display: none;
-  width: 15%;
+  width: max-content;
   padding: 1em;
   height: min-content;
   background-color: #ebecf0;

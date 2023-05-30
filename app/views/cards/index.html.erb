@@ -142,7 +142,8 @@
       $(".addcard-pencon").css("pointer-events", "none") // disable edit & delete addcard for non host and scribe
       $(".addcard").css("pointer-events", "none") // disable adding card for non host and scribe
       $(".clickAddList").css("pointer-events", "none") // disable adding card for non host and scribe
-    } else if (group == "false"){
+    } 
+    if (group == "false"){
       $(".hs").hide();
     }
 
