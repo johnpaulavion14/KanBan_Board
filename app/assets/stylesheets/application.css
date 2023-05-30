@@ -311,11 +311,6 @@
   width: 30px;
   height: 30px;
 }
-.cem-kanban {
-  text-decoration: none;
-  color: black;
-  font-weight: bold;
-}
 .cem-kanban:hover {
   color: white;
 }
@@ -326,12 +321,17 @@
   padding: .5rem 1rem;
   border-radius: 5px;
   margin: auto;
+  margin-left: 10px;
   text-decoration: none;
 }
 .nav-element:hover {
   background-color: #0067a3;
   cursor: pointer;
   color: white;
+}
+.nav-active {
+  color: white;
+  background-color: #0067a3;
 }
 .search-bar {
   background-color: white;
@@ -342,7 +342,6 @@
 }
 .create-relative {
   position: relative;
-  margin-left: 1rem;
   display: flex;
   align-items: center;
 }

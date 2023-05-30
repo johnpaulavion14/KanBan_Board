@@ -2,10 +2,12 @@
   <!-- Left Section -->
   <div class="mx-2 d-flex ">
     <!-- Logo -->
-    <div class="m-auto d-flex nav-element ">
-      <div class="cem-logo"><%= image_tag ("cem-logo.png") %></div>
-      <div class="m-auto"><%= link_to 'ITS L10 MEETING',dashboard_path, class:"cem-kanban" %></div>
-    </div>
+    <%= link_to dashboard_path(), class:"nav-element #{'nav-active' if current_page?(dashboard_path)}" do %>
+      <div class="m-auto d-flex">
+        <div class="cem-logo"><%= image_tag ("cem-logo.png") %></div>
+        <div class="m-auto">ITS L10 MEETING</div>
+      </div>
+    <% end %>
     <!-- Create Button -->
     <div class="create-relative">
       <div class="nav-element create-btn">Create</div>
@@ -25,19 +27,19 @@
       </div>
     </div>
     <!-- Projects Section -->
-    <%= link_to "Your Projects",view_projects_path, class:"nav-element" %>
+    <%= link_to "Your Projects",view_projects_path, class:"nav-element #{'nav-active' if current_page?(view_projects_path + ".1")}"  %>
 
     <!-- All Users Section -->
     <% if current_user.email == "jpbocatija@cem.com" %>
-      <%= link_to "All Users",view_allusers_path, class:"nav-element" %>
+      <%= link_to "All Users",view_allusers_path, class:"nav-element #{'nav-active' if current_page?(view_allusers_path)}" %>
     <% elsif current_user.admin == true %>
-      <%= link_to "All Users",view_allusers_path, class:"nav-element" %>
+      <%= link_to "All Users",view_allusers_path, class:"nav-element #{'nav-active' if current_page?(view_allusers_path)}" %>
     <% end %>
     <!-- All Projects Section -->
     <% if current_user.email == "jpbocatija@cem.com" %>
-      <%= link_to "All Projects",view_allprojects_path, class:"nav-element" %>
+      <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if current_page?(view_allprojects_path)}" %>
     <% elsif current_user.admin == true %>
-      <%= link_to "All Projects",view_allprojects_path, class:"nav-element" %>
+      <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if current_page?(view_allprojects_path)}" %>
     <% end %>
   </div>
   <!-- Right Section -->
@@ -121,37 +123,48 @@
 </div>
 
 <script>
-  // create board toggle
-  $(".new-board").css("display", "none")
+  
+
   $(document).ready(function(){
+
+    // create board toggle
+    $(".new-board").css("display", "none")
     $(".create-btn").click(function(){
       $(".new-board").toggle();
     });
-  });
-  
-  // account toggle
-  $(".account-con").css("display", "none")
-  $(document).ready(function(){
+
+    // account toggle
+    $(".account-con").css("display", "none")
     $(".circle").click(function(){
       $(".account-con").toggle();
       $(".edit-account-con").hide();
     });
-  });
 
-  $(".edit-account-con").css("display", "none")
-  $(document).ready(function(){
+    // Edit account
+    $(".edit-account-con").css("display", "none")
     $(".edit-account").click(function(){
       $(".account-con").hide();
       $(".edit-account-con").show();
     });
-  });
-
-  $(document).ready(function(){
+    // go back link
     $("#back").click(function(){
       $(".account-con").show();
       $(".edit-account-con").hide();
     });
+
+    // show profile pic
+    $(".pic-button").css("display", "none")
+    $( ".profile-pic" ).hover(
+      function() {
+      $( this ).find(".pic-button").css("display", "flex")
+      },
+      function() {
+      $( this ).find(".pic-button").hide()
+      } 
+    );
+
   });
+
   // show password
   function showPassword() {
     var x = document.getElementById("my-password");
@@ -161,18 +174,9 @@
     } else {
       x.type = "password";
     }
-    // hover pic buttons
   }
-  $(".pic-button").css("display", "none")
 
-  $( ".profile-pic" ).hover(
-    // $(".pic-button").show()
-    function() {
-    $( this ).find(".pic-button").css("display", "flex")
-    },
-    function() {
-    $( this ).find(".pic-button").hide()
-    } 
-  );
+  
+
 
 </script>

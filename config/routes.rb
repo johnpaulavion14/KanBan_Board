@@ -6,7 +6,6 @@ Rails.application.routes.draw do
   patch 'home/update_reset_password' => 'home#update_reset_password', as: 'send_reset_password'
 
   #dashboard
-  get 'dashboard/index'
   get 'dashboard' => 'dashboard#index', as: 'dashboard'
   #create_board
   get 'showboard/:id/:from' => 'create_boards#show', as: 'show_board'
