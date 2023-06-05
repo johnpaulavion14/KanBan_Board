@@ -39,10 +39,11 @@ class AddcardsController < ApplicationController
   # POST /addcards or /addcards.json
   def create
     @addcard = @card.addcards.new(addcard_params)
+    @page_value = params[:addcard][:page_scroll].to_i
 
     respond_to do |format|
       if @addcard.save
-        format.html { redirect_to view_cards_path(params[:cb_id]), notice: "Addcard was successfully created." }
+        format.html { redirect_to view_cards_path({page_scroll:@page_value}), notice: "Addcard was successfully created." }
         format.json { render :show, status: :created, location: @addcard }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -88,13 +89,14 @@ class AddcardsController < ApplicationController
   # DELETE /addcards/1 or /addcards/1.json
   def destroy
     @deletecard = @card.addcards.find(params[:id])
+    @page_value = params[:page_scroll].to_i
     # delete all comments inside the addcard
     @deletecard.addcomments.destroy_all
     # delete addcard
     @deletecard.destroy
 
     respond_to do |format|
-      format.html { redirect_to view_cards_path(params[:cb_id]), notice: "Addcard was successfully destroyed." }
+      format.html { redirect_to view_cards_path({page_scroll:@page_value}), notice: "Addcard was successfully destroyed." }
       format.json { head :no_content }
     end
   end

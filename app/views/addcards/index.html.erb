@@ -1,3 +1,4 @@
+<div class="d-none page-scroll"><%= params[:page_scroll] %></div>
 <div class="board-con addcard-bg">
   <span id="username" style="display: none;"><%= current_user.first_name %></span>
   <span id="group" style="display: none;"><%= @board.group %></span>
@@ -34,7 +35,7 @@
           </div>
         </div>
       </div>
-      <span><%= link_to "X" , view_cards_path, class:"addcards_X" %></span>
+      <span><%= link_to "X" , view_cards_path(), class:"addcards_X" %></span>
     </div>
     <div class="d-flex justify-content-between mt-2">
       <section>
@@ -169,7 +170,7 @@
       $(".toggleAddcard").hide();
       $(".clickAddcard").show();
     });
-  //disable buttons for non host or scribe
+    //disable buttons for non host or scribe
     let hosts = $(".host").text();
     let scribes = $(".scribe").text();
     let username = $("#username").text();
@@ -198,6 +199,13 @@
       $(".edit-desc").show();
     });
 
+    // Page Scroll
+    $(".addcards_X").click(function(){
+      let scroll = $(".page-scroll").text()
+      let href = $(this).attr("href") + `?page_scroll=${scroll}`
+      $(this).attr("href", href);
+    });
+    
   });
 
 </script>

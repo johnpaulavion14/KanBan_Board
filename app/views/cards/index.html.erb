@@ -15,7 +15,9 @@
       <% end %>      
     </span>
   </div>
-  <!-- Edit Card -->
+  <!-- Page scroll -->
+  <div class="d-none page-scroll"><%= params[:page_scroll] %></div>
+  <!-- Card  Section -->
   <div id="cards" class="card_container">
     <% @cards.each do |card| %>
       <div class="card_bg">
@@ -23,7 +25,7 @@
           <b class="card_title">
             <%= card.card_title %>
           </b>
-          <%= link_to delete_card_path({card_id:card.id}),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+          <%= link_to delete_card_path({card_id:card.id}),class:"del-card", data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
             <div class="addcard-pencon">
               <div class="addcard-penbox"></div>
               <div class="addcard-pencil"><%= image_tag ("delete.png"),class:"addcard-pen" %></div>
@@ -32,19 +34,21 @@
         </div>
         <div class="toggleCard">
           <%= form_with scope: :card, url:update_card_path({card_id:card.id}), method: :patch, local: true do |form| %>
+            <%= form.text_field :page_scroll, class:"scroll-value d-none" %>
             <span class="pb-1">
               <%= form.text_field :card_title,required: true, class:"input_border",id:"card-input" %>
             </span>
-            <span class="cardX btn btn-primary">X</span>
+            <span class="d-none"><%= image_submit_tag("check.png") %></span>
+            <span class="cardX btn btn-primary mx-2">X</span>
           <% end %>
         </div>
-        <!-- Addcard feature -->
+        <!-- Addcard Section -->
         <div class="d-flex flex-column addcard-outercon">
           <% @addcards.each do |addcard| %>
             <% if card.id==addcard.card_id %>
               <div class="addcard-con">
                 <%= link_to addcard.card_name, view_addcards_path(params[:cb_id],card.id, addcard.id), class:"addcard-name" %>
-                <%= link_to delete_addcard_path(params[:cb_id],card.id,addcard.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+                <%= link_to delete_addcard_path(params[:cb_id],card.id,addcard.id),class:"del-addcard", data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
                   <div class="addcard-pencon">
                     <div class="addcard-penbox"></div>
                     <div class="addcard-pencil"><%= image_tag ("delete.png"),class:"addcard-pen" %></div>
@@ -58,6 +62,7 @@
           <div class="addcard">+ Add a card </div>
           <div class="mt-3 addcard-form">
             <%= form_with scope: :addcard, url:create_addcard_path(params[:cb_id],card.id), method: :post, local: true do |form| %>
+              <%= form.text_field :page_scroll, class:"addlist-scroll-value d-none" %>
               <div class="pb-1">
                 <%= form.text_field :card_name, required: true,placeholder: "Enter a title for this card...",class:"form-con" %>
               </div>
@@ -75,6 +80,7 @@
     <div class="clickAddList add_list_btn">+ Add another list</div>
     <div class="toggleAddCard">
       <%= form_with scope: :card, url:create_card_path(params[:cb_id],), method: :post, local: true do |form| %>
+        <%= form.text_field :page_scroll, class:"addlist-scroll-value d-none" %>
         <div class="pb-1">
           <%= form.text_field :card_title,required: true,type:"text",placeholder: "Enter list title..." , class:"input_border" %>
         </div>
@@ -92,8 +98,12 @@
   $(document).ready(function(){
     // Addlist feature
     $(".clickAddList").click(function(){
-      $(this).hide();
       $(".toggleAddCard").show();
+      $(this).hide();
+
+       // Scroll Value
+       let scroll_val = $(".card_container").scrollLeft()
+      $(".addlist-scroll-value").val(scroll_val)
     });
 
     $(".clickX").click(function(){
@@ -109,13 +119,36 @@
       $(this).hide();
       $(this).siblings(".addcard-form").show();
     });
+    $(".addcard").click(function(){
+      $(".addcard").show();
+      $(".addcard-form").hide();
+      $(this).hide();
+      $(this).siblings(".addcard-form").show();
+      // Scroll Value
+      let scroll_val = $(".card_container").scrollLeft()
+      $(this).siblings(".addcard-form").find(".addlist-scroll-value").val(scroll_val)
+    });
+    $(".addcard-name").click(function(){
+      let scroll = $(".card_container").scrollLeft()
+      let href = $(this).attr("href") + `?page_scroll=${scroll}`
+      $(this).attr("href", href);
+    });
 
+    
     $(".cancel-desc").click(function(){
       $(".addcard-form").hide();
       $(".addcard").show();
     });
+     // Add page scroll after delete addcard
+     $(".del-addcard").each( function(index,deladdcard) {
+      $(deladdcard).click(function(){
+        let scroll_val = $(".card_container").scrollLeft()
+        let href = $(this).attr("href") + `?page_scroll=${scroll_val}`
+        $(this).attr("href", href);
+      });
+    });
 
-    // Edit Card
+    // Card Section
     $(".toggleCard").css("display", "none")
     $(".card_title").click(function(){
       let input_value = $(this).text().replace(/\s/g, '');
@@ -124,11 +157,23 @@
         $(this).parent(".card-con").hide();
         $(this).parent(".card-con").siblings(".toggleCard").show();
         $(this).parent(".card-con").siblings(".toggleCard").find("#card-input").val(input_value);
+        // Scroll Section
+        let scroll_val = $(".card_container").scrollLeft()
+        $(this).parent(".card-con").next(".toggleCard").find(".scroll-value").val(scroll_val)
     });
 
     $(".cardX").click(function(){
       $(".toggleCard").hide();
       $(this).parents(".toggleCard").siblings(".card-con").show();
+    });
+
+    // Add page scroll after delete card
+    $(".del-card").each( function(index,delcard) {
+      $(delcard).click(function(){
+        let scroll_val = $(".card_container").scrollLeft()
+        let href = $(this).attr("href") + `?page_scroll=${scroll_val}`
+        $(this).attr("href", href);
+      });
     });
 
     // Disable non host or scribe
@@ -147,7 +192,14 @@
       $(".hs").hide();
     }
 
+    // Scroll Section
+    let scroll = $(".page-scroll").text()
+      $(".card_container").scrollLeft(scroll)
+
+  
+
   });
+  
 
 
 </script>

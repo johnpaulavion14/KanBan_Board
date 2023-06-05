@@ -25,11 +25,11 @@ class CardsController < ApplicationController
   # POST /cards or /cards.json
   def create
     @card = CreateBoard.find(params[:cb_id]).cards.new(card_params)
+    @page_value = params[:card][:page_scroll].to_i + 1000
 
     respond_to do |format|
       if @card.save
-        format.html { redirect_to view_cards_path(params[:cb_id]), notice: "Card was successfully created." }
-        format.json { render :show, status: :created, location: @card }
+        format.html { redirect_to view_cards_path({page_scroll:@page_value}), notice: "Card was successfully created." }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @card.errors, status: :unprocessable_entity }
@@ -39,10 +39,11 @@ class CardsController < ApplicationController
 
   # PATCH/PUT /cards/1 or /cards/1.json
   def update
+    @page_value = params[:card][:page_scroll].to_i
     respond_to do |format|
       @card = CreateBoard.find(params[:cb_id]).cards.find(params[:card_id])
       if @card.update(card_params)
-        format.html { redirect_to view_cards_path(params[:cb_id]), notice: "Card was successfully updated." }
+        format.html { redirect_to view_cards_path({page_scroll:@page_value}), notice: "Card was successfully updated." }
         format.json { render :show, status: :ok, location: @card }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -54,6 +55,7 @@ class CardsController < ApplicationController
   # DELETE /cards/1 or /cards/1.json
   def destroy
     @card = CreateBoard.find(params[:cb_id]).cards.find(params[:card_id])
+    @page_value = params[:page_scroll].to_i
     # destroy all comment
     alladdcards = @card.addcards
     alladdcards.each do |addcard|
@@ -66,7 +68,7 @@ class CardsController < ApplicationController
     
 
     respond_to do |format|
-      format.html { redirect_to view_cards_path(params[:cb_id]), notice: "Card was successfully destroyed." }
+      format.html { redirect_to view_cards_path({page_scroll:@page_value}), notice: "Card was successfully destroyed." }
       format.json { head :no_content }
     end
   end
