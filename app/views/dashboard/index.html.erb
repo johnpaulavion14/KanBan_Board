@@ -1,47 +1,60 @@
-<!-- Private Boards -->
-<div style="height:200px">
-  <h4 class="your-boards">Your boards</h4>
-  <hr class="page-line" />
-  <div class="d-flex p-2">
-    <span style="display:none" class="current_username"><%= current_user.id %></span>
-    <% @create_boards.each do |create_board| %>
-        <div class="create-board">
-          <section class="d-flex justify-content-between align-items-center">
-            <b><%= link_to create_board.board_title,edit_create_board_path(create_board.id), class:"board-title" %></b>
-            <div class="private-modal three-dots">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-              </svg>
-  
-              <div class="dots-modal">
-                <div class="d-flex flex-column align-items-center">
-                  <%= link_to delete_board_path(create_board.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure you want to delete?'} do %>
-                    <div class="down-pic-con"><%= image_tag ("delete.png"),class:"down-pic" %></div>
-                  <% end %>
-                  <%= link_to update_group_path({group:"true", id:create_board.id}),data: {turbo_method: :patch, turbo_confirm: 'Are you sure you want to move to group boards?'} do %>
-                    <div class="down-pic-con"><%= image_tag ("down-arrow.png"),class:"down-pic mt-2" %></div>
-                  <% end %>
+<div class="dashboard-con">
+  <!-- Private Boards -->
+  <div style="height:200px">
+    <h4 class="your-boards">Your boards</h4>
+    <hr class="page-line" />
+    <div class="d-flex p-2">
+      <span style="display:none" class="current_username"><%= current_user.id %></span>
+      <% @create_boards.each do |create_board| %>
+          <div class="create-board">
+            <div class="d-none board-id"><%= create_board.id %></div>
+            <%= link_to view_cards_path(create_board.id),class:"link-cards" do %>
+              <div class="view-cards-div"></div>
+            <% end %>
+            <section class="d-flex justify-content-between align-items-center">
+              <b class="board-title" ><%= create_board.board_title %></b>
+              <div class="private-modal three-dots">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                  <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                </svg>
+    
+                <div class="dots-modal">
+                  <div class="d-flex flex-column align-items-center">
+                    <%= link_to delete_board_path(create_board.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure you want to delete?'} do %>
+                      <div class="down-pic-con"><%= image_tag ("delete.png"),class:"down-pic" %></div>
+                    <% end %>
+                    <%= link_to update_group_path({group:"true", id:create_board.id}),data: {turbo_method: :patch, turbo_confirm: 'Are you sure you want to move to group boards?'} do %>
+                      <div class="down-pic-con"><%= image_tag ("down-arrow.png"),class:"down-pic mt-2" %></div>
+                    <% end %>
+                  </div>
                 </div>
               </div>
+            </section>
+            <div class="mt-2">
+              <i class="board-desc"><%= create_board.board_desc %></i>
             </div>
-          </section>
-          <div class="mt-2">
-            <i><%= link_to create_board.board_desc, view_cards_path(create_board.id),class:"link-cards"%></i>
           </div>
-        </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
-</div>
-
-<!-- Group Boards -->
-<div class="mt-5">
-  <h4 class="your-boards">Group boards</h4>
-  <hr class="page-line" />
-  <div class="d-flex p-2">
-    <% @group_boards.each do |group_board| %>
+  
+  <!-- Group Boards -->
+  <div class="mt-5">
+    <h4 class="your-boards">Group boards</h4>
+    <hr class="page-line" />
+    <div class="d-flex p-2">
+      <% @group_boards.each do |group_board| %>
         <div class="create-board">
+          <div class="d-none board-id"><%= group_board.id %></div>
+          <%= link_to view_cards_path(group_board.id,{from:"group"}),class:"link-cards" do %>
+            <div class="view-cards-div"></div>
+          <% end %>
           <section class="d-flex justify-content-between align-items-center">
-            <b><%= link_to group_board.board_title,edit_create_board_path(group_board.id), class:"board-title" %></b>
+            <% if group_board.user_id == current_user.id %>
+              <b class="board-title" ><%= group_board.board_title %></b>
+            <% else %>
+              <b><%= group_board.board_title %></b>
+            <% end %>
             <div class="group-modal three-dots">
               <span style="display:none" class="username"><%= group_board.user_id %></span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
@@ -64,31 +77,48 @@
             </div>
           </section>
           <div class="mt-2">
-            <i><%= link_to group_board.board_desc, view_cards_path(group_board.id,{from:"group"}),class:"link-cards"%></i>
+            <i class="board-desc"><%= group_board.board_desc %></i>
           </div>
         </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
-</div>
-
-<!-- edit board modal -->
-<div class="pt-3 editboard-outer">
-  <div class="edit-board-con mx-auto mt-5">
-    <h3 class="card-heading">Editing Board</h3>
+  
+  <!-- edit board modal -->
+  <div class="edit-modal-con">
+    <div class="bg-con">
+    </div>
+    <div class="edit-board-con mx-auto mt-5">
+      <h2 class="card-heading"><u>Edit Board</u></h2>
+      <%= form_with scope: :create_board, url:"/create_boards" , method: :patch, local: true do |form| %>
+        <div class="pb-1">
+          <%= form.label :board_title, style: "display: block" %>
+          <%= form.text_field :board_title,required: true, class:"input_border b-title-val" %>
+        </div>
+        <div class="pb-1">
+          <%= form.label :board_desc, style: "display: block" %>
+          <%= form.text_field :board_desc, class:"input_border b-desc-val" %>
+        </div>
+    
+        <div style="margin-top: 1rem;">
+          <%= form.submit "Save board" , class:"btn btn-success submit-board" %>
+          <span class="btn btn-danger mx-2 exit">X</span>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>
 
 <script>
-  $(".dots-modal").css("display", "none")
-  $(".host-modal").css("display", "none")
-// your board modal
   $(document).ready(function(){
+    // your board modal
+    $(".dots-modal").css("display", "none")
+    $(".host-modal").css("display", "none")
     $(".private-modal").click(function(){
         $(this).children(".dots-modal").toggle();
     });
-  });
-// group modal
-  $(document).ready(function(){
+ 
+  // group modal
     $(".group-modal").click(function(){
       let username = $(this).find(".username").text();
       let current_username = $(".current_username").text();
@@ -99,7 +129,33 @@
         $(this).children(".host-modal").toggle();
       }
     });
+    // edit board modal
+    $(".edit-modal-con").css("display", "none")
+    $(".board-title").each( function(index,title) {
+      $(title).click(function(){
+        let board_title = $(this).text().replace(/\s/g, '');
+        let board_desc = $(this).parents(".create-board").find(".board-desc").text().replace(/\s/g, '');
+        let board_id = $(this).parents(".create-board").find(".board-id").text();
+        let action = $(".edit-modal-con").find("form").attr("action") + `/${board_id}`;
+        $(".edit-modal-con").find("form").attr("action", action);
+        $(".b-title-val").val(board_title);
+        $(".b-desc-val").val(board_desc);
+        $(".edit-modal-con").show()
+      });
+    });
+
+    $(".bg-con").click(function(){
+      $(".edit-modal-con").hide()
+    });
+
+    $(".exit").click(function(){
+      $(".edit-modal-con").hide()
+    });
+
+
+
   });
+
 
 </script>
 

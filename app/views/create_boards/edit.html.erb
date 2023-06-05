@@ -1,6 +1,6 @@
 <div class="pt-3 board-con">
   <div class="edit-board-con mx-auto mt-5">
-    <h3 class="card-heading">Editing Board</h3>
+    <h2 class="card-heading"><u>Editing Board</u></h2>
     <%= form_with scope: :create_board, url:update_board_path(params[:id]), method: :patch, local: true do |form| %>
       <div class="pb-1">
         <%= form.label :board_title, style: "display: block" %>
@@ -11,9 +11,9 @@
         <%= form.text_field :board_desc,value:@create_board.board_desc, class:"input_border" %>
       </div>
 
-      <div>
-        <%= form.submit "Edit board" , class:"btn btn-primary" %>
-        <%= link_to "X" , dashboard_path, class:"btn btn-primary" %>
+      <div style="margin-top: 1rem;">
+        <%= form.submit "Save board" , class:"btn btn-success" %>
+        <%= link_to "X" , dashboard_path, class:"btn btn-danger mx-2" %>
       </div>
     <% end %>
   </div>

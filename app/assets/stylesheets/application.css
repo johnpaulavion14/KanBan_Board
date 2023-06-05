@@ -17,6 +17,9 @@
   body {
     overflow: hidden;
   }
+  .dashboard-con {
+    position: relative;
+  }
   .title-section {
     display: flex;
     justify-content: space-between;
@@ -43,6 +46,7 @@
     
   }
   .create-board {
+    position: relative;
     font-size: 1.2rem;
     background-color: #0067a3;
     color: white;
@@ -64,7 +68,7 @@
     color: white;
     border-radius: 5px;
     padding: .7rem;
-    
+    z-index: 2;
   }
   .three-dots:hover {
     color: white;
@@ -116,24 +120,47 @@
     height: 20px;
     margin: auto;
   }
+  .view-cards-div {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: 1;
+    width: 230px;
+    height: 125px;
+  }
 
   /* Create Board */
   .board-title {
+    position: relative;
     color: white;
     text-decoration: none;
     margin-left: .5rem;
+    z-index: 3;
   }
   .board-title:hover {
     color: white;
   }
+  .bg-con {
+    width: 100vw;
+    height: 100vh;
+    position: absolute ;
+    top: 0;
+    left: 0;
+    background-color: white;
+    opacity: 50%;
+    z-index: 1;
+  }
   .edit-board-con {
+    position: absolute ;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     color: white;
-    position: relative;
-    top: 2rem;
     width: max-content;
     padding: 2rem;
     background-color: #026299;
     border-radius: 5px;
+    z-index: 2;
   }
   .editboard-outer{
     display: none;
@@ -181,7 +208,7 @@
   box-shadow: 0 0 5px 5px rgb(153, 146, 146);
  }
  .card-heading{
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 600;
   cursor: pointer;
  }
