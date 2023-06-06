@@ -66,9 +66,6 @@
                   <%= link_to update_group_path({group:"false", id:group_board.id}),data: {turbo_method: :patch, turbo_confirm: 'Are you sure you want to move to your boards?'} do %>
                   <div class="down-pic-con"><%= image_tag ("up-arrow.png"),class:"down-pic" %></div>
                   <% end %>
-                  <%= link_to delete_board_path(group_board.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure you want to delete?'} do %>
-                  <div class="down-pic-con"><%= image_tag ("delete.png"),class:"down-pic mt-2" %></div>
-                  <% end %>
                 </div>
               </div>
               <div class="host-modal">

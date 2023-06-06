@@ -22,7 +22,7 @@
             <%= form.label 'Board descrition(optional)', style: "display: block" %>
             <%= form.text_field :board_desc, class:"px-2" %>
           </div>
-          <%= form.submit "Save", class:"btn btn-primary w-100 mt-1"%>
+          <%= form.submit "Save", class:"btn btn-success w-100 mt-1"%>
         <% end %>
       </div>
     </div>
@@ -44,6 +44,8 @@
       <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if request.original_url.include? "allprojects"}" %>
     <% end %>
   </div>
+  <!-- Create button background -->
+  <div class="create-bg"></div>
   <!-- Right Section -->
   <div class="d-flex align-items-center mx-4">
     <div>
@@ -131,8 +133,10 @@
 
     // create board toggle
     $(".new-board").css("display", "none")
+    $(".create-bg").css("display", "none")
     $(".create-btn").click(function(){
       $(".new-board").toggle();
+      $(".create-bg").toggle();
     });
 
     // account toggle

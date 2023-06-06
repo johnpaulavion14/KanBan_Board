@@ -148,7 +148,7 @@
     left: 0;
     background-color: white;
     opacity: 50%;
-    z-index: 1;
+    z-index: 5;
   }
   .edit-board-con {
     position: absolute ;
@@ -160,7 +160,7 @@
     padding: 2rem;
     background-color: #026299;
     border-radius: 5px;
-    z-index: 2;
+    z-index: 6;
   }
   .editboard-outer{
     display: none;
@@ -379,8 +379,18 @@
   background-color:white;
   padding: 1rem;
   border-radius: 8px;
-  z-index: 9;
+  z-index: 10;
   box-shadow: 0 0 1px 1px rgb(206, 206, 206);
+}
+.create-bg {
+  position: absolute;
+  top: 65px;
+  left: 0px;
+  background-color: white;
+  opacity: 50%;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9;
 }
 /* account section */
 .account-section {
