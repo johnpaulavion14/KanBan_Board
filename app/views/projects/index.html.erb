@@ -35,7 +35,22 @@
           <td><%= (rock.finish.to_date - rock.start.to_date).to_i %> days</td>
           <td class="start"><%= rock.start %></td>
           <td class="finish"><%= rock.finish %></td>
-          <td class="assigned"><%= rock.assigned %></td>
+          <td style="display: none;" id="rock-assigned"><%= rock.assigned %></td>
+          <td class="assigned">
+            <% if !rock.user.profilepics.blank? %>
+              <%= image_tag rock.user.profilepics.last.pic, class:"assigned-pics", title:current_user.email %>
+            <% end %>
+            <% @all_users.each do |user| %>
+              <% if rock.assigned.include? user.email %>
+                <% if user.id == rock.user.id %>
+                <% elsif !user.profilepics.blank?%>
+                  <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
+                <% else %>
+                  <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:user.email %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </td>
           <td><span class="complete"><%= rock.complete %></span> %</td>
           <td class="status com-status"><%= rock.status %></td>
           <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= rock.remarks %></td>
@@ -59,7 +74,22 @@
               <td><%= (milestone.finish.to_date - milestone.start.to_date).to_i %> days</td>
               <td class="start"><%= milestone.start %></td>
               <td class="finish"><%= milestone.finish %></td>
-              <td class="assigned"><%= milestone.assigned %></td>
+              <td style="display: none;" id="milestone-assigned"><%= milestone.assigned %></td>
+              <td class="assigned">
+                <% if !rock.user.profilepics.blank? %>
+                  <%= image_tag rock.user.profilepics.last.pic, class:"assigned-pics", title:current_user.email %>
+                <% end %>
+                <% @all_users.each do |user| %>
+                  <% if user.id == rock.user.id %>
+                  <% elsif milestone.assigned.include? user.email %>
+                    <% if !user.profilepics.blank? %>
+                      <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
+                    <% else %>
+                      <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:user.email %>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              </td>
               <td><span class="complete"><%= milestone.complete %></span> %</td>
               <td class="status com-status"><%= milestone.status %></td>
               <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= milestone.remarks %></td>
@@ -88,7 +118,7 @@
             <td></td>
             <td><%= f.date_field :start, required:true, class:"px-2" %></td>
             <td><%= f.date_field :finish, required:true, class:"px-2" %></td>
-            <td><%= f.select :assigned,@users, required:true, class:"px-2" %></td>
+            <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
             <td><%= f.select :complete, [10,20,30,40,50,60,70,80,90,100], required:true, class:"px-2" %> %</td>
             <td><%= f.select :status, ["Not Started", "In Progress", "Complete"], required:true, class:"px-2" %></td>
             <td><%= f.text_field :remarks, required:true, class:"px-2" %></td>
@@ -109,6 +139,7 @@
       <!-- milestone params after create or edit -->
       <div class="d-none milestone-params"><%= params[:rock_id] %></div>
       <!-- Rocks Create and Update -->
+      <div id="current-user-email" class="d-none"><%= current_user.email %></div>
       <tr class="new-rock">
         <%= form_with url:create_rocks_path, method: :post, local: true do |f| %>
           <td class="d-flex align-items-center justify-content-center">
@@ -119,7 +150,7 @@
           <td></td>
           <td><%= f.date_field :start, required:true, class:"px-2" %></td>
           <td><%= f.date_field :finish, required:true, class:"px-2" %></td>
-          <td><%= f.select :assigned,@users, required:true, class:"px-2" %></td>
+          <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5}) %></td>
           <td><%= f.select :complete, [10,20,30,40,50,60,70,80,90,100], required:true, class:"px-2"%></td>
           <td><%= f.select :status, ["Not Started", "In Progress", "Complete"], required:true, class:"px-2" %></td>
           <td><%= f.text_field :remarks, required:true, class:"px-2" %></td>
@@ -136,7 +167,7 @@
           <td></td>
           <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
           <td><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
-          <td><%= f.select :assigned,@users, required:true,id:"assigned", class:"px-2" %></td>
+          <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5}) %></td>
           <td><%= f.select :complete, [10,20,30,40,50,60,70,80,90,100], required:true,id:"complete", class:"px-2" %> %</td>
           <td><%= f.select :status, ["Not Started", "In Progress", "Complete"], required:true, id:"status", class:"px-2" %></td>
           <td><%= f.text_field :remarks, required:true,id:"remarks", class:"px-2" %></td>
@@ -154,7 +185,7 @@
             <td></td>
             <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
             <td><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
-            <td><%= f.select :assigned,@users, required:true,id:"assigned", class:"px-2" %></td>
+            <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
             <td><%= f.select :complete, [10,20,30,40,50,60,70,80,90,100], required:true,id:"complete", class:"px-2" %> %</td>
             <td><%= f.select :status, ["Not Started", "In Progress", "Complete"], required:true, id:"status", class:"px-2" %></td>
             <td><%= f.text_field :remarks, required:true,id:"remarks", class:"px-2" %></td>
@@ -184,6 +215,8 @@
     $(".new-rock").css("display", "none")
 
     $(".new-project").click(function(){
+      var user_email = $("#current-user-email").text()
+      $(".new-rock").find("#assigned").val(user_email)
       $(".new-rock").show();
       $(this).hide();
     });
@@ -202,7 +235,7 @@
         var task_name =  $(this).parents("tr").children(".task-name").text().replace(/\s/g, '')
         var start =  $(this).parents("tr").children(".start").text()
         var finish =  $(this).parents("tr").children(".finish").text()
-        var assigned =  $(this).parents("tr").children(".assigned").text()
+        var assigned =  $(this).parents("tr").children("#rock-assigned").text()
         var complete =  $(this).parents("tr").find(".complete").text()
         var status =  $(this).parents("tr").children(".status").text()
         var remarks =  $(this).parents("tr").children(".remarks").text()
@@ -211,7 +244,7 @@
         $(".update-rock").find("#task-name").val(task_name)
         $(".update-rock").find("#start").val(start)
         $(".update-rock").find("#finish").val(finish)
-        $(".update-rock").find("#assigned").val(assigned)
+        $(".update-rock").find("#assigned").val(JSON.parse(assigned))
         $(".update-rock").find("#complete").val(complete)
         $(".update-rock").find("#status").val(status)
         $(".update-rock").find("#remarks").val(remarks)
@@ -269,7 +302,7 @@
         var task_name =  $(this).parents("tr").children(".task-name").text().replace(/\s/g, '')
         var start =  $(this).parents("tr").children(".start").text()
         var finish =  $(this).parents("tr").children(".finish").text()
-        var assigned =  $(this).parents("tr").children(".assigned").text()
+        var assigned =  $(this).parents("tr").children("#milestone-assigned").text()
         var complete =  $(this).parents("tr").find(".complete").text()
         var status =  $(this).parents("tr").children(".status").text()
         var remarks =  $(this).parents("tr").children(".remarks").text()
@@ -279,7 +312,7 @@
         $(".update-milestone").find("#task-name").val(task_name)
         $(".update-milestone").find("#start").val(start)
         $(".update-milestone").find("#finish").val(finish)
-        $(".update-milestone").find("#assigned").val(assigned)
+        $(".update-milestone").find("#assigned").val(JSON.parse(assigned))
         $(".update-milestone").find("#complete").val(complete)
         $(".update-milestone").find("#status").val(status)
         $(".update-milestone").find("#remarks").val(remarks)
@@ -302,6 +335,8 @@
     // Show new milestone form
     $(".blank-milestone").each( function(index,blank) {
       $(blank).click(function(){
+        var user_email = $("#current-user-email").text()
+        $(".new-milestone").find("#assigned").val(user_email)
         $(blank).next(".new-milestone").show()
         $(blank).hide()
       });

@@ -633,3 +633,12 @@
   .new-project:hover {
     background-color: rgb(193, 191, 191);
   }
+  .assigned-pics {
+    width:25px; 
+    height:25px; 
+    border-radius:50%;
+  }
+  .assigned-pics:hover {
+    cursor: pointer;
+  }
+

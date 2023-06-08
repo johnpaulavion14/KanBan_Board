@@ -27,7 +27,21 @@
           <td><%= (rock.finish.to_date - rock.start.to_date).to_i %> days</td>
           <td class="start"><%= rock.start %></td>
           <td class="finish"><%= rock.finish %></td>
-          <td class="assigned"><%= rock.assigned %></td>
+          <td class="assigned">
+            <% if !rock.user.profilepics.blank? %>
+              <%= image_tag rock.user.profilepics.last.pic, class:"assigned-pics", title:current_user.email %>
+            <% end %>
+            <% @all_users.each do |user| %>
+              <% if rock.assigned.include? user.email %>
+                <% if user.id == rock.user.id %>
+                <% elsif !user.profilepics.blank?%>
+                  <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
+                <% else %>
+                  <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:user.email %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </td>
           <td><span class="complete"><%= rock.complete %></span> %</td>
           <td class="status com-status"><%= rock.status %></td>
           <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= rock.remarks %></td>
@@ -44,7 +58,21 @@
               <td><%= (milestone.finish.to_date - milestone.start.to_date).to_i %> days</td>
               <td class="start"><%= milestone.start %></td>
               <td class="finish"><%= milestone.finish %></td>
-              <td class="assigned"><%= milestone.assigned %></td>
+              <td class="assigned">
+                <% if !rock.user.profilepics.blank? %>
+                  <%= image_tag rock.user.profilepics.last.pic, class:"assigned-pics", title:current_user.email %>
+                <% end %>
+                <% @all_users.each do |user| %>
+                  <% if user.id == rock.user.id %>
+                  <% elsif milestone.assigned.include? user.email %>
+                    <% if !user.profilepics.blank? %>
+                      <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
+                    <% else %>
+                      <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:user.email %>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              </td>
               <td><span class="complete"><%= milestone.complete %></span> %</td>
               <td class="status com-status"><%= milestone.status %></td>
               <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= milestone.remarks %></td>
