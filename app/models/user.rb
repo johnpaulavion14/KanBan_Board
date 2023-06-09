@@ -12,4 +12,5 @@ class User < ApplicationRecord
   has_many :addcards , through: :cards
   has_many :profilepics
   has_many :rocks
+  has_many :milestones
 end

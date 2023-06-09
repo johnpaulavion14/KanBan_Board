@@ -86,6 +86,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_20_102335) do
     t.string "status"
     t.text "remarks"
     t.integer "rock_id"
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -38,7 +38,7 @@
           <td style="display: none;" id="rock-assigned"><%= rock.assigned %></td>
           <td class="assigned">
             <% if !rock.user.profilepics.blank? %>
-              <%= image_tag rock.user.profilepics.last.pic, class:"assigned-pics", title:current_user.email %>
+              <%= image_tag rock.user.profilepics.last.pic, class:"assigned-pics", title:rock.user.email %>
             <% end %>
             <% @all_users.each do |user| %>
               <% if rock.assigned.include? user.email %>
@@ -76,11 +76,11 @@
               <td class="finish"><%= milestone.finish %></td>
               <td style="display: none;" id="milestone-assigned"><%= milestone.assigned %></td>
               <td class="assigned">
-                <% if !rock.user.profilepics.blank? %>
-                  <%= image_tag rock.user.profilepics.last.pic, class:"assigned-pics", title:current_user.email %>
+                <% if !milestone.user.profilepics.blank? %>
+                  <%= image_tag milestone.user.profilepics.last.pic, class:"assigned-pics", title:milestone.user.email %>
                 <% end %>
                 <% @all_users.each do |user| %>
-                  <% if user.id == rock.user.id %>
+                  <% if user.id == milestone.user.id %>
                   <% elsif milestone.assigned.include? user.email %>
                     <% if !user.profilepics.blank? %>
                       <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
@@ -110,10 +110,11 @@
         <!-- Milestone create form-->
         <tr class="new-milestone rock-<%= rock.id %>">
           <%= form_with url:create_milestones_path(rock.id), method: :post, local: true do |f| %>
-            <td class="d-flex align-items-center justify-content-center">
-              <%= image_submit_tag("check.png")%>
-              <span class="x-new-milestone mb-1 mx-2" role="button"><%= image_tag ("x.png")%></span>
-            </td>
+          <td class="d-flex align-items-center justify-content-center">
+            <%= image_submit_tag("check.png")%>
+            <span class="x-new-milestone mb-1 mx-2" role="button"><%= image_tag ("x.png")%></span>
+          </td>
+            <td class="d-none"><%= f.hidden_field :user_id, value:current_user.id, class:"px-2" %></td>
             <td><%= f.text_field :task_name, required:true, class:"px-2" %></td>
             <td></td>
             <td><%= f.date_field :start, required:true, class:"px-2" %></td>

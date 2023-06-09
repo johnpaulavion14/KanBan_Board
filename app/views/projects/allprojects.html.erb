@@ -29,7 +29,7 @@
           <td class="finish"><%= rock.finish %></td>
           <td class="assigned">
             <% if !rock.user.profilepics.blank? %>
-              <%= image_tag rock.user.profilepics.last.pic, class:"assigned-pics", title:current_user.email %>
+              <%= image_tag rock.user.profilepics.last.pic, class:"assigned-pics", title:rock.user.email %>
             <% end %>
             <% @all_users.each do |user| %>
               <% if rock.assigned.include? user.email %>
@@ -59,11 +59,11 @@
               <td class="start"><%= milestone.start %></td>
               <td class="finish"><%= milestone.finish %></td>
               <td class="assigned">
-                <% if !rock.user.profilepics.blank? %>
-                  <%= image_tag rock.user.profilepics.last.pic, class:"assigned-pics", title:current_user.email %>
+                <% if !milestone.user.profilepics.blank? %>
+                  <%= image_tag milestone.user.profilepics.last.pic, class:"assigned-pics", title:milestone.user.email %>
                 <% end %>
                 <% @all_users.each do |user| %>
-                  <% if user.id == rock.user.id %>
+                  <% if user.id == milestone.user.id %>
                   <% elsif milestone.assigned.include? user.email %>
                     <% if !user.profilepics.blank? %>
                       <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
