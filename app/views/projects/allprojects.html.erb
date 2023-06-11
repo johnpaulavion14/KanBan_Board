@@ -43,7 +43,16 @@
             <% end %>
           </td>
           <td><span class="complete"><%= rock.complete %></span> %</td>
-          <td class="status com-status"><%= rock.status %></td>
+          <td class="status com-status">
+            <% case rock.complete %>
+            <% when 0 %>
+              Not Started
+            <% when 100 %>
+              Complete
+            <% else %>
+              In Progress
+            <% end %>
+          </td>
           <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= rock.remarks %></td>
         </tr>
         <!-- All Milestones -->
@@ -74,7 +83,16 @@
                 <% end %>
               </td>
               <td><span class="complete"><%= milestone.complete %></span> %</td>
-              <td class="status com-status"><%= milestone.status %></td>
+              <td class="status com-status">
+                <% case milestone.complete %>
+                <% when 0 %>
+                  Not Started
+                <% when 100 %>
+                  Complete
+                <% else %>
+                  In Progress
+                <% end %>
+              </td>
               <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= milestone.remarks %></td>
             </tr>
           <% end %>
@@ -102,8 +120,10 @@
 
     // Complete status
     $(".com-status").each( function(index,value) {
-      if ($(value).text() == "Complete"){
+      if ($(value).text().replace(/\s/g, "") == "Complete"){
         $(value).parents("tr").children("td").not(".notif-con").css("text-decoration", "line-through")
+        $(value).parents("tr").children("td").not(".notif-con").css("text-decoration-color", "red")
+        $(value).parents("tr").children("td").not(".notif-con").css("font-style", "italic")
       }
     });
 

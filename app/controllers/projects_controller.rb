@@ -135,11 +135,11 @@ class ProjectsController < ApplicationController
   private
 
   def rock_params
-    params.permit(:task_name, :start, :finish, :assigned, :complete, :status, :remarks)
+    params.permit(:task_name, :start, :finish, :assigned, :complete, :remarks)
   end
 
   def milestone_params
-    params.permit(:task_name, :start, :finish, :assigned, :complete, :status, :remarks,:user_id)
+    params.permit(:task_name, :start, :finish, :assigned, :complete, :remarks,:user_id)
   end
 
 

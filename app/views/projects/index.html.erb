@@ -52,7 +52,16 @@
             <% end %>
           </td>
           <td><span class="complete"><%= rock.complete %></span> %</td>
-          <td class="status com-status"><%= rock.status %></td>
+          <td class="status com-status">
+            <% case rock.complete %>
+            <% when 0 %>
+              Not Started
+            <% when 100 %>
+              Complete
+            <% else %>
+              In Progress
+            <% end %>
+          </td>
           <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= rock.remarks %></td>
         </tr>
         <!-- All Milestones -->
@@ -91,7 +100,16 @@
                 <% end %>
               </td>
               <td><span class="complete"><%= milestone.complete %></span> %</td>
-              <td class="status com-status"><%= milestone.status %></td>
+              <td class="status com-status">
+                <% case milestone.complete %>
+                <% when 0 %>
+                  Not Started
+                <% when 100 %>
+                  Complete
+                <% else %>
+                  In Progress
+                <% end %>
+              </td>
               <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= milestone.remarks %></td>
             </tr>
           <% end %>
@@ -120,9 +138,9 @@
             <td><%= f.date_field :start, required:true, class:"px-2" %></td>
             <td><%= f.date_field :finish, required:true, class:"px-2" %></td>
             <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
-            <td><%= f.select :complete, [10,20,30,40,50,60,70,80,90,100], required:true, class:"px-2" %> %</td>
-            <td><%= f.select :status, ["Not Started", "In Progress", "Complete"], required:true, class:"px-2" %></td>
-            <td><%= f.text_field :remarks, required:true, class:"px-2" %></td>
+            <td><%= f.select :complete, [0,10,20,30,40,50,60,70,80,90,100], required:true, class:"px-2" %> %</td>
+            <td></td>
+            <td><%= f.text_field :remarks, class:"px-2" %></td>
           <% end %>
         </tr>
         <tr>
@@ -152,9 +170,9 @@
           <td><%= f.date_field :start, required:true, class:"px-2" %></td>
           <td><%= f.date_field :finish, required:true, class:"px-2" %></td>
           <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5}) %></td>
-          <td><%= f.select :complete, [10,20,30,40,50,60,70,80,90,100], required:true, class:"px-2"%></td>
-          <td><%= f.select :status, ["Not Started", "In Progress", "Complete"], required:true, class:"px-2" %></td>
-          <td><%= f.text_field :remarks, required:true, class:"px-2" %></td>
+          <td><%= f.select :complete, [0,10,20,30,40,50,60,70,80,90,100], required:true, class:"px-2"%> %</td>
+          <td></td>
+          <td><%= f.text_field :remarks, class:"px-2" %></td>
         <% end %>
       </tr>
       <tr class="update-rock">
@@ -169,9 +187,9 @@
           <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
           <td><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
           <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5}) %></td>
-          <td><%= f.select :complete, [10,20,30,40,50,60,70,80,90,100], required:true,id:"complete", class:"px-2" %> %</td>
-          <td><%= f.select :status, ["Not Started", "In Progress", "Complete"], required:true, id:"status", class:"px-2" %></td>
-          <td><%= f.text_field :remarks, required:true,id:"remarks", class:"px-2" %></td>
+          <td><%= f.select :complete, [0,10,20,30,40,50,60,70,80,90,100], required:true,id:"complete", class:"px-2" %> %</td>
+          <td></td>
+          <td><%= f.text_field :remarks,id:"remarks", class:"px-2" %></td>
         <% end %>
         <!-- Milstones Update -->
         <tr class="update-milestone">
@@ -187,9 +205,9 @@
             <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
             <td><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
             <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
-            <td><%= f.select :complete, [10,20,30,40,50,60,70,80,90,100], required:true,id:"complete", class:"px-2" %> %</td>
-            <td><%= f.select :status, ["Not Started", "In Progress", "Complete"], required:true, id:"status", class:"px-2" %></td>
-            <td><%= f.text_field :remarks, required:true,id:"remarks", class:"px-2" %></td>
+            <td><%= f.select :complete, [0,10,20,30,40,50,60,70,80,90,100], required:true,id:"complete", class:"px-2" %> %</td>
+            <td></td>
+            <td><%= f.text_field :remarks,id:"remarks", class:"px-2" %></td>
           <% end %>
         </tr>
       </tr>
@@ -238,7 +256,6 @@
         var finish =  $(this).parents("tr").children(".finish").text()
         var assigned =  $(this).parents("tr").children("#rock-assigned").text()
         var complete =  $(this).parents("tr").find(".complete").text()
-        var status =  $(this).parents("tr").children(".status").text()
         var remarks =  $(this).parents("tr").children(".remarks").text()
         var rock_id =  $(this).parents("tr").children("#rock-id").text()
         // rock values
@@ -247,7 +264,6 @@
         $(".update-rock").find("#finish").val(finish)
         $(".update-rock").find("#assigned").val(JSON.parse(assigned))
         $(".update-rock").find("#complete").val(complete)
-        $(".update-rock").find("#status").val(status)
         $(".update-rock").find("#remarks").val(remarks)
         $(".update-rock").find("#rock-id").val(rock_id)
 
@@ -263,8 +279,10 @@
 
     // Complete status
     $(".com-status").each( function(index,value) {
-      if ($(value).text() == "Complete"){
+      if ($(value).text().replace(/\s/g, "") == "Complete"){
         $(value).parents("tr").children("td").not(".notif-con").css("text-decoration", "line-through")
+        $(value).parents("tr").children("td").not(".notif-con").css("text-decoration-color", "red")
+        $(value).parents("tr").children("td").not(".notif-con").css("font-style", "italic")
       }
     });
 
@@ -305,7 +323,6 @@
         var finish =  $(this).parents("tr").children(".finish").text()
         var assigned =  $(this).parents("tr").children("#milestone-assigned").text()
         var complete =  $(this).parents("tr").find(".complete").text()
-        var status =  $(this).parents("tr").children(".status").text()
         var remarks =  $(this).parents("tr").children(".remarks").text()
         var rock_id =  $(this).parents("tr").children("#rock-id").text()
         var milestone_id =  $(this).parents("tr").children("#milestone-id").text()
@@ -315,7 +332,6 @@
         $(".update-milestone").find("#finish").val(finish)
         $(".update-milestone").find("#assigned").val(JSON.parse(assigned))
         $(".update-milestone").find("#complete").val(complete)
-        $(".update-milestone").find("#status").val(status)
         $(".update-milestone").find("#remarks").val(remarks)
         $(".update-milestone").find("#rock-id").val(rock_id)
         $(".update-milestone").find("#milestone-id").val(milestone_id)

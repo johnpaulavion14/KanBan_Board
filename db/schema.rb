@@ -83,7 +83,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_20_102335) do
     t.date "finish"
     t.text "assigned"
     t.integer "complete"
-    t.string "status"
     t.text "remarks"
     t.integer "rock_id"
     t.integer "user_id"
@@ -104,7 +103,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_20_102335) do
     t.date "finish"
     t.text "assigned"
     t.integer "complete"
-    t.string "status"
     t.text "remarks"
     t.integer "user_id"
     t.datetime "created_at", null: false
