@@ -233,7 +233,7 @@
       $(value).click(function(){
         $(".all-rocks").show();
         // rock variables
-        var task_name =  $(this).parents("tr").children(".task-name").text().replace(/\s/g, '')
+        var task_name =  $(this).parents("tr").children(".task-name").text().trimLeft();
         var start =  $(this).parents("tr").children(".start").text()
         var finish =  $(this).parents("tr").children(".finish").text()
         var assigned =  $(this).parents("tr").children("#rock-assigned").text()
@@ -300,7 +300,7 @@
       $(value).click(function(){
         // $(".all-rocks").show();
         // milestone variables
-        var task_name =  $(this).parents("tr").children(".task-name").text().replace(/\s/g, '')
+        var task_name =  $(this).parents("tr").children(".task-name").text().trimLeft();
         var start =  $(this).parents("tr").children(".start").text()
         var finish =  $(this).parents("tr").children(".finish").text()
         var assigned =  $(this).parents("tr").children("#milestone-assigned").text()

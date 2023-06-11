@@ -151,7 +151,7 @@
     // Card Section
     $(".toggleCard").css("display", "none")
     $(".card_title").click(function(){
-      let input_value = $(this).text().replace(/\s/g, '');
+      let input_value = $(this).text().trimLeft();
         $(".card-con").show();
         $(".toggleCard").hide();
         $(this).parent(".card-con").hide();
