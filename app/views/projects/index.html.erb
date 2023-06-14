@@ -5,8 +5,9 @@
         <th scope="col" style="min-width:100px;"></th>
         <th scope="col" style="min-width: 200px;">Task Name</th>
         <th scope="col" >Duration</th>
-        <th scope="col" style="width: 120px;">Start</th>
-        <th scope="col" style="width: 120px;">Finish</th>
+        <th scope="col" style="width: 130px;">Start</th>
+        <th scope="col" ></th>
+        <th scope="col" style="width: 130px;">Finish</th>
         <th scope="col" >Assigned To</th>
         <th scope="col" style="min-width: 150px;">% Complete</th>
         <th scope="col" >Status</th>
@@ -42,8 +43,9 @@
               date.workday?
             end %> days
           </td>
-          <td><%= rock.start.strftime("%b %d, %Y") %></td>
-          <td><%= rock.finish.strftime("%b %d, %Y") %></td>
+          <td>[ <%= rock.start.strftime("%b %d, %Y") %></td>
+          <td>>></td>
+          <td><%= rock.finish.strftime("%b %d, %Y") %> ]</td>
           <td class="assigned">
             <% if !rock.user.profilepics.blank? %>
               <%= image_tag rock.user.profilepics.last.pic, class:"assigned-pics", title:rock.user.email %>
@@ -60,16 +62,14 @@
             <% end %>
           </td>
           <td><span class="complete"><%= rock.complete %></span> %</td>
-          <td class="status com-status">
-            <% case rock.complete %>
+          <% case rock.complete %>
             <% when 0 %>
-              Not Started
+              <td class="status com-status" style="background-color: red;">Not Started</td>
             <% when 100 %>
-              Complete
+              <td class="status com-status" style="background-color: yellow;">Complete</td>
             <% else %>
-              In Progress
-            <% end %>
-          </td>
+              <td class="status com-status" style="background-color: green">In Progress</td>
+          <% end %>
           <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= rock.remarks %></td>
         </tr>
         <!-- All Milestones -->
@@ -85,19 +85,22 @@
                   <% end %>
                 </div>
               </td>
+              <!-- display none -->
               <td style="display: none;" id="rock-id"><%= rock.id %></td>
               <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
+              <td class="start d-none"><%= milestone.start %></td>
+              <td class="finish d-none"><%= milestone.finish %></td>
+              <td style="display: none;" id="milestone-assigned"><%= milestone.assigned %></td>
+              <!-- display none -->
               <td class="task-name" style="text-align: left; min-width: 100px; padding-left:4rem"><%= milestone.task_name %></td>
               <td>
                 <%= (milestone.start.to_date..milestone.finish.to_date).count do |date|
                   date.workday?
                 end %> days
               </td>
-              <td class="start d-none"><%= milestone.start %></td>
-              <td class="finish d-none"><%= milestone.finish %></td>
-              <td><%= milestone.start.strftime("%b %d, %Y") %></td>
-              <td><%= milestone.finish.strftime("%b %d, %Y") %></td>
-              <td style="display: none;" id="milestone-assigned"><%= milestone.assigned %></td>
+              <td>[ <%= milestone.start.strftime("%b %d, %Y") %></td>
+              <td>>></td>
+              <td><%= milestone.finish.strftime("%b %d, %Y") %> ]</td>
               <td class="assigned">
                 <% if !milestone.user.profilepics.blank? %>
                   <%= image_tag milestone.user.profilepics.last.pic, class:"assigned-pics", title:milestone.user.email %>
@@ -114,16 +117,14 @@
                 <% end %>
               </td>
               <td><span class="complete"><%= milestone.complete %></span> %</td>
-              <td class="status com-status">
-                <% case milestone.complete %>
+              <% case milestone.complete %>
                 <% when 0 %>
-                  Not Started
+                  <td class="status com-status"><div class="bg-danger">Not Started</div></td>
                 <% when 100 %>
-                  Complete
+                  <td class="status com-status"><div class="bg-warning">Complete</div></td>
                 <% else %>
-                  In Progress
-                <% end %>
-              </td>
+                  <td class="status com-status"><div class="bg-success">In Progress</div></td>
+              <% end %>
               <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= milestone.remarks %></td>
             </tr>
           <% end %>
@@ -142,14 +143,15 @@
         <!-- Milestone create form-->
         <tr class="new-milestone rock-<%= rock.id %>">
           <%= form_with url:create_milestones_path(rock.id), method: :post, local: true do |f| %>
-          <td class="d-flex align-items-center justify-content-center">
-            <%= image_submit_tag("check.png")%>
-            <span class="x-new-milestone mb-1 mx-2" role="button"><%= image_tag ("x.png")%></span>
+          <td>
+            <span><%= f.submit "Save" ,class:"btn btn-success" %></span>
+            <span class="x-new-milestone mx-2 btn btn-danger">Cancel</span>
           </td>
             <td class="d-none"><%= f.hidden_field :user_id, value:current_user.id, class:"px-2" %></td>
             <td><%= f.text_field :task_name, required:true, class:"px-2" %></td>
             <td></td>
             <td><%= f.date_field :start, required:true, class:"px-2", min: rock.start, max: rock.finish %></td>
+            <td>>></td>
             <td><%= f.date_field :finish, required:true, class:"px-2", min: rock.start, max: rock.finish %></td>
             <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
             <td><%= f.select :complete, [0,10,20,30,40,50,60,70,80,90,100], required:true, class:"px-2" %> %</td>
@@ -175,13 +177,14 @@
       <div id="current-user-email" class="d-none"><%= current_user.email %></div>
       <tr class="new-rock">
         <%= form_with url:create_rocks_path, method: :post, local: true do |f| %>
-          <td class="d-flex align-items-center justify-content-center">
-            <%= image_submit_tag("check.png")%>
-            <span class="x-create mb-1 mx-2" role="button"><%= image_tag ("x.png")%></span>
+          <td>
+            <span><%= f.submit "Save" ,class:"btn btn-success" %></span>
+            <span class="x-create mx-2 btn btn-danger">Cancel</span>
           </td>
           <td><%= f.text_field :task_name, required:true, class:"px-2" %></td>
           <td></td>
           <td><%= f.date_field :start, required:true, class:"px-2" %></td>
+          <td>>></td>
           <td><%= f.date_field :finish, required:true, class:"px-2" %></td>
           <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5}) %></td>
           <td><%= f.select :complete, [0,10,20,30,40,50,60,70,80,90,100], required:true, class:"px-2"%> %</td>
@@ -191,14 +194,15 @@
       </tr>
       <tr class="update-rock">
         <%= form_with url:update_rocks_path, method: :patch, local: true do |f| %>
-          <td class="d-flex align-items-center justify-content-center">
-            <%= image_submit_tag("check2.png")%>
-            <span class="x-update mb-1 mx-2" role="button"><%= image_tag ("x.png")%></span>
+          <td>
+            <span><%= f.submit "Save" ,class:"btn btn-success" %></span>
+            <span class="x-update mx-2 btn btn-danger">Cancel</span>
           </td>
           <td style="display: none;"><%= f.number_field :id, required:true,id:"rock-id" %></td>
           <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2" %></td>
           <td></td>
           <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
+          <td>>></td>
           <td><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
           <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5}) %></td>
           <td><%= f.select :complete, [0,10,20,30,40,50,60,70,80,90,100], required:true,id:"complete", class:"px-2" %> %</td>
@@ -208,15 +212,16 @@
         <!-- Milstones Update -->
         <tr class="update-milestone">
           <%= form_with url:update_milestones_path(), method: :patch, local: true do |f| %>
-            <td class="d-flex align-items-center justify-content-center">
-              <%= image_submit_tag("check2.png")%>
-              <span class="x-update-milestone mb-1 mx-2" role="button"><%= image_tag ("x.png")%></span>
+            <td>
+              <span><%= f.submit "Save" ,class:"btn btn-success" %></span>
+              <span class="x-update-milestone mx-2 btn btn-danger">Cancel</span>
             </td>
             <td style="display: none;"><%= f.number_field :rock_id, required:true,id:"rock-id" %></td>
             <td style="display: none;"><%= f.number_field :id, required:true,id:"milestone-id" %></td>
             <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2" %></td>
             <td></td>
             <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
+            <td>>></td>
             <td><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
             <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
             <td><%= f.select :complete, [0,10,20,30,40,50,60,70,80,90,100], required:true,id:"complete", class:"px-2" %> %</td>
