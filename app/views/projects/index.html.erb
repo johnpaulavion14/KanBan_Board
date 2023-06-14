@@ -26,16 +26,24 @@
               <% end %>
             </div>
           </td>
+          <!-- display none -->
           <td style="display: none;" id="rock-id"><%= rock.id %></td>
+          <td style="display: none;" id="start-<%= rock.id %>" class="start"><%= rock.start %></td>
+          <td style="display: none;" id="finish-<%= rock.id %>" class="finish"><%= rock.finish %></td>
+          <td style="display: none;" id="rock-assigned"><%= rock.assigned %></td>
+          <!-- display none -->
           <td class="task-name" style="text-align: left; min-width: 100px;">
             <%= image_tag ("plus.png"),role:"button", style:"margin-left:1rem",class:"plus-icon" %>
             <%= image_tag ("minus.png"),role:"button", style:"margin-left:1rem",class:"minus-icon" %>
             <%= rock.task_name %>
           </td>
-          <td><%= (rock.finish.to_date - rock.start.to_date).to_i %> days</td>
-          <td class="start"><%= rock.start %></td>
-          <td class="finish"><%= rock.finish %></td>
-          <td style="display: none;" id="rock-assigned"><%= rock.assigned %></td>
+          <td>
+            <%= (rock.start.to_date..rock.finish.to_date).count do |date|
+              date.workday?
+            end %> days
+          </td>
+          <td><%= rock.start.strftime("%b %d, %Y") %></td>
+          <td><%= rock.finish.strftime("%b %d, %Y") %></td>
           <td class="assigned">
             <% if !rock.user.profilepics.blank? %>
               <%= image_tag rock.user.profilepics.last.pic, class:"assigned-pics", title:rock.user.email %>
@@ -80,9 +88,15 @@
               <td style="display: none;" id="rock-id"><%= rock.id %></td>
               <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
               <td class="task-name" style="text-align: left; min-width: 100px; padding-left:4rem"><%= milestone.task_name %></td>
-              <td><%= (milestone.finish.to_date - milestone.start.to_date).to_i %> days</td>
-              <td class="start"><%= milestone.start %></td>
-              <td class="finish"><%= milestone.finish %></td>
+              <td>
+                <%= (milestone.start.to_date..milestone.finish.to_date).count do |date|
+                  date.workday?
+                end %> days
+              </td>
+              <td class="start d-none"><%= milestone.start %></td>
+              <td class="finish d-none"><%= milestone.finish %></td>
+              <td><%= milestone.start.strftime("%b %d, %Y") %></td>
+              <td><%= milestone.finish.strftime("%b %d, %Y") %></td>
               <td style="display: none;" id="milestone-assigned"><%= milestone.assigned %></td>
               <td class="assigned">
                 <% if !milestone.user.profilepics.blank? %>
@@ -135,8 +149,8 @@
             <td class="d-none"><%= f.hidden_field :user_id, value:current_user.id, class:"px-2" %></td>
             <td><%= f.text_field :task_name, required:true, class:"px-2" %></td>
             <td></td>
-            <td><%= f.date_field :start, required:true, class:"px-2" %></td>
-            <td><%= f.date_field :finish, required:true, class:"px-2" %></td>
+            <td><%= f.date_field :start, required:true, class:"px-2", min: rock.start, max: rock.finish %></td>
+            <td><%= f.date_field :finish, required:true, class:"px-2", min: rock.start, max: rock.finish %></td>
             <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
             <td><%= f.select :complete, [0,10,20,30,40,50,60,70,80,90,100], required:true, class:"px-2" %> %</td>
             <td></td>
@@ -339,6 +353,14 @@
         $(this).parents("tr").hide()
         $(".update-milestone").insertAfter($(this).parents("tr"))
         $(".update-milestone").show();
+
+        // get start and finish date
+        var start_date = $("#start-" + rock_id).text()
+        var finish_date = $("#finish-" + rock_id).text()
+        $(".update-milestone").find("#start").attr("min", start_date);
+        $(".update-milestone").find("#start").attr("max", finish_date);
+        $(".update-milestone").find("#finish").attr("min", start_date);
+        $(".update-milestone").find("#finish").attr("max", finish_date);
       })
     })
 

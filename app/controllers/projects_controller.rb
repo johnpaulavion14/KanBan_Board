@@ -19,6 +19,8 @@ class ProjectsController < ApplicationController
     end
     @users = User.all.pluck(:email)
     @all_users = User.all
+
+   
    
   end
 
