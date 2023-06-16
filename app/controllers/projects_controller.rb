@@ -3,20 +3,20 @@ class ProjectsController < ApplicationController
   
   def index
     @rocks = []
-    rocks = Rock.all.order("created_at asc")
+    rocks = Rock.all.order(start: :asc)
     rocks.all.each do |rock|
       if rock.assigned.include? current_user.email
         @rocks.push(rock)
       end
     end
 
-    @milestones = []
-    milestones = Milestone.all.order("created_at asc")
-    milestones.all.each do |milestone|
-      if milestone.assigned.include? current_user.email
-        @milestones.push(milestone)
-      end
-    end
+    # @milestones = []
+    @milestones = Milestone.all.order(start: :asc)
+    # milestones.all.each do |milestone|
+    #   if milestone.assigned.include? current_user.email
+    #     @milestones.push(milestone)
+    #   end
+    # end
     @users = User.all.pluck(:email)
     @all_users = User.all
 
@@ -27,21 +27,8 @@ class ProjectsController < ApplicationController
   def allprojects
     User.all.each do |user|
       if user.admin == true || user.host == true || current_user.email == "jpbocatija@cem.com"
-        @rocks = []
-        rocks = Rock.all.order("created_at asc")
-        rocks.all.each do |rock|
-          if rock.assigned.include? current_user.email
-            @rocks.push(rock)
-          end
-        end
-
-        @milestones = []
-        milestones = Milestone.all.order("created_at asc")
-        milestones.all.each do |milestone|
-          if milestone.assigned.include? current_user.email
-            @milestones.push(milestone)
-          end
-        end
+        @rocks = Rock.all.order(start: :asc)
+        @milestones = Milestone.all.order(start: :asc)
         @users = User.all.pluck(:email)
         @all_users = User.all
       end
@@ -66,8 +53,8 @@ class ProjectsController < ApplicationController
 
   def update_rocks  
     @assigned_array = params[:assigned].reject(&:empty?)
-    @assigned_array.delete(current_user.email)
-    @assigned_array.insert(0, current_user.email)
+    @assigned_array.delete(Rock.find(params[:id]).user.email)
+    @assigned_array.insert(0, Rock.find(params[:id]).user.email)
     respond_to do |format|
       if Rock.find(params[:id]).update(rock_params)
         Rock.find(params[:id]).update(assigned:@assigned_array)
@@ -110,8 +97,8 @@ class ProjectsController < ApplicationController
   def update_milestones
     @milestone = Rock.find(params[:rock_id]).milestones.find(params[:id])
     @assigned_array = params[:assigned].reject(&:empty?)
-    @assigned_array.delete(current_user.email)
-    @assigned_array.insert(0, current_user.email)
+    @assigned_array.delete(@milestone.user.email)
+    @assigned_array.insert(0, @milestone.user.email)
     respond_to do |format|
       if @milestone.update(milestone_params)
         @milestone.update(assigned:@assigned_array)
@@ -124,12 +111,12 @@ class ProjectsController < ApplicationController
   end
 
   def delete_milestones
-    @milestone = current_user.rocks.find(params[:rock_id]).milestones.find(params[:id])
+    @milestone = current_user.milestones.find(params[:id])
     respond_to do |format|
       if @milestone.destroy
         format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully deleted you milestone" }
       else
-        redirect_to view_projects_path
+        redirect_to view_projects_path({rock_id: params[:rock_id]})
       end
     end
   end

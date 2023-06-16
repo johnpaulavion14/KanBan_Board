@@ -75,13 +75,15 @@
         <!-- All Milestones -->
         <% @milestones.each do |milestone| %> 
           <% if rock.id == milestone.rock_id %>
-            <tr class="all-milestones rock-<%= rock.id %>" style="vertical-align: middle;">
+            <tr class="all-milestones rock-<%= rock.id %> <%= milestone.assigned.include?(current_user.email) ? '' : 'bg-light' %>" style="vertical-align: middle;">
               <td class="notif-con" role="button" >
                 <div class="notif">
                   <%= image_tag ("message.png"), class:"project-icon" %>
-                  <%= image_tag ("edit.png"), class:"project-icon edit-milestone" %>
-                  <%= link_to delete_milestones_path(rock.id,milestone.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
-                    <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
+                  <% if milestone.assigned.include? current_user.email %>
+                    <%= image_tag ("edit.png"), class:"project-icon edit-milestone" %>
+                    <%= link_to delete_milestones_path(rock.id,milestone.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+                      <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
+                    <% end %>
                   <% end %>
                 </div>
               </td>
@@ -144,8 +146,8 @@
         <tr class="new-milestone rock-<%= rock.id %>">
           <%= form_with url:create_milestones_path(rock.id), method: :post, local: true do |f| %>
           <td>
-            <span><%= f.submit "Save" ,class:"btn btn-success" %></span>
-            <span class="x-new-milestone mx-2 btn btn-danger">Cancel</span>
+            <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
+            <span class="x-new-milestone mx-2 btn btn-danger mt-1">Cancel</span>
           </td>
             <td class="d-none"><%= f.hidden_field :user_id, value:current_user.id, class:"px-2" %></td>
             <td><%= f.text_field :task_name, required:true, class:"px-2" %></td>
@@ -178,8 +180,8 @@
       <tr class="new-rock">
         <%= form_with url:create_rocks_path, method: :post, local: true do |f| %>
           <td>
-            <span><%= f.submit "Save" ,class:"btn btn-success" %></span>
-            <span class="x-create mx-2 btn btn-danger">Cancel</span>
+            <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
+            <span class="x-create mx-2 btn btn-danger mt-1">Cancel</span>
           </td>
           <td><%= f.text_field :task_name, required:true, class:"px-2" %></td>
           <td></td>
@@ -195,8 +197,8 @@
       <tr class="update-rock">
         <%= form_with url:update_rocks_path, method: :patch, local: true do |f| %>
           <td>
-            <span><%= f.submit "Save" ,class:"btn btn-success" %></span>
-            <span class="x-update mx-2 btn btn-danger">Cancel</span>
+            <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
+            <span class="x-update mx-2 btn btn-danger mt-1">Cancel</span>
           </td>
           <td style="display: none;"><%= f.number_field :id, required:true,id:"rock-id" %></td>
           <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2" %></td>
@@ -213,8 +215,8 @@
         <tr class="update-milestone">
           <%= form_with url:update_milestones_path(), method: :patch, local: true do |f| %>
             <td>
-              <span><%= f.submit "Save" ,class:"btn btn-success" %></span>
-              <span class="x-update-milestone mx-2 btn btn-danger">Cancel</span>
+              <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
+              <span class="x-update-milestone mx-2 btn btn-danger mt-1">Cancel</span>
             </td>
             <td style="display: none;"><%= f.number_field :rock_id, required:true,id:"rock-id" %></td>
             <td style="display: none;"><%= f.number_field :id, required:true,id:"milestone-id" %></td>
