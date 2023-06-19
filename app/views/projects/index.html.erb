@@ -63,7 +63,14 @@
             <% end %>
           </td>
           <td class="rock-percent"><span></span> %</td>
-          <td class="rock-status com-status"></td>
+          <td class="rock-status com-status d-flex align-items-center py-2">
+            <div id="stat" class="px-3 py-2" style="flex:4"></div>
+            <% if rock.finish >= Date.today %>
+              <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="on track"><%= image_tag ("green_circle.png")%></div>  
+            <% else %>
+              <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="off track"><%= image_tag ("red_circle.png")%></div>  
+            <% end %>
+          </td>
           <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= rock.remarks %></td>
         </tr>
         <!-- All Milestones -->
@@ -112,14 +119,22 @@
                 <% end %>
               </td>
               <td><span class="complete"><%= milestone.complete %></span> %</td>
-              <% case milestone.complete %>
-                <% when 0 %>
-                  <td class="status com-status"><div class="bg-danger">Not Started</div></td>
-                <% when 100 %>
-                  <td class="status com-status"><div class="bg-warning">Complete</div></td>
+              <td class="status com-status d-flex align-items-center justify-content-center px-4">
+                <% case milestone.complete %>
+                  <% when 0 %>
+                    <div class="bg-danger px-2 py-1" style="flex:4">Not Started</div>
+                  <% when 100 %>
+                    <div class="bg-warning p-2 py-1" style="flex:4">Complete</div>
+                  <% else %>
+                    <div class="bg-success p-2 py-1" style="flex:4">In Progress</div>
+                <% end %>
+
+                <% if milestone.finish >= Date.today %>
+                  <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="on track"><%= image_tag ("green_circle.png")%></div>  
                 <% else %>
-                  <td class="status com-status"><div class="bg-success">In Progress</div></td>
-              <% end %>
+                  <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="off track"><%= image_tag ("red_circle.png")%></div>  
+                <% end %>
+              </td>
               <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= milestone.remarks %></td>
             </tr>
           <% end %>
@@ -149,7 +164,7 @@
             <td>>></td>
             <td><%= f.date_field :finish, required:true, class:"px-2", min: rock.start, max: rock.finish %></td>
             <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
-            <td><%= f.number_field :complete, required:true, class:"px-2", style:"width: 60px", min:0, max:100, step:10, value:0 %> %</td>
+            <td><%= f.number_field :complete, required:true, class:"px-2", style:"width: 60px", min:0, max:100, value:0 %> %</td>
             <td></td>
             <td><%= f.text_field :remarks, class:"px-2" %></td>
           <% end %>
@@ -219,7 +234,7 @@
             <td>>></td>
             <td><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
             <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
-            <td><%= f.number_field :complete, required:true, class:"px-2",style:"width: 60px",id:"complete", min:0, max:100, step:10 %> %</td>
+            <td><%= f.number_field :complete, required:true, class:"px-2",style:"width: 60px",id:"complete", min:0, max:100 %> %</td>
             <td></td>
             <td><%= f.text_field :remarks,id:"remarks", class:"px-2" %></td>
           <% end %>
@@ -292,14 +307,14 @@
       // Status Value and Complete status style
       let rock_percent = $(value).children("span").text()
       if (rock_percent == "0.00") {
-        $(value).siblings(".rock-status").text("Not Started")
-        $(value).siblings(".rock-status").css("background-color", "red")
+        $(value).siblings(".rock-status").children("#stat").text("Not Started")
+        $(value).siblings(".rock-status").children("#stat").css("background-color", "red")
       }else if (rock_percent == "100.00") {
-        $(value).siblings(".rock-status").text("Complete")
-        $(value).siblings(".rock-status").css("background-color", "yellow")
+        $(value).siblings(".rock-status").children("#stat").text("Complete")
+        $(value).siblings(".rock-status").children("#stat").css("background-color", "yellow")
       }else {
-        $(value).siblings(".rock-status").text("In Progress")
-        $(value).siblings(".rock-status").css("background-color", "green")
+        $(value).siblings(".rock-status").children("#stat").text("In Progress")
+        $(value).siblings(".rock-status").children("#stat").css("background-color", "green")
       }
     });
 
