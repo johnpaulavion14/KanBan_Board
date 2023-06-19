@@ -10,18 +10,10 @@ class ProjectsController < ApplicationController
       end
     end
 
-    # @milestones = []
     @milestones = Milestone.all.order(start: :asc)
-    # milestones.all.each do |milestone|
-    #   if milestone.assigned.include? current_user.email
-    #     @milestones.push(milestone)
-    #   end
-    # end
     @users = User.all.pluck(:email)
     @all_users = User.all
 
-   
-   
   end
 
   def allprojects
@@ -124,7 +116,7 @@ class ProjectsController < ApplicationController
   private
 
   def rock_params
-    params.permit(:task_name, :start, :finish, :assigned, :complete, :remarks)
+    params.permit(:task_name, :start, :finish, :assigned, :remarks)
   end
 
   def milestone_params
