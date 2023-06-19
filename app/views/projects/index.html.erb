@@ -10,7 +10,7 @@
         <th scope="col" style="width: 130px;">Finish</th>
         <th scope="col" >Assigned To</th>
         <th scope="col" style="min-width: 150px;">% Complete</th>
-        <th scope="col" >Status</th>
+        <th scope="col" style="min-width: 150px;">Status</th>
         <th scope="col" >Remarks</th>
       </tr>
     </thead>
@@ -21,7 +21,6 @@
           <td class="notif-con" role="button">
             <div class="notif">
               <%= image_tag ("message.png"), class:"project-icon" %>
-              <%= image_tag ("edit.png"), class:"project-icon edit-rock" %>
               <%= link_to delete_rocks_path(rock.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
                 <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
               <% end %>
@@ -65,7 +64,6 @@
           </td>
           <td class="rock-percent"><span></span> %</td>
           <td class="rock-status com-status"></td>
-       
           <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= rock.remarks %></td>
         </tr>
         <!-- All Milestones -->
@@ -73,10 +71,9 @@
           <% if rock.id == milestone.rock_id %>
             <tr class="all-milestones rock-<%= rock.id %> <%= milestone.assigned.include?(current_user.email) ? '' : 'bg-light' %>" style="vertical-align: middle;">
               <td class="notif-con" role="button" >
-                <div class="notif">
+                <div class="notif" style="margin-left: 30px;">
                   <%= image_tag ("message.png"), class:"project-icon" %>
                   <% if milestone.assigned.include? current_user.email %>
-                    <%= image_tag ("edit.png"), class:"project-icon edit-milestone" %>
                     <%= link_to delete_milestones_path(rock.id,milestone.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
                       <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
                     <% end %>
@@ -152,7 +149,7 @@
             <td>>></td>
             <td><%= f.date_field :finish, required:true, class:"px-2", min: rock.start, max: rock.finish %></td>
             <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
-            <td><%= f.number_field :complete, required:true, class:"px-2", style:"width: 60px", min:0, max:100, step:10 %> %</td>
+            <td><%= f.number_field :complete, required:true, class:"px-2", style:"width: 60px", min:0, max:100, step:10, value:0 %> %</td>
             <td></td>
             <td><%= f.text_field :remarks, class:"px-2" %></td>
           <% end %>
@@ -240,13 +237,6 @@
 
   $(document).ready(function(){
     // -----Rock Section------
-
-    // hover message/edit/delete
-    $(".notif").css("display","none")
-    $(".notif-con").hover(function(){
-      $(this).children(".notif").toggle()
-    })
-    
     // Create New Rock
     $(".new-rock").css("display", "none")
 
@@ -264,16 +254,16 @@
 
     // Edit Rock
     $(".update-rock").css("display", "none")
-    $(".edit-rock").each( function(index,value) {
-      $(value).click(function(){
+    $(".all-rocks").each( function(index,value) {
+      $(value).dblclick(function(){
         $(".all-rocks").show();
         // rock variables
-        var task_name =  $(this).parents("tr").children(".task-name").text().trimLeft();
-        var start =  $(this).parents("tr").children(".start").text()
-        var finish =  $(this).parents("tr").children(".finish").text()
-        var assigned =  $(this).parents("tr").children("#rock-assigned").text()
-        var remarks =  $(this).parents("tr").children(".remarks").text()
-        var rock_id =  $(this).parents("tr").children("#rock-id").text()
+        var task_name =  $(this).children(".task-name").text().trimLeft();
+        var start =  $(this).children(".start").text()
+        var finish =  $(this).children(".finish").text()
+        var assigned =  $(this).children("#rock-assigned").text()
+        var remarks =  $(this).children(".remarks").text()
+        var rock_id =  $(this).children("#rock-id").text()
         // rock values
         $(".update-rock").find("#task-name").val(task_name)
         $(".update-rock").find("#start").val(start)
@@ -282,8 +272,8 @@
         $(".update-rock").find("#remarks").val(remarks)
         $(".update-rock").find("#rock-id").val(rock_id)
 
-        $(this).parents("tr").hide()
-        $(".update-rock").insertAfter($(this).parents("tr"))
+        $(this).hide()
+        $(".update-rock").insertAfter($(this))
         $(".update-rock").show();
       })
     })
@@ -349,18 +339,18 @@
     });
     // Edit milestone
     $(".update-milestone").hide()
-    $(".edit-milestone").each( function(index,value) {
-      $(value).click(function(){
-        // $(".all-rocks").show();
+    $(".all-milestones").each( function(index,value) {
+      $(value).dblclick(function(){
+        $(".all-milestones").show();
         // milestone variables
-        var task_name =  $(this).parents("tr").children(".task-name").text().trimLeft();
-        var start =  $(this).parents("tr").children(".start").text()
-        var finish =  $(this).parents("tr").children(".finish").text()
-        var assigned =  $(this).parents("tr").children("#milestone-assigned").text()
-        var complete =  $(this).parents("tr").find(".complete").text()
-        var remarks =  $(this).parents("tr").children(".remarks").text()
-        var rock_id =  $(this).parents("tr").children("#rock-id").text()
-        var milestone_id =  $(this).parents("tr").children("#milestone-id").text()
+        var task_name =  $(this).children(".task-name").text().trimLeft();
+        var start =  $(this).children(".start").text()
+        var finish =  $(this).children(".finish").text()
+        var assigned =  $(this).children("#milestone-assigned").text()
+        var complete =  $(this).find(".complete").text()
+        var remarks =  $(this).children(".remarks").text()
+        var rock_id =  $(this).children("#rock-id").text()
+        var milestone_id =  $(this).children("#milestone-id").text()
         // milestone values
         $(".update-milestone").find("#task-name").val(task_name)
         $(".update-milestone").find("#start").val(start)
@@ -371,8 +361,8 @@
         $(".update-milestone").find("#rock-id").val(rock_id)
         $(".update-milestone").find("#milestone-id").val(milestone_id)
 
-        $(this).parents("tr").hide()
-        $(".update-milestone").insertAfter($(this).parents("tr"))
+        $(this).hide()
+        $(".update-milestone").insertAfter($(this))
         $(".update-milestone").show();
 
         // get start and finish date
