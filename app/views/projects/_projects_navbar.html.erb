@@ -1,0 +1,23 @@
+<div class="navbar d-flex justify-content-between">
+  <!-- Left Section -->
+  <div class="mx-2 d-flex ">
+    <!-- Projects Section -->
+    <%= link_to "Your Projects",view_projects_path, class:"nav-element #{'nav-active' if request.original_url.include? "yourprojects"}"  %>
+
+    <!-- All Projects Section -->
+    <% if current_user.email == "jpbocatija@cem.com" %>
+      <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if request.original_url.include? "allprojects"}" %>
+    <% elsif current_user.admin == true %>
+      <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if request.original_url.include? "allprojects"}" %>
+    <% elsif current_user.host == true %>
+      <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if request.original_url.include? "allprojects"}" %>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  // Change tab icon and title
+  document.title = "ITS Project Management"
+  $("#tab-icon").attr("href", "/assets/projects_icon.png")
+
+</script>

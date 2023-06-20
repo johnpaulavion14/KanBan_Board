@@ -8,7 +8,7 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_import_module_tag "main" %>
     <%= javascript_importmap_tags %>
-    <%= favicon_link_tag asset_path('meeting.png') %>
+    <%= favicon_link_tag asset_path('meeting.png'), id:"tab-icon" %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/solid.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -23,12 +23,12 @@
 
   <body>
 
-    <% if user_signed_in? && !current_page?(root_path)%>
+  <% if user_signed_in? && !current_page?(root_path) && !request.original_url.include?("projects") %>
     <%= render 'shared/navbar' %>
-      <%= yield %>
-    <% else %>
-      <%= yield %>
-    <% end %>
+    <%= yield %>
+  <% else %>
+    <%= yield %>
+  <% end %>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

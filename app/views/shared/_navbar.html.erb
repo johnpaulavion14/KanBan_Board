@@ -26,8 +26,6 @@
         <% end %>
       </div>
     </div>
-    <!-- Projects Section -->
-    <%= link_to "Your Projects",view_projects_path, class:"nav-element #{'nav-active' if request.original_url.include? "yourprojects"}"  %>
 
     <!-- All Users Section -->
     <% if current_user.email == "jpbocatija@cem.com" %>
@@ -35,13 +33,12 @@
     <% elsif current_user.admin == true %>
       <%= link_to "All Users",view_allusers_path, class:"nav-element #{'nav-active' if request.original_url.include? "allusers"}" %>
     <% end %>
-    <!-- All Projects Section -->
-    <% if current_user.email == "jpbocatija@cem.com" %>
-      <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if request.original_url.include? "allprojects"}" %>
-    <% elsif current_user.admin == true %>
-      <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if request.original_url.include? "allprojects"}" %>
-    <% elsif current_user.host == true %>
-      <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if request.original_url.include? "allprojects"}" %>
+     <!-- Projects Section -->
+     <%= link_to view_projects_path, class:"nav-element",target: :_blank  do %>
+      <div class="m-auto d-flex align-items-center">
+        <div class="new-tab-logo"><%= image_tag ("new_tab.png") %></div>
+        <div class="m-auto">Projects</div>
+      </div>
     <% end %>
   </div>
   <!-- Create button background -->

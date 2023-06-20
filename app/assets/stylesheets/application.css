@@ -338,6 +338,11 @@
   width: 30px;
   height: 30px;
 }
+.new-tab-logo {
+  display: flex;
+  width: 20px;
+  height: 20px;
+}
 .cem-kanban:hover {
   color: white;
 }

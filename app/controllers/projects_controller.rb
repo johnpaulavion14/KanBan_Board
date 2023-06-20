@@ -1,5 +1,9 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
+
+  def dashboard
+    
+  end
   
   def index
     @rocks = []
