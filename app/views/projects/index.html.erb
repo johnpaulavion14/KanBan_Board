@@ -1,5 +1,5 @@
 <%= render 'projects/projects_navbar' %>
-<div style="height: 90vh;width: 100vw; overflow:scroll; ">
+<div style="height: 90vh;width: 100vw; overflow:scroll; " class="yourproject-con">
   <table class="table table-hover text-center">
     <thead>
       <tr style="color: #0067a3; border-bottom: 3px solid #0067a3;border-top: 3px solid #0067a3; height: 50px; vertical-align: middle;">
@@ -21,7 +21,7 @@
         <tr class="all-rocks" style="background-color: rgb(215, 215, 215); font-weight: bold; vertical-align: middle;" role="button">
           <td class="notif-con" role="button">
             <div class="notif">
-              <%= image_tag ("message.png"), class:"project-icon" %>
+              <%= image_tag ("message.png"), class:"project-icon rock-message" %>
               <% if rock.user == current_user %>
                 <%= link_to delete_rocks_path(rock.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
                   <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
@@ -84,7 +84,7 @@
             <tr class="all-milestones rock-<%= rock.id %> <%= milestone.assigned.include?(current_user.email) ? 'm-dblclick' : 'bg-light' %>" style="vertical-align: middle;">
               <td class="notif-con" role="button" >
                 <div class="notif" style="margin-left: 30px;">
-                  <%= image_tag ("message.png"), class:"project-icon" %>
+                  <%= image_tag ("message.png"), class:"project-icon m-message" %>
                   <% if milestone.assigned.include? current_user.email %>
                     <%= link_to delete_milestones_path(rock.id,milestone.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
                       <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
@@ -98,6 +98,12 @@
               <td class="start d-none"><%= milestone.start %></td>
               <td class="finish d-none"><%= milestone.finish %></td>
               <td style="display: none;" id="milestone-assigned"><%= milestone.assigned %></td>
+                <!-- messages -->
+              <td style="display: none;" class="message-id"><%= milestone.messages.pluck(:id) %></td>
+              <td style="display: none;" class="milestone-messages"><%= milestone.messages.pluck(:message) %></td>
+              <td style="display: none;" class="message-firstname"><%= milestone.messages.pluck(:first_name) %></td>
+              <td style="display: none;" class="message-lastname"><%= milestone.messages.pluck(:last_name) %></td>
+              <td style="display: none;" class="message-time"><%= milestone.messages.pluck(:time) %></td>
               <!-- display none -->
               <td class="task-name" style="text-align: left; min-width: 100px; padding-left:4rem"><%= milestone.task_name %></td>
               <td>
@@ -254,6 +260,7 @@
   <div role="button" class="new-project mx-4 mb-3">
     Add new project here !
   </div>
+  <%= render 'projects/messages' %>
 
 </div>
 
@@ -433,6 +440,51 @@
     $(rock_id).prev("tr").find(".minus-icon").show()
 
   });
+
+// Message Section
+$(".message-bg").css("display", "none")
+$(".message-con").css("display", "none")
+$(".m-message").each(function(index,message){
+  $(message).click(function(){
+    $(".messages-container").empty()
+    $(".message-con").show()
+    $(".message-bg").show()
+
+    console.log($(this).parents(".notif-con").siblings("#milestone-id").text())
+
+    let message_id = JSON.parse($(this).parents(".notif-con").siblings(".message-id").text())
+    let milestone_id = $(this).parents(".notif-con").siblings("#milestone-id").text()
+    let message_firstname = JSON.parse($(this).parents(".notif-con").siblings(".message-firstname").text())
+    let message_lastname = JSON.parse($(this).parents(".notif-con").siblings(".message-lastname").text())
+    let message_time = JSON.parse($(this).parents(".notif-con").siblings(".message-time").text())
+    let message_array = JSON.parse($(this).parents(".notif-con").siblings(".milestone-messages").text())
+    message_array.forEach( (message,index) => {
+      $(".messages-container").append(
+        `<div class="d-flex mt-3">
+          <div class="circle">
+            <span class="circle-inner">${message_firstname[index].charAt(0)}${message_lastname[index].charAt(0)}</span>
+          </div>
+          <div style="margin-left: 10px;">
+            <b>${message_firstname[index]} ${message_lastname[index]}</b>
+            <div>${message}</div>
+            <div class="mt-2 message-sub">${message_time[index]}</div>
+            <div id="del-${index}" class="message-sub">
+              <span>edit</span>
+              <%= link_to delete_message_path(1,1),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'},id:"delete-message" do %>
+                <span class="mx-2">delete</span>
+              <% end %>
+            </div>
+          </div>
+        </div>`
+      );
+      $(`#del-${index}`).find("#delete-message").attr("href",`/delete/messages/${milestone_id}/${message_id[index]}`);
+    })
+  })
+})
+$(".message-bg").click(function(){
+    $(this).hide()
+    $(".message-con").hide()
+})
 // Reload Page Once
   function reloadIt() {
     if (window.location.href.substr(-2) !== ".1") {

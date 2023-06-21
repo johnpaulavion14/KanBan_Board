@@ -81,7 +81,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_21_025306) do
     t.text "message"
     t.string "first_name"
     t.string "last_name"
-    t.integer "rock_id"
+    t.string "time"
     t.integer "milestone_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

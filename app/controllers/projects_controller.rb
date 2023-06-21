@@ -130,6 +130,17 @@ class ProjectsController < ApplicationController
     
   end
 
+  def delete_message
+    @message = Milestone.find(params[:milestone_id]).messages.find(params[:id])
+    respond_to do |format|
+      if @message.destroy
+        format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully deleted your message" }
+      else
+        redirect_to view_projects_path({rock_id: params[:rock_id]})
+      end
+    end
+  end
+
 
   private
 
@@ -142,7 +153,7 @@ class ProjectsController < ApplicationController
   end
 
   def message_params
-    params.permit(:messages, :first_name, :last_name)
+    params.permit(:messages, :first_name, :last_name, :time)
   end
 
 

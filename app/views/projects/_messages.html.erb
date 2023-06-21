@@ -1,18 +1,7 @@
-<div class="mt-3">
-  <%= form_with scope: :addcomment, url:create_addcomment_path, method: :post, local: true do |form| %>
-    <%= form.hidden_field :addcard_id, value: @addcard.id %>
-    <%= form.hidden_field :first_name, value: current_user.first_name %>
-    <%= form.hidden_field :last_name, value: current_user.last_name %>
-      <div class="comment-header">
-        <div class="circle">
-          <span class="circle-inner"><%= @name_initial %></span>
-        </div>
-        <span>
-          <%= form.text_area :comment,required: true,placeholder: "Write a comment...",class:"comment-field",oninput:"auto_grow(this)", id:"comment" %>
-        </span>
-        <span class="mx-2">
-          <%= form.submit "Save" , class:"btn btn-primary" %>
-        </span>
-      </div>
-  <% end %>
+<div class="message-bg"></div>
+<div class="message-con">
+  <h3>Conversations</h3>
+  <div class="messages-container"></div>
+
+
 </div>

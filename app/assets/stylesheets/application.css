@@ -647,3 +647,33 @@
     cursor: pointer;
   }
 
+/* Messages section */
+.yourproject-con{
+  position: relative;
+}
+.message-con {
+  position: fixed;
+  right:1.5rem;
+  bottom:4rem;
+  width: 400px;
+  height: 80%;
+  background-color:white;
+  padding: 1rem;
+  border-radius: 8px;
+  z-index: 10;
+  box-shadow: 0 0 1px 1px rgb(206, 206, 206);
+}
+.message-bg {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: white;
+  opacity: 30%;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9;
+}
+.message-sub{
+  font-size: 12px;
+  font-style: italic;
+}
