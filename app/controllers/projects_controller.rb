@@ -117,6 +117,20 @@ class ProjectsController < ApplicationController
     end
   end
 
+  # Messages
+  def create_message
+    respond_to do |format|
+      if @milestone.save
+        Rock.find(params[:rock_id]).milestones.last.update(assigned:@assigned_array)
+        format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully create a new milestone" }
+      else
+        redirect_to view_projects_path
+      end
+    end
+    
+  end
+
+
   private
 
   def rock_params
@@ -125,6 +139,10 @@ class ProjectsController < ApplicationController
 
   def milestone_params
     params.permit(:task_name, :start, :finish, :assigned, :complete, :remarks,:user_id)
+  end
+
+  def message_params
+    params.permit(:messages, :first_name, :last_name)
   end
 
 

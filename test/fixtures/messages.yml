@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  message: MyText
+  firs_name: MyString
+  last_name: MyString
+  rock_id: 1
+  milestone_id: 1
+
+two:
+  message: MyText
+  firs_name: MyString
+  last_name: MyString
+  rock_id: 1
+  milestone_id: 1
