@@ -18,12 +18,14 @@
     <tbody>
       <% @rocks.each do |rock| %>
         <!-- All Rocks -->
-        <tr class="all-rocks" style="background-color: rgb(215, 215, 215); font-weight: bold; vertical-align: middle;">
+        <tr class="all-rocks" style="background-color: rgb(215, 215, 215); font-weight: bold; vertical-align: middle;" role="button">
           <td class="notif-con" role="button">
             <div class="notif">
               <%= image_tag ("message.png"), class:"project-icon" %>
-              <%= link_to delete_rocks_path(rock.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
-                <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
+              <% if rock.user == current_user %>
+                <%= link_to delete_rocks_path(rock.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+                  <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
+                <% end %>
               <% end %>
             </div>
           </td>
@@ -79,7 +81,7 @@
         <!-- All Milestones -->
         <% @milestones.each do |milestone| %> 
           <% if rock.id == milestone.rock_id %>
-            <tr class="all-milestones rock-<%= rock.id %> <%= milestone.assigned.include?(current_user.email) ? '' : 'bg-light' %>" style="vertical-align: middle;">
+            <tr class="all-milestones rock-<%= rock.id %> <%= milestone.assigned.include?(current_user.email) ? 'm-dblclick' : 'bg-light' %>" style="vertical-align: middle;">
               <td class="notif-con" role="button" >
                 <div class="notif" style="margin-left: 30px;">
                   <%= image_tag ("message.png"), class:"project-icon" %>
@@ -154,6 +156,7 @@
           <td>-</td>
           <td>-</td>
           <td>-</td>
+          <td>-</td>
         </tr>
         <!-- Milestone create form-->
         <tr class="new-milestone rock-<%= rock.id %>">
@@ -175,6 +178,7 @@
           <% end %>
         </tr>
         <tr>
+          <td></td>
           <td></td>
           <td></td>
           <td></td>
@@ -360,7 +364,8 @@
     });
     // Edit milestone
     $(".update-milestone").hide()
-    $(".all-milestones").each( function(index,value) {
+    $(".m-dblclick").each( function(index,value) {
+      $(value).attr("role", "button");
       $(value).dblclick(function(){
         $(".all-milestones").show();
         // milestone variables
