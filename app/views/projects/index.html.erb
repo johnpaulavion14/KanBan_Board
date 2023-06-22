@@ -84,7 +84,7 @@
             <tr class="all-milestones rock-<%= rock.id %> <%= milestone.assigned.include?(current_user.email) ? 'm-dblclick' : 'bg-light' %>" style="vertical-align: middle;">
               <td class="notif-con" role="button" >
                 <div class="notif" style="margin-left: 30px;">
-                  <%= image_tag ("message.png"), class:"project-icon m-message" %>
+                  <span id="m-<%=milestone.id%>"><%= image_tag ("message.png"), class:"project-icon m-message" %></span>
                   <% if milestone.assigned.include? current_user.email %>
                     <%= link_to delete_milestones_path(rock.id,milestone.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
                       <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
@@ -99,11 +99,12 @@
               <td class="finish d-none"><%= milestone.finish %></td>
               <td style="display: none;" id="milestone-assigned"><%= milestone.assigned %></td>
                 <!-- messages -->
-              <td style="display: none;" class="message-id"><%= milestone.messages.pluck(:id) %></td>
-              <td style="display: none;" class="milestone-messages"><%= milestone.messages.pluck(:message) %></td>
-              <td style="display: none;" class="message-firstname"><%= milestone.messages.pluck(:first_name) %></td>
-              <td style="display: none;" class="message-lastname"><%= milestone.messages.pluck(:last_name) %></td>
-              <td style="display: none;" class="message-time"><%= milestone.messages.pluck(:time) %></td>
+              <td style="display: none;" class="m-current-user"><%= current_user.first_name %> <%= current_user.last_name%></td>
+              <td style="display: none;" class="message-id"><%= milestone.messages.order(created_at: :asc).pluck(:id) %></td>
+              <td style="display: none;" class="milestone-messages"><%= milestone.messages.order(created_at: :asc).pluck(:message) %></td>
+              <td style="display: none;" class="message-firstname"><%= milestone.messages.order(created_at: :asc).pluck(:first_name) %></td>
+              <td style="display: none;" class="message-lastname"><%= milestone.messages.order(created_at: :asc).pluck(:last_name) %></td>
+              <td style="display: none;" class="message-time"><%= milestone.messages.order(created_at: :asc).pluck(:time) %></td>
               <!-- display none -->
               <td class="task-name" style="text-align: left; min-width: 100px; padding-left:4rem"><%= milestone.task_name %></td>
               <td>
@@ -197,7 +198,8 @@
         </tr>
       <% end %>
       <!-- milestone params after create or edit -->
-      <div class="d-none milestone-params"><%= params[:rock_id] %></div>
+      <div class="d-none rock-params"><%= params[:rock_id] %></div>
+      <div class="d-none milestone-params"><%= params[:milestone_id] %></div>
       <!-- Rocks Create and Update -->
       <div id="current-user-email" class="d-none"><%= current_user.email %></div>
       <tr class="new-rock">
@@ -432,7 +434,7 @@
       });
     });
     // Show milestone after create or update
-    var id = $(".milestone-params").text().replace('.1','')
+    var id = $(".rock-params").text().replace('.1','')
     var rock_id = ".rock-" + id
     $(rock_id).show()
     $(rock_id + ".new-milestone").hide()
@@ -444,15 +446,18 @@
 // Message Section
 $(".message-bg").css("display", "none")
 $(".message-con").css("display", "none")
+
 $(".m-message").each(function(index,message){
   $(message).click(function(){
     $(".messages-container").empty()
     $(".message-con").show()
     $(".message-bg").show()
 
-    console.log($(this).parents(".notif-con").siblings("#milestone-id").text())
+    console.log($(this).parents(".notif-con").siblings("#rock-id").text())
 
+    let current_user = $(this).parents(".notif-con").siblings(".m-current-user").text()
     let message_id = JSON.parse($(this).parents(".notif-con").siblings(".message-id").text())
+    let rock_id = $(this).parents(".notif-con").siblings("#rock-id").text()
     let milestone_id = $(this).parents(".notif-con").siblings("#milestone-id").text()
     let message_firstname = JSON.parse($(this).parents(".notif-con").siblings(".message-firstname").text())
     let message_lastname = JSON.parse($(this).parents(".notif-con").siblings(".message-lastname").text())
@@ -465,26 +470,48 @@ $(".m-message").each(function(index,message){
             <span class="circle-inner">${message_firstname[index].charAt(0)}${message_lastname[index].charAt(0)}</span>
           </div>
           <div style="margin-left: 10px;">
-            <b>${message_firstname[index]} ${message_lastname[index]}</b>
+            <b class="message-names">${message_firstname[index]} ${message_lastname[index]}</b>
             <div>${message}</div>
             <div class="mt-2 message-sub">${message_time[index]}</div>
-            <div id="del-${index}" class="message-sub">
-              <span>edit</span>
-              <%= link_to delete_message_path(1,1),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'},id:"delete-message" do %>
+            <div id="del-edit-${index}" class="message-sub">
+              <a href="#message-input" id="edit-message">edit</a>
+              <%= link_to delete_message_path(1,1,1),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'},id:"delete-message" do %>
                 <span class="mx-2">delete</span>
               <% end %>
             </div>
           </div>
         </div>`
       );
-      $(`#del-${index}`).find("#delete-message").attr("href",`/delete/messages/${milestone_id}/${message_id[index]}`);
+      //Create message
+      $("#write-message").find("form").attr("method",'post');
+      // Delete message
+      $(`#del-edit-${index}`).find("#delete-message").attr("href",`/delete/messages/${rock_id}/${milestone_id}/${message_id[index]}`);
+      // Edit message
+      $(`#del-edit-${index}`).find("#edit-message").click(function(){
+        $("#write-message").find("#message-input").val(`${message}`)
+        $("#write-message").find("form").attr("action",`/projects/messages/${milestone_id}/${message_id[index]}`);
+        $("#write-message").find("form").attr("method",'patch');
+        $("#m-hidden-forms").find("#r-id").val(`${rock_id}`);
+      })
+      // Hide edit and delete
+      if (message_firstname[index] + " " + message_lastname[index] != current_user ) {
+        $(`#del-edit-${index}`).hide()
+      }
     })
+    // Create message/change milestone_id
+    $("#write-message").find("form").attr("action",`/projects/messages/${milestone_id}`);
+    $("#m-hidden-forms").find("#r-id").val(`${rock_id}`);
+
   })
 })
 $(".message-bg").click(function(){
     $(this).hide()
     $(".message-con").hide()
 })
+// Trigger message after create/delete/update
+  var id = $(".milestone-params").text().replace('.1','')
+  var milestone_id = "#m-" + id
+  $(milestone_id).find("img").trigger("click")
 // Reload Page Once
   function reloadIt() {
     if (window.location.href.substr(-2) !== ".1") {

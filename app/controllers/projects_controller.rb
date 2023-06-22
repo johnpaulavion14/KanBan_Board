@@ -120,23 +120,31 @@ class ProjectsController < ApplicationController
   # Messages
   def create_message
     respond_to do |format|
-      if @milestone.save
-        Rock.find(params[:rock_id]).milestones.last.update(assigned:@assigned_array)
-        format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully create a new milestone" }
+      if Milestone.find(params[:milestone_id]).messages.create(message_params)
+        format.html { redirect_to view_projects_path({rock_id: params[:rock_id],milestone_id: params[:milestone_id]}), notice: "You have successfully create a new message" }
       else
-        redirect_to view_projects_path
+        redirect_to view_projects_path({rock_id: params[:rock_id],milestone_id: params[:milestone_id] })
       end
     end
-    
+  end
+
+  def update_message
+    respond_to do |format|
+      if Milestone.find(params[:milestone_id]).messages.find(params[:id]).update(message_params)
+        format.html { redirect_to view_projects_path({rock_id: params[:rock_id],milestone_id: params[:milestone_id]}), notice: "You have successfully updated a new message" }
+      else
+        redirect_to view_projects_path({rock_id: params[:rock_id],milestone_id: params[:milestone_id]})
+      end
+    end
   end
 
   def delete_message
     @message = Milestone.find(params[:milestone_id]).messages.find(params[:id])
     respond_to do |format|
       if @message.destroy
-        format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully deleted your message" }
+        format.html { redirect_to view_projects_path({rock_id: params[:rock_id],milestone_id: params[:milestone_id]}), notice: "You have successfully deleted your message" }
       else
-        redirect_to view_projects_path({rock_id: params[:rock_id]})
+        redirect_to view_projects_path({rock_id: params[:rock_id],milestone_id: params[:milestone_id]})
       end
     end
   end
@@ -153,7 +161,7 @@ class ProjectsController < ApplicationController
   end
 
   def message_params
-    params.permit(:messages, :first_name, :last_name, :time)
+    params.permit(:message, :first_name, :last_name, :time)
   end
 
 

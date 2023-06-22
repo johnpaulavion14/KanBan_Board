@@ -660,7 +660,7 @@
   background-color:white;
   padding: 1rem;
   border-radius: 8px;
-  z-index: 10;
+  z-index: 9;
   box-shadow: 0 0 1px 1px rgb(206, 206, 206);
 }
 .message-bg {
@@ -671,9 +671,19 @@
   opacity: 30%;
   width: 100vw;
   height: 100vh;
-  z-index: 9;
+  z-index: 8;
 }
 .message-sub{
   font-size: 12px;
   font-style: italic;
+}
+#write-message {
+  height: 70px;
+  border-top: 2px solid rgb(221, 221, 221);
+}
+#message-input {
+  width: 100%;
+  height: 30px;
+  border: none;
+  outline:none;
 }
