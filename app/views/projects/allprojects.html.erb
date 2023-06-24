@@ -256,7 +256,7 @@ $(document).ready(function(){
             </div>
             <div style="margin-left: 10px;">
               <b class="message-names">${message_firstname[index]} ${message_lastname[index]}</b>
-              <div>${message}</div>
+              <div style="white-space:pre-wrap">${message.replace( /\n/g, '<br>' )}</div>
               <div class="mt-2 message-sub">${message_time[index]}</div>
               <div id="del-edit-${index}" class="message-sub">
                 <a href="#message-input" id="edit-message">edit</a>

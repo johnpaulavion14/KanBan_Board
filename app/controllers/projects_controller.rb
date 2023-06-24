@@ -63,6 +63,14 @@ class ProjectsController < ApplicationController
   end
 
   def delete_rocks
+    # delete rock messages
+    current_user.rocks.find(params[:id]).rockmessages.destroy_all
+    # delete milestone messages
+    allmilestone = current_user.rocks.find(params[:id]).milestones
+    allmilestone.each do |milestone|
+      milestone.messages.destroy_all
+    end
+    # delete milestones
     current_user.rocks.find(params[:id]).milestones.destroy_all
     respond_to do |format|
       if current_user.rocks.find(params[:id]).destroy
@@ -108,6 +116,8 @@ class ProjectsController < ApplicationController
 
   def delete_milestones
     @milestone = current_user.milestones.find(params[:id])
+    # delete milestone messages
+    @milestone.messages.destroy_all
     respond_to do |format|
       if @milestone.destroy
         format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully deleted you milestone" }

@@ -471,8 +471,6 @@ $(".m-message").each(function(index,message){
     $(".message-con").show()
     $(".message-bg").show()
 
-    console.log($(this).parents(".notif-con").siblings("#rock-id").text())
-
     let current_user = $(this).parents(".notif-con").siblings(".m-current-user").text()
     let message_id = JSON.parse($(this).parents(".notif-con").siblings(".message-id").text())
     let isrock = $(this).parents(".notif-con").siblings("#isrock").text()
@@ -482,6 +480,9 @@ $(".m-message").each(function(index,message){
     let message_lastname = JSON.parse($(this).parents(".notif-con").siblings(".message-lastname").text())
     let message_time = JSON.parse($(this).parents(".notif-con").siblings(".message-time").text())
     let message_array = JSON.parse($(this).parents(".notif-con").siblings(".milestone-messages").text())
+
+    console.log(message_array)
+
     message_array.forEach( (message,index) => {
       $(".messages-container").append(
         `<div class="d-flex mt-3">
@@ -490,7 +491,7 @@ $(".m-message").each(function(index,message){
           </div>
           <div style="margin-left: 10px;">
             <b class="message-names">${message_firstname[index]} ${message_lastname[index]}</b>
-            <div>${message}</div>
+            <div style="white-space:pre-wrap">${message.replace( /\n/g, '<br>' )}</div>
             <div class="mt-2 message-sub">${message_time[index]}</div>
             <div id="del-edit-${index}" class="message-sub">
               <a href="#message-input" id="edit-message">edit</a>
