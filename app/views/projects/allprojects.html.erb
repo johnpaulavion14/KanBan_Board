@@ -19,7 +19,11 @@
       <% @rocks.each do |rock| %>
         <!-- All Rocks -->
         <tr class="all-rocks" style="background-color:#cccdd4; font-weight: bold; vertical-align: middle;">
-          <td class="notif-con"><%= image_tag ("message.png"), class:"message-icon project-icon" %></td>
+          <% if rock.rockmessages.empty? %>
+            <td class="notif-con"><%= image_tag ("message.png"), class:"message-icon project-icon m-message"%></td>
+            <% else %>
+            <td class="notif-con"><%= image_tag ("message_1.png"), class:"message-icon project-icon m-message"%></td>
+          <% end %>
           <td style="display: none;" id="rock-id"><%= rock.id %></td>
           <td class="task-name" style="text-align: left; min-width: 100px;">
             <%= image_tag ("plus.png"),role:"button", style:"margin-left:1rem",class:"plus-icon" %>
@@ -27,8 +31,16 @@
             <%= rock.task_name %>
           </td>
           <!-- display none -->
+          <td style="display: none;" id="isrock">rock</td>
           <td style="display: none;" id="percent-sum"><%= rock.milestones.pluck(:complete).reduce(:+) %></td>
           <td style="display: none;" id="m-count"><%= rock.milestones.count %></td>
+          <!-- messages -->
+          <td style="display: none;" class="m-current-user"><%= current_user.first_name %> <%= current_user.last_name%></td>
+          <td style="display: none;" class="message-id"><%= rock.rockmessages.order(created_at: :asc).pluck(:id) %></td>
+          <td style="display: none;" class="milestone-messages"><%= rock.rockmessages.order(created_at: :asc).pluck(:message) %></td>
+          <td style="display: none;" class="message-firstname"><%= rock.rockmessages.order(created_at: :asc).pluck(:first_name) %></td>
+          <td style="display: none;" class="message-lastname"><%= rock.rockmessages.order(created_at: :asc).pluck(:last_name) %></td>
+          <td style="display: none;" class="message-time"><%= rock.rockmessages.order(created_at: :asc).pluck(:time) %></td>
           <!-- display none -->
           <td>
             <%= (rock.start.to_date..rock.finish.to_date).count do |date|
@@ -70,9 +82,20 @@
         <% @milestones.each do |milestone| %> 
           <% if rock.id == milestone.rock_id %>
             <tr class="all-milestones rock-<%= rock.id %>" style="vertical-align: middle;">
-              <td class="notif-con" ><%= image_tag ("message.png"), class:"message-icon project-icon", style:"margin-left: 30px;" %></td>
+              <% if milestone.messages.empty? %>
+                <td class="notif-con" ><%= image_tag ("message.png"), class:"message-icon project-icon m-message", style:"margin-left: 30px;" %></td>
+              <% else %>
+                <td class="notif-con" ><%= image_tag ("message_1.png"), class:"message-icon project-icon m-message", style:"margin-left: 30px;" %></td>
+              <% end %>
               <td style="display: none;" id="rock-id"><%= rock.id %></td>
               <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
+              <!-- messages -->
+              <td style="display: none;" class="m-current-user"><%= current_user.first_name %> <%= current_user.last_name%></td>
+              <td style="display: none;" class="message-id"><%= milestone.messages.order(created_at: :asc).pluck(:id) %></td>
+              <td style="display: none;" class="milestone-messages"><%= milestone.messages.order(created_at: :asc).pluck(:message) %></td>
+              <td style="display: none;" class="message-firstname"><%= milestone.messages.order(created_at: :asc).pluck(:first_name) %></td>
+              <td style="display: none;" class="message-lastname"><%= milestone.messages.order(created_at: :asc).pluck(:last_name) %></td>
+              <td style="display: none;" class="message-time"><%= milestone.messages.order(created_at: :asc).pluck(:time) %></td>
               <td class="task-name" style="text-align: left; min-width: 100px; padding-left:4rem"><%= milestone.task_name %></td>
               <td>
                 <%= (milestone.start.to_date..milestone.finish.to_date).count do |date|
@@ -134,77 +157,128 @@
         </tr>
       <% end %>
     </tbody>
+    <%= render 'projects/messages' %>
   </table>
-
 </div>
 
 <script>
 
-  $(document).ready(function(){
+$(document).ready(function(){
 
-     // hover messages
-    // $(".message-icon").css("display","none")
-    // $(".notif-con").hover(function(){
-    //   $(this).children(".message-icon").toggle()
-    // })
+    // hover messages
+  // $(".message-icon").css("display","none")
+  // $(".notif-con").hover(function(){
+  //   $(this).children(".message-icon").toggle()
+  // })
 
-   // Complete and Status Column
-   $(".rock-percent").each( function(index,value) {
-      // Rock Percentage Value
-      let percent_sum = $(value).siblings("#percent-sum").text()
-      let m_count = $(value).siblings("#m-count").text()
-      let total_rock_percent = m_count == "0" ? 0 : (parseInt(percent_sum) / (100 *  parseInt(m_count))) * 100
-      $(value).children("span").text(total_rock_percent.toFixed(2))
-      // Status Value and Complete status style
-      let rock_percent = $(value).children("span").text()
-      if (rock_percent == "0.00") {
-        $(value).siblings(".rock-status").find("#stat").text("Not Started")
-        $(value).siblings(".rock-status").find("#stat").css("background-color", "red")
-      }else if (rock_percent == "100.00") {
-        $(value).siblings(".rock-status").find("#stat").text("Complete")
-        $(value).siblings(".rock-status").find("#stat").css("background-color", "yellow")
-      }else {
-        $(value).siblings(".rock-status").find("#stat").text("In Progress")
-        $(value).siblings(".rock-status").find("#stat").css("background-color", "green")
-      }
-    });
-    
-    $(".com-status").each( function(index,value) {
-      if ($(value).text().replace(/\s/g, "") == "Complete"){
-        $(value).parents("tr").children("td").not(".notif-con").css("text-decoration", "line-through")
-        $(value).parents("tr").children("td").not(".notif-con").css("text-decoration-color", "red")
-        $(value).parents("tr").children("td").not(".notif-con").css("font-style", "italic")
-        $(value).find(".track").hide()
-      }
-    });
-
-    // -----Milestone Section------
-
-    // Show / Hide Milestones
-    $(".minus-icon").css("display", "none")
-    $(".all-milestones").css("display", "none")
-    $(".new-milestone").css("display", "none")
-    $(".blank-milestone").css("display", "none")
-    $(".plus-icon").each( function(index,plus) {
-      $(plus).click(function(){
-        $(this).hide()
-        $(this).next(".minus-icon").show()
-        var id = $(plus).parents(".task-name").siblings("#rock-id").text()
-        var rock_id = ".rock-" + id
-        $(rock_id).show()
-        $(rock_id + ".new-milestone").hide()
-      });
-    });
-    $(".minus-icon").each( function(index,minus) {
-      $(minus).click(function(){
-        $(this).hide()
-        $(this).prev(".plus-icon").show()
-        var id = $(minus).parents(".task-name").siblings("#rock-id").text()
-        var rock_id = ".rock-" + id
-        $(rock_id).hide()
-      });
-    });
-   
+  // Complete and Status Column
+  $(".rock-percent").each( function(index,value) {
+    // Rock Percentage Value
+    let percent_sum = $(value).siblings("#percent-sum").text()
+    let m_count = $(value).siblings("#m-count").text()
+    let total_rock_percent = m_count == "0" ? 0 : (parseInt(percent_sum) / (100 *  parseInt(m_count))) * 100
+    $(value).children("span").text(total_rock_percent.toFixed(2))
+    // Status Value and Complete status style
+    let rock_percent = $(value).children("span").text()
+    if (rock_percent == "0.00") {
+      $(value).siblings(".rock-status").find("#stat").text("Not Started")
+      $(value).siblings(".rock-status").find("#stat").css("background-color", "red")
+    }else if (rock_percent == "100.00") {
+      $(value).siblings(".rock-status").find("#stat").text("Complete")
+      $(value).siblings(".rock-status").find("#stat").css("background-color", "yellow")
+    }else {
+      $(value).siblings(".rock-status").find("#stat").text("In Progress")
+      $(value).siblings(".rock-status").find("#stat").css("background-color", "green")
+    }
   });
+  
+  $(".com-status").each( function(index,value) {
+    if ($(value).text().replace(/\s/g, "") == "Complete"){
+      $(value).parents("tr").children("td").not(".notif-con").css("text-decoration", "line-through")
+      $(value).parents("tr").children("td").not(".notif-con").css("text-decoration-color", "red")
+      $(value).parents("tr").children("td").not(".notif-con").css("font-style", "italic")
+      $(value).find(".track").hide()
+    }
+  });
+
+  // -----Milestone Section------
+
+  // Show / Hide Milestones
+  $(".minus-icon").css("display", "none")
+  $(".all-milestones").css("display", "none")
+  $(".new-milestone").css("display", "none")
+  $(".blank-milestone").css("display", "none")
+  $(".plus-icon").each( function(index,plus) {
+    $(plus).click(function(){
+      $(this).hide()
+      $(this).next(".minus-icon").show()
+      var id = $(plus).parents(".task-name").siblings("#rock-id").text()
+      var rock_id = ".rock-" + id
+      $(rock_id).show()
+      $(rock_id + ".new-milestone").hide()
+    });
+  });
+  $(".minus-icon").each( function(index,minus) {
+    $(minus).click(function(){
+      $(this).hide()
+      $(this).prev(".plus-icon").show()
+      var id = $(minus).parents(".task-name").siblings("#rock-id").text()
+      var rock_id = ".rock-" + id
+      $(rock_id).hide()
+    });
+  });
+
+  // Message Section
+  $(".message-bg").css("display", "none")
+  $(".message-con").css("display", "none")
+
+  $(".m-message").each(function(index,message){
+    $(message).click(function(){
+      $(".messages-container").empty()
+      $(".message-con").show()
+      $(".message-bg").show()
+
+      console.log($(this).parents(".notif-con").siblings("#rock-id").text())
+
+      let current_user = $(this).parents(".notif-con").siblings(".m-current-user").text()
+      let message_id = JSON.parse($(this).parents(".notif-con").siblings(".message-id").text())
+      let rock_id = $(this).parents(".notif-con").siblings("#rock-id").text()
+      let milestone_id = $(this).parents(".notif-con").siblings("#milestone-id").text()
+      let message_firstname = JSON.parse($(this).parents(".notif-con").siblings(".message-firstname").text())
+      let message_lastname = JSON.parse($(this).parents(".notif-con").siblings(".message-lastname").text())
+      let message_time = JSON.parse($(this).parents(".notif-con").siblings(".message-time").text())
+      let message_array = JSON.parse($(this).parents(".notif-con").siblings(".milestone-messages").text())
+      message_array.forEach( (message,index) => {
+        $(".messages-container").append(
+          `<div class="d-flex mt-3">
+            <div class="circle">
+              <span class="circle-inner">${message_firstname[index].charAt(0)}${message_lastname[index].charAt(0)}</span>
+            </div>
+            <div style="margin-left: 10px;">
+              <b class="message-names">${message_firstname[index]} ${message_lastname[index]}</b>
+              <div>${message}</div>
+              <div class="mt-2 message-sub">${message_time[index]}</div>
+              <div id="del-edit-${index}" class="message-sub">
+                <a href="#message-input" id="edit-message">edit</a>
+                <%= link_to delete_message_path(1,1,1),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'},id:"delete-message" do %>
+                  <span class="mx-2">delete</span>
+                <% end %>
+              </div>
+            </div>
+          </div>`
+        );
+        // Hide edit and delete
+        $(`#del-edit-${index}`).hide()
+      })
+    })
+  })
+  // disable write message div
+  $("#write-message").css("pointer-events", "none")
+
+  $(".message-bg").click(function(){
+      $(this).hide()
+      $(".message-con").hide()
+  })
+});
   
 </script>

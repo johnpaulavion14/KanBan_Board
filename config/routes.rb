@@ -56,11 +56,14 @@ Rails.application.routes.draw do
   get 'projects/dashboard' => 'projects#dashboard', as: 'view_projects_dashboard'
   get 'yourprojects' => 'projects#index', as: 'view_projects'
   get 'allprojects' => 'projects#allprojects', as: 'view_allprojects'
+  #Milestone messages
   post 'projects/messages/:milestone_id' => 'projects#create_message', as: 'create_message'
   patch 'projects/messages/:milestone_id/:id' => 'projects#update_message', as: 'update_message'
   delete 'delete/messages/:rock_id/:milestone_id/:id' => 'projects#delete_message', as: 'delete_message'
-  # patch 'update/role/:id' => 'allusers#update', as: 'update_role'
-  # patch 'update/admin/:id/:admin' => 'allusers#updateadmin', as: 'update_admin'
+  #Rock messages
+  post 'projects/rockmessages/:rock_id' => 'projects#create_rockmessage', as: 'create_rockmessage'
+  patch 'projects/rockmessages/:rock_id/:id' => 'projects#update_rockmessage', as: 'update_rockmessage'
+  delete 'delete/rockmessages/:rock_id/:id' => 'projects#delete_rockmessage', as: 'delete_rockmessage'
 
  # Rocks
   post 'create/rocks' => 'projects#create_rocks', as: 'create_rocks'

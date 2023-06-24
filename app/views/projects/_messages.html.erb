@@ -21,7 +21,7 @@
             <%= f.hidden_field :time, value:DateTime.now.strftime("%b %d at %I:%M%p") %>
             <%= f.hidden_field :rock_id, id:"r-id" %>
             <%= f.text_area :message, required:true,placeholder:"Write your message here ...", id:"message-input" %>
-            <div class="mx-3"><%= image_submit_tag("send.png")%></div>
+            <div class="mx-3" id="m-submit"><%= image_submit_tag("send.png")%></div>
           </div>
           </div>
         </div>

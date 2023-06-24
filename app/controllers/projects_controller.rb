@@ -117,7 +117,7 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # Messages
+  # Milestone Messages
   def create_message
     respond_to do |format|
       if Milestone.find(params[:milestone_id]).messages.create(message_params)
@@ -148,7 +148,37 @@ class ProjectsController < ApplicationController
       end
     end
   end
+  # Rock Messages
+  def create_rockmessage
+    respond_to do |format|
+      if Rock.find(params[:rock_id]).rockmessages.create(message_params)
+        format.html { redirect_to view_projects_path({rock_m_id: params[:rock_id]}), notice: "You have successfully create a new message" }
+      else
+        redirect_to view_projects_path({rock_m_id: params[:rock_id]})
+      end
+    end
+  end
 
+  def update_rockmessage
+    respond_to do |format|
+      if Rock.find(params[:rock_id]).rockmessages.find(params[:id]).update(message_params)
+        format.html { redirect_to view_projects_path({rock_m_id: params[:rock_id]}), notice: "You have successfully updated a new message" }
+      else
+        redirect_to view_projects_path({rock_m_id: params[:rock_id]})
+      end
+    end
+  end
+
+  def delete_rockmessage
+    @message = Rock.find(params[:rock_id]).rockmessages.find(params[:id])
+    respond_to do |format|
+      if @message.destroy
+        format.html { redirect_to view_projects_path({rock_m_id: params[:rock_id]}), notice: "You have successfully deleted your message" }
+      else
+        redirect_to view_projects_path({rock_m_id: params[:rock_id]})
+      end
+    end
+  end
 
   private
 
@@ -163,6 +193,5 @@ class ProjectsController < ApplicationController
   def message_params
     params.permit(:message, :first_name, :last_name, :time)
   end
-
 
 end

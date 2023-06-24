@@ -21,7 +21,11 @@
         <tr class="all-rocks" style="background-color: rgb(215, 215, 215); font-weight: bold; vertical-align: middle;" role="button">
           <td class="notif-con" role="button">
             <div class="notif">
-              <%= image_tag ("message.png"), class:"project-icon rock-message" %>
+              <% if rock.rockmessages.empty? %>
+                <span id="r-<%=rock.id%>"><%= image_tag ("message.png"), class:"project-icon m-message" %></span>
+              <% else %>
+                <span id="r-<%=rock.id%>"><%= image_tag ("message_1.png"), class:"project-icon m-message" %></span>
+              <% end %>
               <% if rock.user == current_user %>
                 <%= link_to delete_rocks_path(rock.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
                   <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
@@ -30,12 +34,21 @@
             </div>
           </td>
           <!-- display none -->
+          <td style="display: none;" id="isrock">rock</td>
           <td style="display: none;" id="rock-id"><%= rock.id %></td>
           <td style="display: none;" id="start-<%= rock.id %>" class="start"><%= rock.start %></td>
           <td style="display: none;" id="finish-<%= rock.id %>" class="finish"><%= rock.finish %></td>
           <td style="display: none;" id="rock-assigned"><%= rock.assigned %></td>
           <td style="display: none;" id="percent-sum"><%= rock.milestones.pluck(:complete).reduce(:+) %></td>
           <td style="display: none;" id="m-count"><%= rock.milestones.count %></td>
+            <!-- messages -->
+          <td style="display: none;" class="m-current-user"><%= current_user.first_name %> <%= current_user.last_name%></td>
+          <td style="display: none;" class="message-id"><%= rock.rockmessages.order(created_at: :asc).pluck(:id) %></td>
+          <td style="display: none;" class="milestone-messages"><%= rock.rockmessages.order(created_at: :asc).pluck(:message) %></td>
+          <td style="display: none;" class="message-firstname"><%= rock.rockmessages.order(created_at: :asc).pluck(:first_name) %></td>
+          <td style="display: none;" class="message-lastname"><%= rock.rockmessages.order(created_at: :asc).pluck(:last_name) %></td>
+          <td style="display: none;" class="message-time"><%= rock.rockmessages.order(created_at: :asc).pluck(:time) %></td>
+
           <!-- display none -->
           <td class="task-name" style="text-align: left; min-width: 100px;">
             <%= image_tag ("plus.png"),role:"button", style:"margin-left:1rem",class:"plus-icon" %>
@@ -84,7 +97,11 @@
             <tr class="all-milestones rock-<%= rock.id %> <%= milestone.assigned.include?(current_user.email) ? 'm-dblclick' : 'bg-light' %>" style="vertical-align: middle;">
               <td class="notif-con" role="button" >
                 <div class="notif" style="margin-left: 30px;">
-                  <span id="m-<%=milestone.id%>"><%= image_tag ("message.png"), class:"project-icon m-message" %></span>
+                  <% if milestone.messages.empty? %>
+                    <span id="m-<%=milestone.id%>"><%= image_tag ("message.png"), class:"project-icon m-message" %></span>
+                  <% else %>
+                    <span id="m-<%=milestone.id%>"><%= image_tag ("message_1.png"), class:"project-icon m-message" %></span>
+                  <% end %>
                   <% if milestone.assigned.include? current_user.email %>
                     <%= link_to delete_milestones_path(rock.id,milestone.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
                       <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
@@ -197,7 +214,8 @@
           <td></td>
         </tr>
       <% end %>
-      <!-- milestone params after create or edit -->
+      <!-- rock and milestone params after create or edit -->
+      <div class="d-none rock-m-id"><%= params[:rock_m_id] %></div>
       <div class="d-none rock-params"><%= params[:rock_id] %></div>
       <div class="d-none milestone-params"><%= params[:milestone_id] %></div>
       <!-- Rocks Create and Update -->
@@ -457,6 +475,7 @@ $(".m-message").each(function(index,message){
 
     let current_user = $(this).parents(".notif-con").siblings(".m-current-user").text()
     let message_id = JSON.parse($(this).parents(".notif-con").siblings(".message-id").text())
+    let isrock = $(this).parents(".notif-con").siblings("#isrock").text()
     let rock_id = $(this).parents(".notif-con").siblings("#rock-id").text()
     let milestone_id = $(this).parents(".notif-con").siblings("#milestone-id").text()
     let message_firstname = JSON.parse($(this).parents(".notif-con").siblings(".message-firstname").text())
@@ -485,11 +504,19 @@ $(".m-message").each(function(index,message){
       //Create message
       $("#write-message").find("form").attr("method",'post');
       // Delete message
-      $(`#del-edit-${index}`).find("#delete-message").attr("href",`/delete/messages/${rock_id}/${milestone_id}/${message_id[index]}`);
+      if (isrock == "rock"){
+        $(`#del-edit-${index}`).find("#delete-message").attr("href",`/delete/rockmessages/${rock_id}/${message_id[index]}`);
+      }else{
+        $(`#del-edit-${index}`).find("#delete-message").attr("href",`/delete/messages/${rock_id}/${milestone_id}/${message_id[index]}`);
+      }
       // Edit message
       $(`#del-edit-${index}`).find("#edit-message").click(function(){
         $("#write-message").find("#message-input").val(`${message}`)
-        $("#write-message").find("form").attr("action",`/projects/messages/${milestone_id}/${message_id[index]}`);
+        if (isrock == "rock"){
+          $("#write-message").find("form").attr("action",`/projects/rockmessages/${rock_id}/${message_id[index]}`);
+        }else{
+          $("#write-message").find("form").attr("action",`/projects/messages/${milestone_id}/${message_id[index]}`);
+        }
         $("#write-message").find("form").attr("method",'patch');
         $("#m-hidden-forms").find("#r-id").val(`${rock_id}`);
       })
@@ -499,8 +526,12 @@ $(".m-message").each(function(index,message){
       }
     })
     // Create message/change milestone_id
-    $("#write-message").find("form").attr("action",`/projects/messages/${milestone_id}`);
-    $("#m-hidden-forms").find("#r-id").val(`${rock_id}`);
+    if (isrock == "rock"){
+      $("#write-message").find("form").attr("action",`/projects/rockmessages/${rock_id}`);
+    }else{
+      $("#write-message").find("form").attr("action",`/projects/messages/${milestone_id}`);
+      $("#m-hidden-forms").find("#r-id").val(`${rock_id}`);
+    }
 
   })
 })
@@ -509,8 +540,13 @@ $(".message-bg").click(function(){
     $(".message-con").hide()
 })
 // Trigger message after create/delete/update
-  var id = $(".milestone-params").text().replace('.1','')
-  var milestone_id = "#m-" + id
+  // rock
+  var r_id = $(".rock-m-id").text().replace('.1','')
+  var rock_id = "#r-" + r_id
+  $(rock_id).find("img").trigger("click")
+  // milestone
+  var m_id = $(".milestone-params").text().replace('.1','')
+  var milestone_id = "#m-" + m_id
   $(milestone_id).find("img").trigger("click")
 // Reload Page Once
   function reloadIt() {
