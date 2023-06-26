@@ -3,7 +3,6 @@
   <table class="table table-hover text-center">
     <thead>
       <tr style="color: #0067a3; border-bottom: 3px solid #0067a3;border-top: 3px solid #0067a3; height: 50px; vertical-align: middle;">
-        <th scope="col" style="min-width:50px;"></th>
         <th scope="col">Task Name</th>
         <th scope="col">Duration</th>
         <th scope="col">Start</th>
@@ -13,17 +12,14 @@
         <th scope="col">% Complete</th>
         <th scope="col">Status</th>
         <th scope="col">Remarks</th>
+        <th scope="col" style="min-width:50px;">Actions</th>
+
       </tr>
     </thead>
     <tbody>
       <% @rocks.each do |rock| %>
         <!-- All Rocks -->
         <tr class="all-rocks" style="background-color:#cccdd4; font-weight: bold; vertical-align: middle;">
-          <% if rock.rockmessages.empty? %>
-            <td class="notif-con"><%= image_tag ("message.png"), class:"message-icon project-icon m-message"%></td>
-            <% else %>
-            <td class="notif-con"><%= image_tag ("message_1.png"), class:"message-icon project-icon m-message"%></td>
-          <% end %>
           <td style="display: none;" id="rock-id"><%= rock.id %></td>
           <td class="task-name" style="text-align: left; min-width: 100px;">
             <%= image_tag ("plus.png"),role:"button", style:"margin-left:1rem",class:"plus-icon" %>
@@ -70,23 +66,23 @@
             <div class="d-flex align-items-center justify-content-center">
               <div id="stat" class="px-3 py-2" style="flex:4"></div>
               <% if rock.finish >= Date.today %>
-                <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="on track" class="track"><%= image_tag ("green_circle.png")%></div>  
+                <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="on track" class="track"><%= image_tag ("blue_circle.png")%></div>  
               <% else %>
                 <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="off track" class="track"><%= image_tag ("red_circle.png")%></div>  
               <% end %>
             </div>
           </td>
           <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= rock.remarks %></td>
+          <% if rock.rockmessages.empty? %>
+            <td class="notif-con"><%= image_tag ("message.png"), class:"message-icon project-icon m-message"%></td>
+          <% else %>
+            <td class="notif-con"><%= image_tag ("message_1.png"), class:"message-icon project-icon m-message"%></td>
+          <% end %>
         </tr>
         <!-- All Milestones -->
         <% @milestones.each do |milestone| %> 
           <% if rock.id == milestone.rock_id %>
             <tr class="all-milestones rock-<%= rock.id %>" style="vertical-align: middle;">
-              <% if milestone.messages.empty? %>
-                <td class="notif-con" ><%= image_tag ("message.png"), class:"message-icon project-icon m-message", style:"margin-left: 30px;" %></td>
-              <% else %>
-                <td class="notif-con" ><%= image_tag ("message_1.png"), class:"message-icon project-icon m-message", style:"margin-left: 30px;" %></td>
-              <% end %>
               <td style="display: none;" id="rock-id"><%= rock.id %></td>
               <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
               <!-- messages -->
@@ -125,21 +121,26 @@
                 <div class="d-flex align-items-center justify-content-center">
                   <% case milestone.complete %>
                     <% when 0 %>
-                      <div class="bg-danger px-2 py-1" style="flex:4">Not Started</div>
+                      <div class="bg-light px-2 py-1" style="flex:4">Not Started</div>
                     <% when 100 %>
-                      <div class="bg-warning p-2 py-1" style="flex:4">Complete</div>
+                      <div class="bg-success p-2 py-1" style="flex:4">Complete</div>
                     <% else %>
-                      <div class="bg-success p-2 py-1" style="flex:4">In Progress</div>
+                      <div class="bg-warning p-2 py-1" style="flex:4">In Progress</div>
                   <% end %>
   
                   <% if milestone.finish >= Date.today %>
-                    <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="on track" class="track"><%= image_tag ("green_circle.png")%></div>  
+                    <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="on track" class="track"><%= image_tag ("blue_circle.png")%></div>  
                   <% else %>
                     <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="off track" class="track"><%= image_tag ("red_circle.png")%></div>  
                   <% end %>
                 </div>
               </td>
               <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= milestone.remarks %></td>
+              <% if milestone.messages.empty? %>
+                <td class="notif-con" ><%= image_tag ("message.png"), class:"message-icon project-icon m-message", style:"margin-left: 30px;" %></td>
+              <% else %>
+                <td class="notif-con" ><%= image_tag ("message_1.png"), class:"message-icon project-icon m-message", style:"margin-left: 30px;" %></td>
+              <% end %>
             </tr>
           <% end %>
         <% end %>
@@ -182,13 +183,13 @@ $(document).ready(function(){
     let rock_percent = $(value).children("span").text()
     if (rock_percent == "0.00") {
       $(value).siblings(".rock-status").find("#stat").text("Not Started")
-      $(value).siblings(".rock-status").find("#stat").css("background-color", "red")
+      $(value).siblings(".rock-status").find("#stat").css("background-color", "silver")
     }else if (rock_percent == "100.00") {
       $(value).siblings(".rock-status").find("#stat").text("Complete")
-      $(value).siblings(".rock-status").find("#stat").css("background-color", "yellow")
+      $(value).siblings(".rock-status").find("#stat").css("background-color", "green")
     }else {
       $(value).siblings(".rock-status").find("#stat").text("In Progress")
-      $(value).siblings(".rock-status").find("#stat").css("background-color", "green")
+      $(value).siblings(".rock-status").find("#stat").css("background-color", "yellow")
     }
   });
   

@@ -3,7 +3,6 @@
   <table class="table table-hover text-center">
     <thead>
       <tr style="color: #0067a3; border-bottom: 3px solid #0067a3;border-top: 3px solid #0067a3; height: 50px; vertical-align: middle;">
-        <th scope="col" style="min-width:100px;"></th>
         <th scope="col" style="min-width: 200px;">Task Name</th>
         <th scope="col" >Duration</th>
         <th scope="col" style="width: 130px;">Start</th>
@@ -13,26 +12,13 @@
         <th scope="col" style="min-width: 150px;">% Complete</th>
         <th scope="col" style="min-width: 200px;">Status</th>
         <th scope="col" >Remarks</th>
+        <th scope="col" style="min-width:100px;">Actions</th>
       </tr>
     </thead>
     <tbody>
       <% @rocks.each do |rock| %>
         <!-- All Rocks -->
         <tr  class="all-rocks" style="background-color: rgb(215, 215, 215); font-weight: bold; vertical-align: middle;" role="button">
-          <td class="notif-con" role="button">
-            <div class="notif">
-              <% if rock.rockmessages.empty? %>
-                <span id="r-<%=rock.id%>"><%= image_tag ("message.png"), class:"project-icon m-message" %></span>
-              <% else %>
-                <span id="r-<%=rock.id%>"><%= image_tag ("message_1.png"), class:"project-icon m-message" %></span>
-              <% end %>
-              <% if rock.user == current_user %>
-                <%= link_to delete_rocks_path(rock.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
-                  <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
-                <% end %>
-              <% end %>
-            </div>
-          </td>
           <!-- display none -->
           <td style="display: none;" id="isrock">rock</td>
           <td style="display: none;" id="rock-id"><%= rock.id %></td>
@@ -83,32 +69,32 @@
             <div class="d-flex align-items-center justify-content-center">
               <div id="stat" class="px-3 py-2" style="flex:4"></div>
               <% if rock.finish >= Date.today %>
-                <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="on track" class="track"><%= image_tag ("green_circle.png")%></div>  
+                <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="on track" class="track"><%= image_tag ("blue_circle.png")%></div>  
               <% else %>
                 <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="off track" class="track"><%= image_tag ("red_circle.png")%></div>  
               <% end %>
             </div>
           </td>
           <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= rock.remarks %></td>
+          <td class="notif-con" role="button">
+            <div class="notif">
+              <% if rock.rockmessages.empty? %>
+                <span id="r-<%=rock.id%>"><%= image_tag ("message.png"), class:"project-icon m-message" %></span>
+              <% else %>
+                <span id="r-<%=rock.id%>"><%= image_tag ("message_1.png"), class:"project-icon m-message" %></span>
+              <% end %>
+              <% if rock.user == current_user %>
+                <%= link_to delete_rocks_path(rock.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+                  <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
+                <% end %>
+              <% end %>
+            </div>
+          </td>
         </tr>
         <!-- All Milestones -->
         <% @milestones.each do |milestone| %> 
           <% if rock.id == milestone.rock_id %>
             <tr class="all-milestones rock-<%= rock.id %> <%= milestone.assigned.include?(current_user.email) ? 'm-dblclick' : 'bg-light' %>" style="vertical-align: middle;">
-              <td class="notif-con" role="button" >
-                <div class="notif" style="margin-left: 30px;">
-                  <% if milestone.messages.empty? %>
-                    <span id="m-<%=milestone.id%>"><%= image_tag ("message.png"), class:"project-icon m-message" %></span>
-                  <% else %>
-                    <span id="m-<%=milestone.id%>"><%= image_tag ("message_1.png"), class:"project-icon m-message" %></span>
-                  <% end %>
-                  <% if milestone.assigned.include? current_user.email %>
-                    <%= link_to delete_milestones_path(rock.id,milestone.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
-                      <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
-                    <% end %>
-                  <% end %>
-                </div>
-              </td>
               <!-- display none -->
               <td style="display: none;" id="rock-id"><%= rock.id %></td>
               <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
@@ -152,21 +138,35 @@
                 <div class="d-flex align-items-center justify-content-center">
                     <% case milestone.complete %>
                       <% when 0 %>
-                        <div class="bg-danger px-2 py-1" style="flex:4">Not Started</div>
+                        <div class="bg-light px-2 py-1" style="flex:4">Not Started</div>
                       <% when 100 %>
-                        <div class="bg-warning p-2 py-1" style="flex:4">Complete</div>
+                        <div class="bg-success p-2 py-1" style="flex:4">Complete</div>
                       <% else %>
-                        <div class="bg-success p-2 py-1" style="flex:4">In Progress</div>
+                        <div class="bg-warning p-2 py-1" style="flex:4">In Progress</div>
                     <% end %>
     
                     <% if milestone.finish >= Date.today %>
-                      <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="on track" class="track"><%= image_tag ("green_circle.png")%></div>  
+                      <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="on track" class="track"><%= image_tag ("blue_circle.png")%></div>  
                     <% else %>
                       <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="off track" class="track"><%= image_tag ("red_circle.png")%></div>  
                     <% end %>
                 </div>
               </td>
               <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= milestone.remarks %></td>
+              <td class="notif-con" role="button" >
+                <div class="notif" style="margin-left: 30px;">
+                  <% if milestone.messages.empty? %>
+                    <span id="m-<%=milestone.id%>"><%= image_tag ("message.png"), class:"project-icon m-message" %></span>
+                  <% else %>
+                    <span id="m-<%=milestone.id%>"><%= image_tag ("message_1.png"), class:"project-icon m-message" %></span>
+                  <% end %>
+                  <% if milestone.assigned.include? current_user.email %>
+                    <%= link_to delete_milestones_path(rock.id,milestone.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+                      <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
+                    <% end %>
+                  <% end %>
+                </div>
+              </td>
             </tr>
           <% end %>
         <% end %>
@@ -185,10 +185,6 @@
         <!-- Milestone create form-->
         <tr class="new-milestone create-m-<%= rock.id %>">
           <%= form_with url:create_milestones_path(rock.id), method: :post, local: true do |f| %>
-          <td>
-            <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
-            <span class="x-new-milestone mx-2 btn btn-danger mt-1">Cancel</span>
-          </td>
             <td class="d-none"><%= f.hidden_field :user_id, value:current_user.id, class:"px-2" %></td>
             <td><%= f.text_field :task_name, required:true, class:"px-2" %></td>
             <td></td>
@@ -199,6 +195,10 @@
             <td><%= f.number_field :complete, required:true, class:"px-2", style:"width: 65px; text-align:center", min:0, max:100, value:0 %> %</td>
             <td></td>
             <td><%= f.text_field :remarks, class:"px-2" %></td>
+            <td>
+              <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
+              <span class="x-new-milestone mx-2 btn btn-danger mt-1">Cancel</span>
+            </td>
           <% end %>
         </tr>
         <tr>
@@ -222,10 +222,6 @@
       <div id="current-user-email" class="d-none"><%= current_user.email %></div>
       <tr class="new-rock">
         <%= form_with url:create_rocks_path, method: :post, local: true do |f| %>
-          <td>
-            <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
-            <span class="x-create mx-2 btn btn-danger mt-1">Cancel</span>
-          </td>
           <td><%= f.text_field :task_name, required:true, class:"px-2" %></td>
           <td></td>
           <td><%= f.date_field :start, required:true, class:"px-2" %></td>
@@ -235,14 +231,14 @@
           <td></td>
           <td></td>
           <td><%= f.text_field :remarks, class:"px-2" %></td>
+          <td>
+            <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
+            <span class="x-create mx-2 btn btn-danger mt-1">Cancel</span>
+          </td>
         <% end %>
       </tr>
       <tr class="update-rock">
         <%= form_with url:update_rocks_path, method: :patch, local: true do |f| %>
-          <td>
-            <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
-            <span class="x-update mx-2 btn btn-danger mt-1">Cancel</span>
-          </td>
           <td style="display: none;"><%= f.number_field :id, required:true,id:"rock-id" %></td>
           <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2" %></td>
           <td></td>
@@ -253,14 +249,14 @@
           <td></td>
           <td></td>
           <td><%= f.text_field :remarks,id:"remarks", class:"px-2" %></td>
+          <td>
+            <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
+            <span class="x-update mx-2 btn btn-danger mt-1">Cancel</span>
+          </td>
         <% end %>
         <!-- Milstones Update -->
         <tr class="update-milestone">
           <%= form_with url:update_milestones_path(), method: :patch, local: true do |f| %>
-            <td>
-              <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
-              <span class="x-update-milestone mx-2 btn btn-danger mt-1">Cancel</span>
-            </td>
             <td style="display: none;"><%= f.number_field :rock_id, required:true,id:"rock-id" %></td>
             <td style="display: none;"><%= f.number_field :id, required:true,id:"milestone-id" %></td>
             <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2" %></td>
@@ -272,6 +268,10 @@
             <td><%= f.number_field :complete, required:true, class:"px-2",style:"width: 65px; text-align:center",id:"complete", min:0, max:100 %> %</td>
             <td></td>
             <td><%= f.text_field :remarks,id:"remarks", class:"px-2" %></td>
+            <td>
+              <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
+              <span class="x-update-milestone mx-2 btn btn-danger mt-1">Cancel</span>
+            </td>
           <% end %>
         </tr>
       </tr>
@@ -344,13 +344,13 @@
       let rock_percent = $(value).children("span").text()
       if (rock_percent == "0.00") {
         $(value).siblings(".rock-status").find("#stat").text("Not Started")
-        $(value).siblings(".rock-status").find("#stat").css("background-color", "red")
+        $(value).siblings(".rock-status").find("#stat").css("background-color", "silver")
       }else if (rock_percent == "100.00") {
         $(value).siblings(".rock-status").find("#stat").text("Complete")
-        $(value).siblings(".rock-status").find("#stat").css("background-color", "yellow")
+        $(value).siblings(".rock-status").find("#stat").css("background-color", "green")
       }else {
         $(value).siblings(".rock-status").find("#stat").text("In Progress")
-        $(value).siblings(".rock-status").find("#stat").css("background-color", "green")
+        $(value).siblings(".rock-status").find("#stat").css("background-color", "yellow")
       }
     });
 
