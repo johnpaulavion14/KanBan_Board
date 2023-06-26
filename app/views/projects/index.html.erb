@@ -18,7 +18,7 @@
     <tbody>
       <% @rocks.each do |rock| %>
         <!-- All Rocks -->
-        <tr class="all-rocks" style="background-color: rgb(215, 215, 215); font-weight: bold; vertical-align: middle;" role="button">
+        <tr  class="all-rocks" style="background-color: rgb(215, 215, 215); font-weight: bold; vertical-align: middle;" role="button">
           <td class="notif-con" role="button">
             <div class="notif">
               <% if rock.rockmessages.empty? %>
@@ -394,7 +394,6 @@
     $(".m-dblclick").each( function(index,value) {
       $(value).attr("role", "button");
       $(value).dblclick(function(){
-        $(".all-milestones").show();
         // milestone variables
         var task_name =  $(this).children(".task-name").text().trimLeft();
         var start =  $(this).children(".start").text()
@@ -413,7 +412,9 @@
         $(".update-milestone").find("#remarks").val(remarks)
         $(".update-milestone").find("#rock-id").val(rock_id)
         $(".update-milestone").find("#milestone-id").val(milestone_id)
-
+        // show milestones
+        $(`.rock-${rock_id}`).show();
+        // show update milestone form
         $(this).hide()
         $(".update-milestone").insertAfter($(this))
         $(".update-milestone").show();
@@ -425,6 +426,7 @@
         $(".update-milestone").find("#start").attr("max", finish_date);
         $(".update-milestone").find("#finish").attr("min", start_date);
         $(".update-milestone").find("#finish").attr("max", finish_date);
+
       })
     })
 
