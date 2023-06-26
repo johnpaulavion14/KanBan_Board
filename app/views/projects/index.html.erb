@@ -183,7 +183,7 @@
           <td>-</td>
         </tr>
         <!-- Milestone create form-->
-        <tr class="new-milestone rock-<%= rock.id %>">
+        <tr class="new-milestone create-m-<%= rock.id %>">
           <%= form_with url:create_milestones_path(rock.id), method: :post, local: true do |f| %>
           <td>
             <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
@@ -386,7 +386,9 @@
         $(this).prev(".plus-icon").show()
         var id = $(minus).parents(".task-name").siblings("#rock-id").text()
         var rock_id = ".rock-" + id
+        var create_m_id = ".create-m-" + id
         $(rock_id).hide()
+        $(create_m_id).hide()
       });
     });
     // Edit milestone
