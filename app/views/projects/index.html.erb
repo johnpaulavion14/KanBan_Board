@@ -404,7 +404,7 @@
         lastClickedElement = event.target;
         // trigger last click plus-icon using escape
         $(document).keydown(function(event) {
-          if (event.which === 27) {
+          if (event.which === 81) {
             $(lastClickedElement).next(".minus-icon").trigger("click")
           }
         });
@@ -420,6 +420,7 @@
         $(rock_id).hide()
         $(create_m_id).hide()
         $(".update-milestone").hide()
+        $(".update-milestone").insertAfter($(".update-rock"))
       });
     });
     // Edit milestone
