@@ -196,7 +196,7 @@
             <td></td>
             <td><%= f.text_field :remarks, class:"px-2" %></td>
             <td>
-              <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
+              <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-m-submit" %></span>
               <span class="x-new-milestone mx-2 btn btn-danger mt-1">Cancel</span>
             </td>
           <% end %>
@@ -232,7 +232,7 @@
           <td></td>
           <td><%= f.text_field :remarks, class:"px-2" %></td>
           <td>
-            <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
+            <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-rock-submit" %></span>
             <span class="x-create mx-2 btn btn-danger mt-1">Cancel</span>
           </td>
         <% end %>
@@ -250,30 +250,30 @@
           <td></td>
           <td><%= f.text_field :remarks,id:"remarks", class:"px-2" %></td>
           <td>
-            <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
+            <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-r-submit" %></span>
             <span class="x-update mx-2 btn btn-danger mt-1">Cancel</span>
           </td>
         <% end %>
-        <!-- Milstones Update -->
-        <tr class="update-milestone">
-          <%= form_with url:update_milestones_path(), method: :patch, local: true do |f| %>
-            <td style="display: none;"><%= f.number_field :rock_id, required:true,id:"rock-id" %></td>
-            <td style="display: none;"><%= f.number_field :id, required:true,id:"milestone-id" %></td>
-            <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2" %></td>
-            <td></td>
-            <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
-            <td>>></td>
-            <td><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
-            <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
-            <td><%= f.number_field :complete, required:true, class:"px-2",style:"width: 65px; text-align:center",id:"complete", min:0, max:100 %> %</td>
-            <td></td>
-            <td><%= f.text_field :remarks,id:"remarks", class:"px-2" %></td>
-            <td>
-              <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
-              <span class="x-update-milestone mx-2 btn btn-danger mt-1">Cancel</span>
-            </td>
-          <% end %>
-        </tr>
+      </tr>
+      <!-- Milstones Update -->
+      <tr class="update-milestone">
+        <%= form_with url:update_milestones_path(), method: :patch, local: true do |f| %>
+          <td style="display: none;"><%= f.number_field :rock_id, required:true,id:"rock-id" %></td>
+          <td style="display: none;"><%= f.number_field :id, required:true,id:"milestone-id" %></td>
+          <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2" %></td>
+          <td></td>
+          <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
+          <td>>></td>
+          <td><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
+          <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
+          <td><%= f.number_field :complete, required:true, class:"px-2",style:"width: 65px; text-align:center",id:"complete", min:0, max:100 %> %</td>
+          <td></td>
+          <td><%= f.text_field :remarks,id:"remarks", class:"px-2" %></td>
+          <td>
+            <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-m-submit" %></span>
+            <span class="x-update-milestone mx-2 btn btn-danger mt-1">Cancel</span>
+          </td>
+        <% end %>
       </tr>
     </tbody>
   </table>
@@ -296,6 +296,16 @@
       $(".new-rock").find("#assigned").val(user_email)
       $(".new-rock").show();
       $(this).hide();
+
+      // trigger escape and enter key
+      $(document).keydown(function(event) {
+        if (event.which === 27) {
+          $(".x-create").trigger("click")
+        }
+        if (event.which === 13) {
+          $(".new-rock-submit").trigger("click")
+        }
+      });
     });
 
     $(".x-create").click(function(){
@@ -326,6 +336,16 @@
         $(this).hide()
         $(".update-rock").insertAfter($(this))
         $(".update-rock").show();
+
+        // trigger escape and enter key
+        $(document).keydown(function(event) {
+          if (event.which === 27) {
+            $(".x-update").trigger("click")
+          }
+          if (event.which === 13) {
+            $(".update-r-submit").trigger("click")
+          }
+        });
       })
     })
     $(".x-update").click(function(){
@@ -379,6 +399,16 @@
         $(rock_id).show()
         $(rock_id + ".new-milestone").hide()
       });
+
+      $(this).on('click', function(event) {
+        lastClickedElement = event.target;
+        // trigger last click plus-icon using escape
+        $(document).keydown(function(event) {
+          if (event.which === 27) {
+            $(lastClickedElement).next(".minus-icon").trigger("click")
+          }
+        });
+      });
     });
     $(".minus-icon").each( function(index,minus) {
       $(minus).click(function(){
@@ -389,6 +419,7 @@
         var create_m_id = ".create-m-" + id
         $(rock_id).hide()
         $(create_m_id).hide()
+        $(".update-milestone").hide()
       });
     });
     // Edit milestone
@@ -417,6 +448,7 @@
         // show milestones
         $(`.rock-${rock_id}`).show();
         // show update milestone form
+        $(".update-milestone").prev("tr").not(".update-rock").show()
         $(this).hide()
         $(".update-milestone").insertAfter($(this))
         $(".update-milestone").show();
@@ -429,6 +461,15 @@
         $(".update-milestone").find("#finish").attr("min", start_date);
         $(".update-milestone").find("#finish").attr("max", finish_date);
 
+        // trigger escape and enter key
+        $(document).keydown(function(event) {
+          if (event.which === 27) {
+            $(".x-update-milestone").trigger("click")
+          }
+          if (event.which === 13) {
+            $(".update-m-submit").trigger("click")
+          }
+        });
       })
     })
 
@@ -446,13 +487,23 @@
         $(".new-milestone").find("#assigned").val(user_email)
         $(blank).next(".new-milestone").show()
         $(blank).hide()
+
+        // trigger escape and enter key
+        $(document).keydown(function(event) {
+          if (event.which === 27) {
+            $(blank).next(".new-milestone").find(".x-new-milestone").trigger("click")
+          }
+          if (event.which === 13) {
+            (".new-m-submit").trigger("click")
+          }
+        });
       });
     });
     // exit new milestone form
     $(".x-new-milestone").each( function(index,milestone) {
       $(milestone).click(function(){
-        $(milestone).parents(".new-milestone").hide()
-        $(milestone).parents(".new-milestone").prev(".blank-milestone").show()
+        $(this).parents(".new-milestone").hide()
+        $(this).parents(".new-milestone").prev(".blank-milestone").show()
       });
     });
     // Show milestone after create or update
@@ -553,12 +604,17 @@ $(".message-bg").click(function(){
   var m_id = $(".milestone-params").text().replace('.1','')
   var milestone_id = "#m-" + m_id
   $(milestone_id).find("img").trigger("click")
+
 // Reload Page Once
+var userAgent = navigator.userAgent.toLowerCase();
+if (userAgent.indexOf('firefox') > -1) {
+} else {
   function reloadIt() {
     if (window.location.href.substr(-2) !== ".1") {
         window.location = window.location.href + ".1";
     }
   }
   setTimeout('reloadIt()', 1000);
-  
+}
+
 </script>
