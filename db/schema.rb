@@ -93,6 +93,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_21_025307) do
     t.date "finish"
     t.text "assigned"
     t.integer "complete"
+    t.date "date_completed"
+    t.text "output"
     t.text "remarks"
     t.integer "rock_id"
     t.integer "user_id"
@@ -121,7 +123,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_21_025307) do
     t.string "task_name"
     t.date "start"
     t.date "finish"
+    t.date "date_completed"
     t.text "assigned"
+    t.text "output"
     t.text "remarks"
     t.integer "user_id"
     t.datetime "created_at", null: false

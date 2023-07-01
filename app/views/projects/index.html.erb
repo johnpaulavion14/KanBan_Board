@@ -10,7 +10,9 @@
         <th scope="col" style="width: 130px;">Finish</th>
         <th scope="col" >Assigned To</th>
         <th scope="col" style="min-width: 150px;">% Complete</th>
+        <th scope="col" style="min-width: 100px;">Date Completed</th>
         <th scope="col" style="min-width: 200px;">Status</th>
+        <th scope="col" >Output</th>
         <th scope="col" >Remarks</th>
         <th scope="col" style="min-width:100px;">Actions</th>
       </tr>
@@ -27,6 +29,8 @@
           <td style="display: none;" id="rock-assigned"><%= rock.assigned %></td>
           <td style="display: none;" id="percent-sum"><%= rock.milestones.pluck(:complete).reduce(:+) %></td>
           <td style="display: none;" id="m-count"><%= rock.milestones.count %></td>
+          <td class="output d-none" ><%= rock.output %></td>
+          <td class="remarks d-none" ><%= rock.remarks %></td>
             <!-- messages -->
           <td style="display: none;" class="m-current-user"><%= current_user.first_name %> <%= current_user.last_name%></td>
           <td style="display: none;" class="message-id"><%= rock.rockmessages.order(created_at: :asc).pluck(:id) %></td>
@@ -65,6 +69,13 @@
             <% end %>
           </td>
           <td class="rock-percent"><span></span> %</td>
+          <td class="date-completed">
+            <% if rock.date_completed.nil? %>
+              - -
+            <% else %>
+              <%= rock.date_completed.strftime("%b %d, %Y") %>
+            <% end %>
+          </td>
           <td class="rock-status com-status py-2">
             <div class="d-flex align-items-center justify-content-center">
               <div id="stat" class="px-3 py-2" style="flex:4"></div>
@@ -75,7 +86,8 @@
               <% end %>
             </div>
           </td>
-          <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= rock.remarks %></td>
+          <td style="max-width:200px; overflow-x: auto;"><%= rock.output.to_s.gsub(/\n/, '<br>').html_safe %></td>
+          <td style="max-width:200px; overflow-x: auto;"><%= rock.remarks.to_s.gsub(/\n/, '<br>').html_safe %></td>
           <td class="notif-con" role="button">
             <div class="notif">
               <% if rock.rockmessages.empty? %>
@@ -101,6 +113,8 @@
               <td class="start d-none"><%= milestone.start %></td>
               <td class="finish d-none"><%= milestone.finish %></td>
               <td style="display: none;" id="milestone-assigned"><%= milestone.assigned %></td>
+              <td class="output d-none"><%= milestone.output %></td>
+              <td class="remarks d-none"><%= milestone.remarks %></td>
                 <!-- messages -->
               <td style="display: none;" class="m-current-user"><%= current_user.first_name %> <%= current_user.last_name%></td>
               <td style="display: none;" class="message-id"><%= milestone.messages.order(created_at: :asc).pluck(:id) %></td>
@@ -134,6 +148,13 @@
                 <% end %>
               </td>
               <td><span class="complete"><%= milestone.complete %></span> %</td>
+              <td class="date-completed">
+                <% if milestone.date_completed.nil? %>
+                  - -
+                <% else %>
+                  <%= milestone.date_completed.strftime("%b %d, %Y") %>
+                <% end %>
+              </td>
               <td class="status com-status px-4">
                 <div class="d-flex align-items-center justify-content-center">
                     <% case milestone.complete %>
@@ -152,7 +173,8 @@
                     <% end %>
                 </div>
               </td>
-              <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= milestone.remarks %></td>
+              <td style="max-width:200px; overflow-x: auto;"><%= milestone.output.to_s.gsub(/\n/, '<br>').html_safe %></td>
+              <td style="max-width:200px; overflow-x: auto;"><%= milestone.remarks.to_s.gsub(/\n/, '<br>').html_safe %></td>
               <td class="notif-con" role="button" >
                 <div class="notif" style="margin-left: 30px;">
                   <% if milestone.messages.empty? %>
@@ -181,6 +203,8 @@
           <td>-</td>
           <td>-</td>
           <td>-</td>
+          <td>-</td>
+          <td>-</td>
         </tr>
         <!-- Milestone create form-->
         <tr class="new-milestone create-m-<%= rock.id %>">
@@ -194,7 +218,9 @@
             <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
             <td><%= f.number_field :complete, required:true, class:"px-2", style:"width: 65px; text-align:center", min:0, max:100, value:0 %> %</td>
             <td></td>
-            <td><%= f.text_field :remarks, class:"px-2" %></td>
+            <td></td>
+            <td><%= f.text_area :output, class:"px-2", style:"height:100px" %></td>
+            <td><%= f.text_area :remarks, class:"px-2", style:"height:100px" %></td>
             <td>
               <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-m-submit" %></span>
               <span class="x-new-milestone mx-2 btn btn-danger mt-1">Cancel</span>
@@ -202,6 +228,8 @@
           <% end %>
         </tr>
         <tr>
+          <td></td>
+          <td></td>
           <td></td>
           <td></td>
           <td></td>
@@ -230,7 +258,9 @@
           <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5}) %></td>
           <td></td>
           <td></td>
-          <td><%= f.text_field :remarks, class:"px-2" %></td>
+          <td></td>
+          <td><%= f.text_area :output, class:"px-2", style:"height:100px" %></td>
+          <td><%= f.text_area :remarks, class:"px-2", style:"height:100px" %></td>
           <td>
             <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-rock-submit" %></span>
             <span class="x-create mx-2 btn btn-danger mt-1">Cancel</span>
@@ -248,7 +278,9 @@
           <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5}) %></td>
           <td></td>
           <td></td>
-          <td><%= f.text_field :remarks,id:"remarks", class:"px-2" %></td>
+          <td></td>
+          <td><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px" %></td>
+          <td><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px" %></td>
           <td>
             <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-r-submit" %></span>
             <span class="x-update mx-2 btn btn-danger mt-1">Cancel</span>
@@ -268,7 +300,9 @@
           <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
           <td><%= f.number_field :complete, required:true, class:"px-2",style:"width: 65px; text-align:center",id:"complete", min:0, max:100 %> %</td>
           <td></td>
-          <td><%= f.text_field :remarks,id:"remarks", class:"px-2" %></td>
+          <td></td>
+          <td><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px" %></td>
+          <td><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px" %></td>
           <td>
             <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-m-submit" %></span>
             <span class="x-update-milestone mx-2 btn btn-danger mt-1">Cancel</span>
@@ -298,11 +332,11 @@
       $(this).hide();
 
       // trigger escape and enter key
-      $(document).keydown(function(event) {
+      $(document).on('keydown', function(event) {
         if (event.which === 27) {
           $(".x-create").trigger("click")
         }
-        if (event.which === 13) {
+        if (event.ctrlKey && event.keyCode === 13) {
           $(".new-rock-submit").trigger("click")
         }
       });
@@ -323,6 +357,7 @@
         var start =  $(this).children(".start").text()
         var finish =  $(this).children(".finish").text()
         var assigned =  $(this).children("#rock-assigned").text()
+        var output =  $(this).children(".output").text()
         var remarks =  $(this).children(".remarks").text()
         var rock_id =  $(this).children("#rock-id").text()
         // rock values
@@ -330,6 +365,7 @@
         $(".update-rock").find("#start").val(start)
         $(".update-rock").find("#finish").val(finish)
         $(".update-rock").find("#assigned").val(JSON.parse(assigned))
+        $(".update-rock").find("#output").val(output)
         $(".update-rock").find("#remarks").val(remarks)
         $(".update-rock").find("#rock-id").val(rock_id)
 
@@ -338,11 +374,11 @@
         $(".update-rock").show();
 
         // trigger escape and enter key
-        $(document).keydown(function(event) {
+        $(document).on('keydown', function(event) {
           if (event.which === 27) {
             $(".x-update").trigger("click")
           }
-          if (event.which === 13) {
+          if (event.ctrlKey && event.keyCode === 13) {
             $(".update-r-submit").trigger("click")
           }
         });
@@ -434,6 +470,7 @@
         var finish =  $(this).children(".finish").text()
         var assigned =  $(this).children("#milestone-assigned").text()
         var complete =  $(this).find(".complete").text()
+        var output =  $(this).children(".output").text()
         var remarks =  $(this).children(".remarks").text()
         var rock_id =  $(this).children("#rock-id").text()
         var milestone_id =  $(this).children("#milestone-id").text()
@@ -443,6 +480,7 @@
         $(".update-milestone").find("#finish").val(finish)
         $(".update-milestone").find("#assigned").val(JSON.parse(assigned))
         $(".update-milestone").find("#complete").val(complete)
+        $(".update-milestone").find("#output").val(output)
         $(".update-milestone").find("#remarks").val(remarks)
         $(".update-milestone").find("#rock-id").val(rock_id)
         $(".update-milestone").find("#milestone-id").val(milestone_id)
@@ -463,11 +501,11 @@
         $(".update-milestone").find("#finish").attr("max", finish_date);
 
         // trigger escape and enter key
-        $(document).keydown(function(event) {
+        $(document).on('keydown', function(event) {
           if (event.which === 27) {
             $(".x-update-milestone").trigger("click")
           }
-          if (event.which === 13) {
+          if (event.ctrlKey && event.keyCode === 13) {
             $(".update-m-submit").trigger("click")
           }
         });
@@ -490,11 +528,11 @@
         $(blank).hide()
 
         // trigger escape and enter key
-        $(document).keydown(function(event) {
+        $(document).on('keydown', function(event) {
           if (event.which === 27) {
             $(blank).next(".new-milestone").find(".x-new-milestone").trigger("click")
           }
-          if (event.which === 13) {
+          if (event.ctrlKey && event.keyCode === 13) {
             (".new-m-submit").trigger("click")
           }
         });

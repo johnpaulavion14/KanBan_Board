@@ -90,6 +90,14 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if @milestone.save
         Rock.find(params[:rock_id]).milestones.last.update(assigned:@assigned_array)
+        if params[:complete] == "100"
+          Rock.find(params[:rock_id]).milestones.last.update(date_completed:Date.today)
+        end
+        if Rock.find(params[:rock_id]).milestones.average(:complete) == 100
+          Rock.find(params[:rock_id]).update(date_completed:Date.today)
+        else
+          Rock.find(params[:rock_id]).update(date_completed:"")
+        end
         format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully create a new milestone" }
       else
         redirect_to view_projects_path
@@ -106,6 +114,16 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if @milestone.update(milestone_params)
         @milestone.update(assigned:@assigned_array)
+        if params[:complete] == "100"
+          @milestone.update(date_completed:Date.today)
+        else
+          @milestone.update(date_completed:"")
+        end
+        if Rock.find(params[:rock_id]).milestones.average(:complete) == 100
+          Rock.find(params[:rock_id]).update(date_completed:Date.today)
+        else
+          Rock.find(params[:rock_id]).update(date_completed:"")
+        end
         format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully updated your project" }
       else
         redirect_to view_projects_path
@@ -120,6 +138,9 @@ class ProjectsController < ApplicationController
     @milestone.messages.destroy_all
     respond_to do |format|
       if @milestone.destroy
+        if Rock.find(params[:rock_id]).milestones.average(:complete) == 100
+          Rock.find(params[:rock_id]).update(date_completed:Date.today)
+        end
         format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully deleted you milestone" }
       else
         redirect_to view_projects_path({rock_id: params[:rock_id]})
@@ -193,11 +214,11 @@ class ProjectsController < ApplicationController
   private
 
   def rock_params
-    params.permit(:task_name, :start, :finish, :assigned, :remarks)
+    params.permit(:task_name, :start, :finish, :assigned, :remarks, :output, :date_completed)
   end
 
   def milestone_params
-    params.permit(:task_name, :start, :finish, :assigned, :complete, :remarks,:user_id)
+    params.permit(:task_name, :start, :finish, :assigned, :complete, :remarks,:user_id, :output, :date_completed)
   end
 
   def message_params

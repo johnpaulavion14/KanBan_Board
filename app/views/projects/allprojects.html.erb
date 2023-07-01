@@ -10,7 +10,9 @@
         <th scope="col">Finish</th>
         <th scope="col">Assigned To</th>
         <th scope="col">% Complete</th>
+        <th scope="col">Date Completed</th>
         <th scope="col">Status</th>
+        <th scope="col" >Output</th>
         <th scope="col">Remarks</th>
         <th scope="col" style="min-width:50px;">Actions</th>
 
@@ -62,6 +64,13 @@
             <% end %>
           </td>
           <td class="rock-percent"><span></span> %</td>
+          <td class="date-completed">
+            <% if rock.date_completed.nil? %>
+              - -
+            <% else %>
+              <%= rock.date_completed.strftime("%b %d, %Y") %>
+            <% end %>
+          </td>
           <td class="rock-status com-status py-2">
             <div class="d-flex align-items-center justify-content-center">
               <div id="stat" class="px-3 py-2" style="flex:4"></div>
@@ -72,7 +81,8 @@
               <% end %>
             </div>
           </td>
-          <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= rock.remarks %></td>
+          <td style="max-width:200px; overflow-x: auto;"><%= rock.output.to_s.gsub(/\n/, '<br>').html_safe %></td>
+          <td style="max-width:200px; overflow-x: auto;"><%= rock.remarks.to_s.gsub(/\n/, '<br>').html_safe %></td>
           <% if rock.rockmessages.empty? %>
             <td class="notif-con"><%= image_tag ("message.png"), class:"message-icon project-icon m-message"%></td>
           <% else %>
@@ -117,6 +127,13 @@
                 <% end %>
               </td>
               <td><span class="complete"><%= milestone.complete %></span> %</td>
+              <td class="date-completed">
+                <% if milestone.date_completed.nil? %>
+                  - -
+                <% else %>
+                  <%= milestone.date_completed.strftime("%b %d, %Y") %>
+                <% end %>
+              </td>
               <td class="status com-status px-4">
                 <div class="d-flex align-items-center justify-content-center">
                   <% case milestone.complete %>
@@ -135,7 +152,8 @@
                   <% end %>
                 </div>
               </td>
-              <td class="remarks" style="max-width:200px; overflow-x: auto;"><%= milestone.remarks %></td>
+              <td style="max-width:200px; overflow-x: auto;"><%= milestone.output.to_s.gsub(/\n/, '<br>').html_safe %></td>
+              <td style="max-width:200px; overflow-x: auto;"><%= milestone.remarks.to_s.gsub(/\n/, '<br>').html_safe %></td>
               <% if milestone.messages.empty? %>
                 <td class="notif-con" ><%= image_tag ("message.png"), class:"message-icon project-icon m-message", style:"margin-left: 30px;" %></td>
               <% else %>
@@ -146,6 +164,8 @@
         <% end %>
         <tr>
           <td></td>
+          <td>-</td>
+          <td>-</td>
           <td>-</td>
           <td>-</td>
           <td>-</td>
