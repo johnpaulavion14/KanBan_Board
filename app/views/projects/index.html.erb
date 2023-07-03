@@ -1,6 +1,6 @@
 <%= render 'projects/projects_navbar' %>
 <div style="height: 90vh;width: 100vw; overflow:scroll; " class="yourproject-con">
-  <table class="table table-hover text-center">
+  <table class="table table-hover text-center" style="width:max-content;">
     <thead>
       <tr style="color: #0067a3; border-bottom: 3px solid #0067a3;border-top: 3px solid #0067a3; height: 50px; vertical-align: middle;">
         <th scope="col" style="min-width: 200px;">Task Name</th>
@@ -41,9 +41,9 @@
 
           <!-- display none -->
           <td class="task-name" style="text-align: left; min-width: 100px;">
-            <%= image_tag ("plus.png"),role:"button", style:"margin-left:1rem",class:"plus-icon" %>
-            <%= image_tag ("minus.png"),role:"button", style:"margin-left:1rem",class:"minus-icon" %>
-            <%= rock.task_name %>
+              <%= image_tag ("plus.png"),role:"button", style:"margin-left:1rem",class:"plus-icon" %>
+              <%= image_tag ("minus.png"),role:"button", style:"margin-left:1rem",class:"minus-icon" %>
+              <%= rock.task_name %>
           </td>
           <td>
             <%= (rock.start.to_date..rock.finish.to_date).count do |date|
@@ -87,7 +87,7 @@
             </div>
           </td>
           <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= rock.output %></div></td>
-          <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= rock.output %></div></td>
+          <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= rock.remarks %></div></td>
           <td class="notif-con" role="button">
             <div class="notif">
               <% if rock.rockmessages.empty? %>
