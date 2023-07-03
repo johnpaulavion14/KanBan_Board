@@ -2,7 +2,7 @@ class AllusersController < ApplicationController
   before_action :authenticate_user!
   
   def index
-    if current_user.email == "jpbocatija@cem.com"
+    if current_user.email == "jpbocatija@cem-inc.org.ph"
       @all_users = User.all.order("created_at asc")
     end
 

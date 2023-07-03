@@ -5,7 +5,7 @@
     <%= link_to "Your Projects",view_projects_path, class:"nav-element #{'nav-active' if request.original_url.include? "yourprojects"}"  %>
 
     <!-- All Projects Section -->
-    <% if current_user.email == "jpbocatija@cem.com" %>
+    <% if current_user.email == "jpbocatija@cem-inc.org.ph" %>
       <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if request.original_url.include? "allprojects"}" %>
     <% elsif current_user.admin == true %>
       <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if request.original_url.include? "allprojects"}" %>

@@ -86,8 +86,8 @@
               <% end %>
             </div>
           </td>
-          <td style="max-width:200px; overflow-x: auto;"><%= rock.output.to_s.gsub(/\n/, '<br>').html_safe %></td>
-          <td style="max-width:200px; overflow-x: auto;"><%= rock.remarks.to_s.gsub(/\n/, '<br>').html_safe %></td>
+          <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= rock.output %></div></td>
+          <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= rock.output %></div></td>
           <td class="notif-con" role="button">
             <div class="notif">
               <% if rock.rockmessages.empty? %>
@@ -173,8 +173,8 @@
                     <% end %>
                 </div>
               </td>
-              <td style="max-width:200px; overflow-x: auto;"><%= milestone.output.to_s.gsub(/\n/, '<br>').html_safe %></td>
-              <td style="max-width:200px; overflow-x: auto;"><%= milestone.remarks.to_s.gsub(/\n/, '<br>').html_safe %></td>
+              <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= milestone.output %></div></td>
+              <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= milestone.remarks %></div></td>
               <td class="notif-con" role="button" >
                 <div class="notif" style="margin-left: 30px;">
                   <% if milestone.messages.empty? %>
@@ -219,8 +219,8 @@
             <td><%= f.number_field :complete, required:true, class:"px-2", style:"width: 65px; text-align:center", min:0, max:100, value:0 %> %</td>
             <td></td>
             <td></td>
-            <td><%= f.text_area :output, class:"px-2", style:"height:100px" %></td>
-            <td><%= f.text_area :remarks, class:"px-2", style:"height:100px" %></td>
+            <td><%= f.text_area :output, class:"px-2", style:"height:100px; width:200px;" %></td>
+            <td><%= f.text_area :remarks, class:"px-2", style:"height:100px; width:200px;" %></td>
             <td>
               <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-m-submit" %></span>
               <span class="x-new-milestone mx-2 btn btn-danger mt-1">Cancel</span>
@@ -259,8 +259,8 @@
           <td></td>
           <td></td>
           <td></td>
-          <td><%= f.text_area :output, class:"px-2", style:"height:100px" %></td>
-          <td><%= f.text_area :remarks, class:"px-2", style:"height:100px" %></td>
+          <td><%= f.text_area :output, class:"px-2", style:"height:100px; width:200px;" %></td>
+          <td><%= f.text_area :remarks, class:"px-2", style:"height:100px; width:200px;" %></td>
           <td>
             <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-rock-submit" %></span>
             <span class="x-create mx-2 btn btn-danger mt-1">Cancel</span>
@@ -279,8 +279,8 @@
           <td></td>
           <td></td>
           <td></td>
-          <td><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px" %></td>
-          <td><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px" %></td>
+          <td><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px; width:200px;" %></td>
+          <td><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px; width:200px;" %></td>
           <td>
             <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-r-submit" %></span>
             <span class="x-update mx-2 btn btn-danger mt-1">Cancel</span>
@@ -301,8 +301,8 @@
           <td><%= f.number_field :complete, required:true, class:"px-2",style:"width: 65px; text-align:center",id:"complete", min:0, max:100 %> %</td>
           <td></td>
           <td></td>
-          <td><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px" %></td>
-          <td><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px" %></td>
+          <td><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px; width:200px;" %></td>
+          <td><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px ;width:200px;" %></td>
           <td>
             <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-m-submit" %></span>
             <span class="x-update-milestone mx-2 btn btn-danger mt-1">Cancel</span>
@@ -436,15 +436,10 @@
         $(rock_id + ".new-milestone").hide()
       });
 
-      $(this).on('click', function(event) {
-        lastClickedElement = event.target;
-        // trigger last click plus-icon using escape
-        $(document).keydown(function(event) {
-          if (event.which === 81) {
-            $(lastClickedElement).next(".minus-icon").trigger("click")
-          }
-        });
-      });
+      // trigger last click plus-icon using escape
+      // $(this).on('click', function(event) {
+      //   lastClickedElement = event.target;
+      // });
     });
     $(".minus-icon").each( function(index,minus) {
       $(minus).click(function(){

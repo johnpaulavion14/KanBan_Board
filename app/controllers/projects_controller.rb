@@ -22,7 +22,7 @@ class ProjectsController < ApplicationController
 
   def allprojects
     User.all.each do |user|
-      if user.admin == true || user.host == true || current_user.email == "jpbocatija@cem.com"
+      if user.admin == true || user.host == true || current_user.email == "jpbocatija@cem-inc.org.ph"
         @rocks = Rock.all.order(start: :asc)
         @milestones = Milestone.all.order(start: :asc)
         @users = User.all.pluck(:email)
