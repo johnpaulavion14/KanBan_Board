@@ -1,0 +1,97 @@
+/* Cards */
+.card_container {
+  display: flex;
+  min-width: 100vw;
+  height: 90vh;
+  overflow-x: auto;
+}
+
+.add_list_btn {
+  color: white;
+  background-color: #026299;
+  border-radius: 5px;
+  padding: 1em;
+  height: min-content;
+  min-width: 250px;
+  margin: 0 .5rem;
+  transition: height 2s;
+  margin-top: 1rem;
+}
+
+.add_list_btn:hover {
+  color: white;
+  cursor: pointer;
+  background-color: #4997c7;
+}
+
+.new_card {
+  width: 760px;
+  min-height: 900px;
+  max-height: 900px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 5px;
+  overflow-y: auto;
+  box-shadow: 0 0 5px 5px rgb(153, 146, 146);
+}
+
+.card-heading {
+  font-size: 2rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.addcards_X {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: black;
+  padding: .5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.addcards_X:hover {
+  background-color: #ddddddd7;
+}
+
+.input_border {
+  border-color: blue;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+
+#card-input {
+  text-align: left;
+}
+
+.card_bg {
+  margin-top: 1rem;
+  min-width: 320px;
+  height: min-content;
+  padding: 1em;
+  background-color: white;
+  margin-left: 1em;
+  border-radius: 5px;
+  box-shadow: 0 0 5px 5px rgb(153, 146, 146);
+}
+
+.card_title {
+  color: black;
+  text-decoration: none;
+}
+
+.toggleAddCard {
+  display: none;
+  width: max-content;
+  padding: 1em;
+  height: min-content;
+  background-color: #ebecf0;
+  margin: 0 .5rem;
+  border-radius: 5px;
+  margin-top: 1rem;
+}
+
+#addcard_card_name {
+  border: solid 1px black;
+}

@@ -1,0 +1,168 @@
+/* Addcards Inside Cards*/
+.addcard-outercon {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.card-con {
+  display: flex;
+  justify-content: space-between;
+}
+
+.addcard-right {
+  border: solid 1px rgb(161, 161, 161);
+  border-radius: 5px;
+  width: 100px;
+}
+
+.addcard {
+  padding: 6px 12px;
+  width: 100%;
+  color: gray;
+  font-family: Roboto;
+  font-weight: 400;
+}
+
+.addcard:hover {
+  cursor: pointer;
+  color: black;
+  background-color: #dbdde0;
+  border-radius: 5px;
+}
+
+.addcard-pencon {
+  width: 30px;
+  height: 30px;
+  float: right;
+  position: relative;
+}
+
+.addcard-pencon:hover {
+  cursor: pointer;
+}
+
+.addcard-penbox {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+
+.addcard-pencil {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+.addcard-pen {
+  width: 15px;
+  height: 15px;
+  margin: auto;
+}
+
+.addcard-penbox:hover+.addcard-pencil {
+  display: flex;
+}
+
+
+/* Add Card Page */
+.addcard-bg {
+  background-image: url("kanban_bg.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.addcard-con {
+  padding: 1rem;
+  background-color: #ddddddd7;
+  border-radius: 5px;
+  margin-top: .7rem;
+  height: 100px;
+  cursor: pointer;
+}
+
+.addcard-name {
+  text-decoration: none;
+  color: black;
+}
+
+.edit-desc {
+  background-color: #ddddddd7;
+  padding: 5px 1rem;
+  border-radius: 5px;
+  margin-left: .6rem;
+  cursor: pointer;
+}
+
+.edit-desc:hover {
+  background-color: #b9b9b9d7;
+}
+
+.present,
+.undo {
+  font-weight: bold;
+  background-color: #29d65dd7;
+  padding: 5px 1rem;
+  border-radius: 5px;
+  margin-left: .6rem;
+  cursor: pointer;
+  border: none;
+}
+
+.present:hover {
+  color: white;
+  background-color: #2fa816d7;
+}
+
+.undo {
+  background-color: rgb(218, 29, 29);
+}
+
+.undo:hover {
+  color: white;
+  background-color: rgb(173, 3, 3);
+}
+
+.desc-area {
+  min-height: 100px;
+  margin-left: 43px
+}
+
+.save-desc {
+  font-size: 1rem;
+  color: white;
+  background-color: #0079bf;
+  padding: 6px 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+}
+
+.save-desc:hover {
+  background-color: #026299;
+}
+
+.cancel-desc {
+  font-size: 1rem;
+  color: black;
+  padding: .5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-desc:hover {
+  background-color: #ddddddd7;
+}
+
+.form-con {
+  width: 100%;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-radius: 5px;
+  margin-top: .7rem;
+  min-height: 80px;
+  border: none;
+}

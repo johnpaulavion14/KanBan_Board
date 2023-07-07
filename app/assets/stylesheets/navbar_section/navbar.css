@@ -1,0 +1,83 @@
+/* Navbar */
+.navbar {
+  position: fixed;
+  width: 100vw;
+  height: 65px;
+  font-family: 'Roboto', sans-serif;
+  background-color: #a5a6aa;
+  border-bottom: solid white 2px;
+}
+
+.cem-logo {
+  display: flex;
+  width: 30px;
+  height: 30px;
+}
+
+.new-tab-logo {
+  display: flex;
+  width: 20px;
+  height: 20px;
+}
+
+.cem-kanban:hover {
+  color: white;
+}
+
+.nav-element {
+  color: black;
+  font-weight: bold;
+  text-align: center;
+  padding: .5rem 1rem;
+  border-radius: 5px;
+  margin: auto;
+  margin-left: 10px;
+  text-decoration: none;
+}
+
+.nav-element:hover {
+  background-color: #0067a3;
+  cursor: pointer;
+  color: white;
+}
+
+.nav-active {
+  color: white;
+  background-color: #0067a3;
+}
+
+.search-bar {
+  background-color: white;
+  font-size: 1rem;
+  border: 0;
+  border-radius: 7px;
+  padding-left: 10px;
+}
+
+.create-relative {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.new-board {
+  position: absolute;
+  top: 50px;
+  color: black;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  z-index: 10;
+  box-shadow: 0 0 1px 1px rgb(206, 206, 206);
+}
+
+.create-bg {
+  position: absolute;
+  top: 65px;
+  left: 0px;
+  background-color: white;
+  opacity: 70%;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9;
+}
