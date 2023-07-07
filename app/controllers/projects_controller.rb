@@ -2,7 +2,8 @@ class ProjectsController < ApplicationController
   before_action :authenticate_user!
 
   def dashboard
-    
+    @project_workspaces = ProjectWorkspace.order(created_at: :asc)
+    @users = User.all.pluck(:email)
   end
   
   def index

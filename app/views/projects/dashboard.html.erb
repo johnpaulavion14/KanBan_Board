@@ -1,0 +1,114 @@
+<%= render 'projects/projects_navbar' %>
+<%= render 'projects/projects_header' %>
+<div class="px-2">
+  <h4>Projects Workspace</h4>
+  <table class="table table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th scope="col"><u>#</u></th>
+        <th scope="col">Workspace Name</th>
+        <th scope="col">Work Group</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @project_workspaces.each_with_index do |folder,index| %>
+      <tr role="button" class="all-workspace">
+        <td style="display: none;" id="workspace-id"><%= folder.id %></td>
+        <th scope="row"><%= index + 1%></th>
+        <td class="folder-name"><%= folder.folder_name %></td>
+        <td class="assigned"><%= folder.assigned %></td>
+        <td >
+          <% if folder.user == current_user %>
+            <%= link_to delete_workspace_path(folder.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+              <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+      <!-- Create and Update Workspace -->
+      <tr class="workspace-form">
+        <%= form_with url:create_workspace_path, method: :post, local: true do |f| %>
+          <td></td>
+          <td><%= f.text_field :folder_name, required:true, class:"px-2" %></td>
+          <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5}) %></td>
+          <td>
+            <span><%= f.submit "Save" ,class:"btn btn-success mt-1" %></span>
+            <span class="x-create mx-2 btn btn-danger mt-1">Cancel</span>
+          </td>
+        <% end %>
+      </tr>
+      <tr class="update-workspace">
+        <%= form_with url:update_workspace_path, method: :patch, local: true do |f| %>
+          <td style="display: none;"><%= f.number_field :id, required:true,id:"workspace-id" %></td>
+          <td></td>
+          <td><%= f.text_field :folder_name, required:true, class:"px-2" %></td>
+          <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5}) %></td>
+          <td>
+            <span><%= f.submit "Update" ,class:"btn btn-success mt-1" %></span>
+            <span class="x-update mx-2 btn btn-danger mt-1">Cancel</span>
+          </td>
+        <% end %>
+      </tr>
+    </tbody>
+  </table>
+  <!-- <div id="current-user-email" class="d-none"><%= current_user.email %></div> -->
+  
+
+  <div role="button" class="new-workspace mx-4 mb-3 new-project">
+    Create new workspace here !
+  </div>
+</div>
+<script>
+  $(document).ready(function(){
+   // Create New Workspace
+   $(".workspace-form").css("display", "none")
+
+    $(".new-workspace").click(function(){
+      // var user_email = $("#current-user-email").text()
+      // $(".new-rock").find("#assigned").val(user_email)
+      $(".workspace-form").show();
+      $(this).hide();
+    });
+    $(".x-create").click(function(){
+      $(".workspace-form").hide();
+      $(".new-workspace").show();
+    });
+    // Update Workspace
+    $(".update-workspace").css("display", "none")
+    $(".all-workspace").each( function(index,value) {
+      $(value).dblclick(function(){
+        $(".all-workspace").show();
+        // rock variables
+        var folder_name =  $(this).children(".folder-name").text()
+        var assigned =  $(this).children(".assigned").text()
+        var workspace_id =  $(this).children("#workspace-id").text()
+        // rock values
+        $(".update-workspace").find("#folder_name").val(folder_name)
+        $(".update-workspace").find("#assigned").val(JSON.parse(assigned))
+        $(".update-workspace").find("#workspace-id").val(workspace_id)
+
+        $(this).hide()
+        $(".update-workspace").insertAfter($(this))
+        $(".update-workspace").show();
+      });
+    });
+
+    $(".x-update").click(function(){
+      $(".update-workspace").hide();
+      $(".all-workspace").show();
+    });
+  });
+  // Reload Page Once
+  var userAgent = navigator.userAgent.toLowerCase();
+  if (userAgent.indexOf('firefox') > -1) {
+  } else {
+    function reloadIt() {
+      if (window.location.href.substr(-2) !== ".1") {
+          window.location = window.location.href + ".1";
+      }
+    }
+    setTimeout('reloadIt()', 1000);
+  }
+</script>

@@ -1,10 +1,18 @@
 <div class="navbar d-flex justify-content-between">
   <!-- Left Section -->
-  <div class="mx-2 d-flex ">
-    <!-- Projects Section -->
+  <!-- Logo -->
+  <%= link_to projects_dashboard_path(), class:"nav-element #{'nav-active' if request.original_url.include? "dashboard"}" do %>
+    <div class="m-auto d-flex">
+      <div class="cem-logo"><%= image_tag ("cem-logo.png") %></div>
+      <div class="m-auto" title="Project Management Monitoring System">PMMS</div>
+    </div>
+  <% end %>
+  
+  <!-- <div class="mx-2 d-flex ">
+    Projects Section
     <%= link_to "Your Projects",view_projects_path, class:"nav-element #{'nav-active' if request.original_url.include? "yourprojects"}"  %>
 
-    <!-- All Projects Section -->
+    All Projects Section
     <% if current_user.email == "jpbocatija@cem-inc.org.ph" %>
       <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if request.original_url.include? "allprojects"}" %>
     <% elsif current_user.admin == true %>
@@ -12,7 +20,7 @@
     <% elsif current_user.host == true %>
       <%= link_to "All Projects",view_allprojects_path, class:"nav-element #{'nav-active' if request.original_url.include? "allprojects"}" %>
     <% end %>
-  </div>
+  </div> -->
 </div>
 
 <script>

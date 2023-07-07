@@ -53,9 +53,15 @@ Rails.application.routes.draw do
   patch 'update/admin/:id/:admin' => 'allusers#updateadmin', as: 'update_admin'
 
   # Projects
-  get 'projects/dashboard' => 'projects#dashboard', as: 'view_projects_dashboard'
+  get 'projects/dashboard' => 'projects#dashboard', as: 'projects_dashboard'
   get 'yourprojects' => 'projects#index', as: 'view_projects'
   get 'allprojects' => 'projects#allprojects', as: 'view_allprojects'
+
+  # Workspace
+  post 'create/workspace' => 'project_workspaces#create_workspace', as: 'create_workspace'
+  patch 'update/workspace' => 'project_workspaces#update_workspace', as: 'update_workspace'
+  delete 'delete/workspace/:id' => 'project_workspaces#delete_workspace', as: 'delete_workspace'
+
   #Milestone messages
   post 'projects/messages/:milestone_id' => 'projects#create_message', as: 'create_message'
   patch 'projects/messages/:milestone_id/:id' => 'projects#update_message', as: 'update_message'
