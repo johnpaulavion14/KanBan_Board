@@ -1,5 +1,5 @@
 <div class="mx-2 mb-2 ">
-  <h3 class="text-center">- - <%= params[:workspace_name] %> - -</h3>
+  <h3 class="text-center">- - <%= ProjectWorkspace.find(params[:pw_id]).folder_name %> - -</h3>
   <%= link_to "Your Projects",view_projects_path, class:" #{'nav-active' if request.original_url.include? "yourprojects"}"  %>
 
   <% if current_user.email == "jpbocatija@cem-inc.org.ph" %>

@@ -113,6 +113,7 @@
               <!-- display none -->
               <td style="display: none;" id="rock-id"><%= rock.id %></td>
               <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
+              <td style="display: none;" id="pw-id"><%= rock.project_workspace.id %></td>
               <td class="start d-none"><%= milestone.start %></td>
               <td class="finish d-none"><%= milestone.finish %></td>
               <td style="display: none;" id="milestone-assigned"><%= milestone.assigned %></td>
@@ -185,8 +186,8 @@
                   <% else %>
                     <span id="m-<%=milestone.id%>"><%= image_tag ("message_1.png"), class:"project-icon m-message" %></span>
                   <% end %>
-                  <% if milestone.assigned.include? current_user.email %>
-                    <%= link_to delete_milestones_path(rock.id,milestone.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+                  <% if milestone.user_id == current_user.id %>
+                    <%= link_to delete_milestones_path(params[:pw_id],rock.id,milestone.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
                       <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
                     <% end %>
                   <% end %>
@@ -211,7 +212,7 @@
         </tr>
         <!-- Milestone create form-->
         <tr class="new-milestone create-m-<%= rock.id %>">
-          <%= form_with url:create_milestones_path(rock.id), method: :post, local: true do |f| %>
+          <%= form_with url:create_milestones_path(params[:pw_id],rock.id), method: :post, local: true do |f| %>
             <td class="d-none"><%= f.hidden_field :user_id, value:current_user.id, class:"px-2" %></td>
             <td><%= f.text_field :task_name, required:true, class:"px-2" %></td>
             <td></td>

@@ -54,8 +54,8 @@ Rails.application.routes.draw do
 
   # Projects
   get 'projects/dashboard' => 'projects#dashboard', as: 'projects_dashboard'
-  get 'yourprojects/:pw_id/:workspace_name' => 'projects#index', as: 'view_projects'
-  get 'allprojects/:pw_id/:workspace_name' => 'projects#allprojects', as: 'view_allprojects'
+  get 'yourprojects/:pw_id' => 'projects#index', as: 'view_projects'
+  get 'allprojects/:pw_id' => 'projects#allprojects', as: 'view_allprojects'
 
   # Workspace
   post 'create/workspace' => 'project_workspaces#create_workspace', as: 'create_workspace'
@@ -78,9 +78,9 @@ Rails.application.routes.draw do
   delete 'delete/rocks/:pw_id/:id' => 'projects#delete_rocks', as: 'delete_rocks'
 
   # Milestones
-  post 'create/milestones/:rock_id' => 'projects#create_milestones', as: 'create_milestones'
-  patch 'update/milestones' => 'projects#update_milestones', as: 'update_milestones'
-  delete 'delete/milestones/:rock_id/:id' => 'projects#delete_milestones', as: 'delete_milestones'
+  post 'create/milestones/:pw_id/:rock_id' => 'projects#create_milestones', as: 'create_milestones'
+  patch 'update/milestones/:pw_id' => 'projects#update_milestones', as: 'update_milestones'
+  delete 'delete/milestones/:pw_id/:rock_id/:id' => 'projects#delete_milestones', as: 'delete_milestones'
 
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
