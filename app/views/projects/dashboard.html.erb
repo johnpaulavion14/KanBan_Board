@@ -1,5 +1,4 @@
 <%= render 'projects/projects_navbar' %>
-<%= render 'projects/projects_header' %>
 <div class="px-2">
   <h4>Projects Workspace</h4>
   <table class="table table-hover">
@@ -16,7 +15,7 @@
       <tr role="button" class="all-workspace">
         <td style="display: none;" id="workspace-id"><%= folder.id %></td>
         <th scope="row"><%= index + 1%></th>
-        <td class="folder-name"><%= folder.folder_name %></td>
+        <td class="folder-name"><%= link_to folder.folder_name, view_projects_path(folder.id,folder.folder_name) %></td>
         <td class="assigned"><%= folder.assigned %></td>
         <td >
           <% if folder.user == current_user %>

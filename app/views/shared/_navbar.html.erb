@@ -34,7 +34,7 @@
       <%= link_to "All Users",view_allusers_path, class:"nav-element #{'nav-active' if request.original_url.include? "allusers"}" %>
     <% end %>
      <!-- Projects Section -->
-     <%= link_to view_projects_path, class:"nav-element",target: :_blank  do %>
+     <%= link_to projects_dashboard_path, class:"nav-element",target: :_blank  do %>
       <div class="m-auto d-flex align-items-center">
         <div class="new-tab-logo"><%= image_tag ("new_tab.png") %></div>
         <div class="m-auto">Projects</div>

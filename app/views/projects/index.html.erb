@@ -24,7 +24,9 @@
         <tr  class="all-rocks" style="background-color: rgb(215, 215, 215); font-weight: bold; vertical-align: middle;" role="button">
           <!-- display none -->
           <td style="display: none;" id="isrock">rock</td>
+          <td style="display: none;" id="rock-user-id"><%= rock.user_id %></td>
           <td style="display: none;" id="rock-id"><%= rock.id %></td>
+          <td style="display: none;" id="pw-id"><%= rock.project_workspace.id %></td>
           <td style="display: none;" id="start-<%= rock.id %>" class="start"><%= rock.start %></td>
           <td style="display: none;" id="finish-<%= rock.id %>" class="finish"><%= rock.finish %></td>
           <td style="display: none;" id="rock-assigned"><%= rock.assigned %></td>
@@ -55,12 +57,12 @@
           <td>>></td>
           <td><%= rock.finish.strftime("%b %d, %Y") %> ]</td>
           <td class="assigned">
-            <% if !rock.user.profilepics.blank? %>
-              <%= image_tag rock.user.profilepics.last.pic, class:"assigned-pics", title:rock.user.email %>
+            <% if !User.find(rock.user_id).profilepics.blank? %>
+              <%= image_tag User.find(rock.user_id).profilepics.last.pic, class:"assigned-pics", title:User.find(rock.user_id).email %>
             <% end %>
             <% @all_users.each do |user| %>
               <% if rock.assigned.include? user.email %>
-                <% if user.id == rock.user.id %>
+                <% if user.id == User.find(rock.user_id).id %>
                 <% elsif !user.profilepics.blank?%>
                   <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
                 <% else %>
@@ -96,8 +98,8 @@
               <% else %>
                 <span id="r-<%=rock.id%>"><%= image_tag ("message_1.png"), class:"project-icon m-message" %></span>
               <% end %>
-              <% if rock.user == current_user %>
-                <%= link_to delete_rocks_path(rock.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+              <% if User.find(rock.user_id) == current_user %>
+                <%= link_to delete_rocks_path(rock.project_workspace.id,rock.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
                   <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
                 <% end %>
               <% end %>
@@ -251,6 +253,7 @@
       <div id="current-user-email" class="d-none"><%= current_user.email %></div>
       <tr class="new-rock">
         <%= form_with url:create_rocks_path, method: :post, local: true do |f| %>
+          <td style="display: none;"><%= f.number_field :user_id,value:current_user.id, required:true %></td>
           <td><%= f.text_field :task_name, required:true, class:"px-2" %></td>
           <td></td>
           <td><%= f.date_field :start, required:true, class:"px-2" %></td>
@@ -270,7 +273,9 @@
       </tr>
       <tr class="update-rock">
         <%= form_with url:update_rocks_path, method: :patch, local: true do |f| %>
+          <td style="display: none;"><%= f.number_field :user_id, required:true, id:"rock-user-id"%></td>
           <td style="display: none;"><%= f.number_field :id, required:true,id:"rock-id" %></td>
+          <td style="display: none;"><%= f.number_field :pw_id, required:true,id:"pw-id" %></td>
           <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2" %></td>
           <td></td>
           <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
@@ -361,6 +366,8 @@
         var output =  $(this).children(".output").text()
         var remarks =  $(this).children(".remarks").text()
         var rock_id =  $(this).children("#rock-id").text()
+        var rock_user_id =  $(this).children("#rock-user-id").text()
+        var pw_id =  $(this).children("#pw-id").text()
         // rock values
         $(".update-rock").find("#task-name").val(task_name)
         $(".update-rock").find("#start").val(start)
@@ -369,6 +376,8 @@
         $(".update-rock").find("#output").val(output)
         $(".update-rock").find("#remarks").val(remarks)
         $(".update-rock").find("#rock-id").val(rock_id)
+        $(".update-rock").find("#rock-user-id").val(rock_user_id)
+        $(".update-rock").find("#pw-id").val(pw_id)
 
         $(this).hide()
         $(".update-rock").insertAfter($(this))
@@ -565,6 +574,7 @@ $(".m-message").each(function(index,message){
     let message_id = JSON.parse($(this).parents(".notif-con").siblings(".message-id").text())
     let isrock = $(this).parents(".notif-con").siblings("#isrock").text()
     let rock_id = $(this).parents(".notif-con").siblings("#rock-id").text()
+    let pw_id = $(this).parents(".notif-con").siblings("#pw-id").text()
     let milestone_id = $(this).parents(".notif-con").siblings("#milestone-id").text()
     let message_firstname = JSON.parse($(this).parents(".notif-con").siblings(".message-firstname").text())
     let message_lastname = JSON.parse($(this).parents(".notif-con").siblings(".message-lastname").text())
@@ -585,7 +595,7 @@ $(".m-message").each(function(index,message){
             <div class="mt-2 message-sub">${message_time[index]}</div>
             <div id="del-edit-${index}" class="message-sub">
               <a href="#message-input" id="edit-message">edit</a>
-              <%= link_to delete_message_path(1,1,1),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'},id:"delete-message" do %>
+              <%= link_to delete_message_path(1,1,1,1),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'},id:"delete-message" do %>
                 <span class="mx-2">delete</span>
               <% end %>
             </div>
@@ -596,17 +606,17 @@ $(".m-message").each(function(index,message){
       $("#write-message").find("form").attr("method",'post');
       // Delete message
       if (isrock == "rock"){
-        $(`#del-edit-${index}`).find("#delete-message").attr("href",`/delete/rockmessages/${rock_id}/${message_id[index]}`);
+        $(`#del-edit-${index}`).find("#delete-message").attr("href",`/delete/rockmessages/${pw_id}/${rock_id}/${message_id[index]}`);
       }else{
-        $(`#del-edit-${index}`).find("#delete-message").attr("href",`/delete/messages/${rock_id}/${milestone_id}/${message_id[index]}`);
+        $(`#del-edit-${index}`).find("#delete-message").attr("href",`/delete/messages/${pw_id}/${rock_id}/${milestone_id}/${message_id[index]}`);
       }
       // Edit message
       $(`#del-edit-${index}`).find("#edit-message").click(function(){
         $("#write-message").find("#message-input").val(`${message}`)
         if (isrock == "rock"){
-          $("#write-message").find("form").attr("action",`/projects/rockmessages/${rock_id}/${message_id[index]}`);
+          $("#write-message").find("form").attr("action",`/projects/rockmessages/${pw_id}/${rock_id}/${message_id[index]}`);
         }else{
-          $("#write-message").find("form").attr("action",`/projects/messages/${milestone_id}/${message_id[index]}`);
+          $("#write-message").find("form").attr("action",`/projects/messages/${pw_id}/${milestone_id}/${message_id[index]}`);
         }
         $("#write-message").find("form").attr("method",'patch');
         $("#m-hidden-forms").find("#r-id").val(`${rock_id}`);
@@ -618,9 +628,9 @@ $(".m-message").each(function(index,message){
     })
     // Create message/change milestone_id
     if (isrock == "rock"){
-      $("#write-message").find("form").attr("action",`/projects/rockmessages/${rock_id}`);
+      $("#write-message").find("form").attr("action",`/projects/rockmessages/${pw_id}/${rock_id}`);
     }else{
-      $("#write-message").find("form").attr("action",`/projects/messages/${milestone_id}`);
+      $("#write-message").find("form").attr("action",`/projects/messages/${pw_id}/${milestone_id}`);
       $("#m-hidden-forms").find("#r-id").val(`${rock_id}`);
     }
 

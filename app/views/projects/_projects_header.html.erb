@@ -1,4 +1,5 @@
 <div class="mx-2 mb-2 ">
+  <h3 class="text-center">- - <%= params[:workspace_name] %> - -</h3>
   <%= link_to "Your Projects",view_projects_path, class:" #{'nav-active' if request.original_url.include? "yourprojects"}"  %>
 
   <% if current_user.email == "jpbocatija@cem-inc.org.ph" %>
@@ -8,6 +9,7 @@
   <% elsif current_user.host == true %>
     <%= link_to "All Projects",view_allprojects_path, class:" #{'nav-active' if request.original_url.include? "allprojects"}" %>
   <% end %>
+
 </div>
 
 <script>

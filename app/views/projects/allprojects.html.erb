@@ -49,12 +49,12 @@
           <td>>></td>
           <td><%= rock.finish.strftime("%b %d, %Y") %> ]</td>
           <td class="assigned">
-            <% if !rock.user.profilepics.blank? %>
-              <%= image_tag rock.user.profilepics.last.pic, class:"assigned-pics", title:rock.user.email %>
+            <% if !rock.project_workspace.user.profilepics.blank? %>
+              <%= image_tag rock.project_workspace.user.profilepics.last.pic, class:"assigned-pics", title:rock.project_workspace.user.email %>
             <% end %>
             <% @all_users.each do |user| %>
               <% if rock.assigned.include? user.email %>
-                <% if user.id == rock.user.id %>
+                <% if user.id == rock.project_workspace.user.id %>
                 <% elsif !user.profilepics.blank?%>
                   <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
                 <% else %>
@@ -281,7 +281,7 @@ $(document).ready(function(){
               <div class="mt-2 message-sub">${message_time[index]}</div>
               <div id="del-edit-${index}" class="message-sub">
                 <a href="#message-input" id="edit-message">edit</a>
-                <%= link_to delete_message_path(1,1,1),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'},id:"delete-message" do %>
+                <%= link_to delete_message_path(1,1,1,1),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'},id:"delete-message" do %>
                   <span class="mx-2">delete</span>
                 <% end %>
               </div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_07_005142) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_08_090217) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -131,11 +131,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_07_005142) do
     t.string "task_name"
     t.date "start"
     t.date "finish"
-    t.date "date_completed"
     t.text "assigned"
+    t.date "date_completed"
     t.text "output"
     t.text "remarks"
     t.integer "user_id"
+    t.integer "project_workspace_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -54,8 +54,8 @@ Rails.application.routes.draw do
 
   # Projects
   get 'projects/dashboard' => 'projects#dashboard', as: 'projects_dashboard'
-  get 'yourprojects' => 'projects#index', as: 'view_projects'
-  get 'allprojects' => 'projects#allprojects', as: 'view_allprojects'
+  get 'yourprojects/:pw_id/:workspace_name' => 'projects#index', as: 'view_projects'
+  get 'allprojects/:pw_id/:workspace_name' => 'projects#allprojects', as: 'view_allprojects'
 
   # Workspace
   post 'create/workspace' => 'project_workspaces#create_workspace', as: 'create_workspace'
@@ -63,18 +63,19 @@ Rails.application.routes.draw do
   delete 'delete/workspace/:id' => 'project_workspaces#delete_workspace', as: 'delete_workspace'
 
   #Milestone messages
-  post 'projects/messages/:milestone_id' => 'projects#create_message', as: 'create_message'
-  patch 'projects/messages/:milestone_id/:id' => 'projects#update_message', as: 'update_message'
-  delete 'delete/messages/:rock_id/:milestone_id/:id' => 'projects#delete_message', as: 'delete_message'
+  post 'projects/messages/:pw_id/:milestone_id' => 'projects#create_message', as: 'create_message'
+  patch 'projects/messages/:pw_id/:milestone_id/:id' => 'projects#update_message', as: 'update_message'
+  delete 'delete/messages/:pw_id/:rock_id/:milestone_id/:id' => 'projects#delete_message', as: 'delete_message'
+  
   #Rock messages
-  post 'projects/rockmessages/:rock_id' => 'projects#create_rockmessage', as: 'create_rockmessage'
-  patch 'projects/rockmessages/:rock_id/:id' => 'projects#update_rockmessage', as: 'update_rockmessage'
-  delete 'delete/rockmessages/:rock_id/:id' => 'projects#delete_rockmessage', as: 'delete_rockmessage'
+  post 'projects/rockmessages/:pw_id/:rock_id' => 'projects#create_rockmessage', as: 'create_rockmessage'
+  patch 'projects/rockmessages/:pw_id/:rock_id/:id' => 'projects#update_rockmessage', as: 'update_rockmessage'
+  delete 'delete/rockmessages/:pw_id/:rock_id/:id' => 'projects#delete_rockmessage', as: 'delete_rockmessage'
 
  # Rocks
-  post 'create/rocks' => 'projects#create_rocks', as: 'create_rocks'
-  patch 'update/rocks' => 'projects#update_rocks', as: 'update_rocks'
-  delete 'delete/rocks/:id' => 'projects#delete_rocks', as: 'delete_rocks'
+  post 'create/rocks/:pw_id' => 'projects#create_rocks', as: 'create_rocks'
+  patch 'update/rocks/:pw_id' => 'projects#update_rocks', as: 'update_rocks'
+  delete 'delete/rocks/:pw_id/:id' => 'projects#delete_rocks', as: 'delete_rocks'
 
   # Milestones
   post 'create/milestones/:rock_id' => 'projects#create_milestones', as: 'create_milestones'
