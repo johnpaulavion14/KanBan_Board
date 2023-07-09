@@ -24,8 +24,13 @@
         <tr class="all-rocks" style="background-color:#cccdd4; font-weight: bold; vertical-align: middle;">
           <td style="display: none;" id="rock-id"><%= rock.id %></td>
           <td class="task-name" style="text-align: left; min-width: 100px;">
-            <%= image_tag ("plus.png"),role:"button", style:"margin-left:1rem",class:"plus-icon" %>
-            <%= image_tag ("minus.png"),role:"button", style:"margin-left:1rem",class:"minus-icon" %>
+            <% if rock.milestones.blank? %>
+              <%= image_tag ("plus.png"),role:"button",style:"margin-left:1rem",class:"plus-icon" %>
+              <%= image_tag ("minus.png"),role:"button", style:"margin-left:1rem",class:"minus-icon" %>
+            <% else %>
+              <%= image_tag ("plus_black.png"),role:"button",style:"margin-left:1rem",class:"plus-icon" %>
+              <%= image_tag ("minus_black.png"),role:"button",style:"margin-left:1rem",class:"minus-icon" %>
+            <% end %>
             <%= rock.task_name %>
           </td>
           <!-- display none -->
@@ -102,7 +107,15 @@
               <td style="display: none;" class="message-firstname"><%= milestone.messages.order(created_at: :asc).pluck(:first_name) %></td>
               <td style="display: none;" class="message-lastname"><%= milestone.messages.order(created_at: :asc).pluck(:last_name) %></td>
               <td style="display: none;" class="message-time"><%= milestone.messages.order(created_at: :asc).pluck(:time) %></td>
-              <td class="task-name" style="text-align: left; min-width: 100px; padding-left:4rem"><%= milestone.task_name %></td>
+              <td class="task-name" style="text-align: left; min-width: 100px; padding-left:4rem">
+                <% if milestone.submilestones.blank? %>
+                  <%= image_tag ("plus.png"),role:"button",class:"m-plus-icon" %>
+                  <%= image_tag ("minus.png"),role:"button",class:"m-minus-icon" %>
+                <% else %>
+                  <%= image_tag ("plus_black.png"),role:"button",class:"m-plus-icon" %>
+                  <%= image_tag ("minus_black.png"),role:"button",class:"m-minus-icon" %>
+                <% end %>
+                <%= milestone.task_name %></td>
               <td>
                 <%= (milestone.start.to_date..milestone.finish.to_date).count do |date|
                   date.workday?
@@ -160,6 +173,69 @@
                 <td class="notif-con" ><%= image_tag ("message_1.png"), class:"message-icon project-icon m-message", style:"margin-left: 30px;" %></td>
               <% end %>
             </tr>
+            <!-- All Submilestones -->
+            <% @submilestones.each do |submilestone| %> 
+              <% if milestone.id == submilestone.milestone_id %>
+                <tr class="all-submilestones mile-<%= milestone.id %> <%= submilestone.assigned.include?(current_user.email) ? '' : 'bg-light' %>" style="vertical-align: middle;">
+                  <td class="task-name" style="text-align: left; min-width: 100px; padding-left:6rem"><%= submilestone.task_name %></td>
+                  <td>
+                    <%= (submilestone.start.to_date..submilestone.finish.to_date).count do |date|
+                      date.workday?
+                    end %> days
+                  </td>
+                  <td>[ <%= submilestone.start.strftime("%b %d, %Y") %></td>
+                  <td>>></td>
+                  <td><%= submilestone.finish.strftime("%b %d, %Y") %> ]</td>
+                  <td class="assigned">
+                    <% if !submilestone.user.profilepics.blank? %>
+                      <%= image_tag submilestone.user.profilepics.last.pic, class:"assigned-pics", title:submilestone.user.email %>
+                    <% end %>
+                    <% @all_users.each do |user| %>
+                      <% if user.id == submilestone.user.id %>
+                      <% elsif submilestone.assigned.include? user.email %>
+                        <% if !user.profilepics.blank? %>
+                          <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
+                        <% else %>
+                          <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:user.email %>
+                        <% end %>
+                      <% end %>
+                    <% end %>
+                  </td>
+                  <td><span class="complete"><%= submilestone.complete %></span> %</td>
+                  <td class="date-completed">
+                    <% if submilestone.date_completed.nil? %>
+                      - -
+                    <% else %>
+                      <%= submilestone.date_completed.strftime("%b %d, %Y") %>
+                    <% end %>
+                  </td>
+                  <td class="status com-status px-4">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <% case submilestone.complete %>
+                          <% when 0 %>
+                            <div class="bg-light px-2 py-1" style="flex:4">Not Started</div>
+                          <% when 100 %>
+                            <div class="bg-success p-2 py-1" style="flex:4">Complete</div>
+                          <% else %>
+                            <div class="bg-warning p-2 py-1" style="flex:4">In Progress</div>
+                        <% end %>
+        
+                        <% if submilestone.finish >= Date.today %>
+                          <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="on track" class="track"><%= image_tag ("blue_circle.png")%></div>  
+                        <% else %>
+                          <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="off track" class="track"><%= image_tag ("red_circle.png")%></div>  
+                        <% end %>
+                    </div>
+                  </td>
+                  <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= submilestone.output %></div></td>
+                  <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= submilestone.remarks %></div></td>
+                  <td class="notif-con" role="button" >
+                    <div class="notif" style="margin-left: 30px;">
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            <% end %>
           <% end %>
         <% end %>
         <tr>
@@ -246,6 +322,33 @@ $(document).ready(function(){
       var id = $(minus).parents(".task-name").siblings("#rock-id").text()
       var rock_id = ".rock-" + id
       $(rock_id).hide()
+    });
+  });
+
+  // Show / Hide / Create Sub Milestones
+  $(".m-minus-icon").css("display", "none")
+  $(".all-submilestones").css("display", "none")
+  $(".m-plus-icon").each( function(index,plus) {
+    $(plus).click(function(){
+      $(this).hide()
+      $(this).next(".m-minus-icon").show()
+      var id = $(plus).parents(".task-name").siblings("#milestone-id").text()
+      var mile_id = ".mile-" + id
+      $(mile_id).show()
+      // $(mile_id + ".new-milestone").hide()
+    });
+  });
+  $(".m-minus-icon").each( function(index,minus) {
+    $(minus).click(function(){
+      $(this).hide()
+      $(this).prev(".m-plus-icon").show()
+      var id = $(minus).parents(".task-name").siblings("#milestone-id").text()
+      var mile_id = ".mile-" + id
+      var create_subm_id = ".create-subm-" + id
+      $(mile_id).hide()
+      $(create_subm_id).hide()
+      $(".update-submilestone").hide()
+      $(".update-submilestone").insertAfter($(".update-milestone"))
     });
   });
 

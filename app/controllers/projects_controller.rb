@@ -23,6 +23,7 @@ class ProjectsController < ApplicationController
     end
 
     @milestones = Milestone.all.order(start: :asc)
+    @submilestones = Submilestone.all.order(start: :asc)
     @users = User.all.pluck(:email)
     @all_users = User.all
 
@@ -33,6 +34,7 @@ class ProjectsController < ApplicationController
       if user.admin == true || user.host == true || current_user.email == "jpbocatija@cem-inc.org.ph"
         @rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(start: :asc)
         @milestones = Milestone.all.order(start: :asc)
+        @submilestones = Submilestone.all.order(start: :asc)
         @users = User.all.pluck(:email)
         @all_users = User.all
       end
