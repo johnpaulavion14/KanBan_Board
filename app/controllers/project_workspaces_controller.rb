@@ -31,6 +31,18 @@ class ProjectWorkspacesController < ApplicationController
   end
 
   def delete_workspace
+     # delete milestone messages and all submilestones
+     ProjectWorkspace.find(params[:id]).rocks.each do |rock|
+      rock.milestones.each do |milestone|
+        milestone.messages.destroy_all
+        milestone.submilestones.destroy_all
+      end
+      # delete rock messages
+      rock.rockmessages.destroy_all
+       # delete rocks and milestones
+      rock.milestones.destroy_all
+      rock.destroy
+      end
     respond_to do |format|
       if current_user.project_workspaces.find(params[:id]).destroy
         format.html { redirect_to projects_dashboard_path, notice: "You have successfully deleted your workspace" }

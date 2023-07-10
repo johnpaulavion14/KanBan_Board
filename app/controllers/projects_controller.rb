@@ -75,10 +75,11 @@ class ProjectsController < ApplicationController
   def delete_rocks
     # delete rock messages
     Rock.find(params[:id]).rockmessages.destroy_all
-    # delete milestone messages
+    # delete milestone messages and submilestones
     allmilestone = Rock.find(params[:id]).milestones
     allmilestone.each do |milestone|
       milestone.messages.destroy_all
+      milestone.submilestones.destroy_all
     end
     # delete milestones
     Rock.find(params[:id]).milestones.destroy_all
@@ -144,6 +145,8 @@ class ProjectsController < ApplicationController
 
   def delete_milestones
     @milestone = current_user.milestones.find(params[:id])
+    # delete submilestones
+    @milestone.submilestones.destroy_all
     # delete milestone messages
     @milestone.messages.destroy_all
     respond_to do |format|
