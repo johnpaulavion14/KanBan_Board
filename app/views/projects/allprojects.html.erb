@@ -54,12 +54,14 @@
           <td>>></td>
           <td><%= rock.finish.strftime("%b %d, %Y") %> ]</td>
           <td class="assigned">
-            <% if !rock.project_workspace.user.profilepics.blank? %>
-              <%= image_tag rock.project_workspace.user.profilepics.last.pic, class:"assigned-pics", title:rock.project_workspace.user.email %>
+            <% if !User.find(rock.user_id).profilepics.blank? %>
+              <%= image_tag User.find(rock.user_id).profilepics.last.pic, class:"assigned-pics", title:User.find(rock.user_id).email %>
+            <% else %>
+              <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:User.find(rock.user_id).email %>
             <% end %>
             <% @all_users.each do |user| %>
               <% if rock.assigned.include? user.email %>
-                <% if user.id == rock.project_workspace.user.id %>
+                <% if user.id == User.find(rock.user_id).id %>
                 <% elsif !user.profilepics.blank?%>
                   <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
                 <% else %>
@@ -127,6 +129,8 @@
               <td class="assigned">
                 <% if !milestone.user.profilepics.blank? %>
                   <%= image_tag milestone.user.profilepics.last.pic, class:"assigned-pics", title:milestone.user.email %>
+                <% else %>
+                  <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:milestone.user.email %>
                 <% end %>
                 <% @all_users.each do |user| %>
                   <% if user.id == milestone.user.id %>
@@ -153,9 +157,9 @@
                     <% when 0 %>
                       <div class="bg-light px-2 py-1" style="flex:4">Not Started</div>
                     <% when 100 %>
-                      <div class="bg-success p-2 py-1" style="flex:4">Complete</div>
+                      <div class="bg-success px-2 py-1" style="flex:4">Complete</div>
                     <% else %>
-                      <div class="bg-warning p-2 py-1" style="flex:4">In Progress</div>
+                      <div class="bg-warning px-2 py-1" style="flex:4">In Progress</div>
                   <% end %>
   
                   <% if milestone.finish >= Date.today %>
@@ -189,6 +193,8 @@
                   <td class="assigned">
                     <% if !submilestone.user.profilepics.blank? %>
                       <%= image_tag submilestone.user.profilepics.last.pic, class:"assigned-pics", title:submilestone.user.email %>
+                    <% else %>
+                      <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:submilestone.user.email %>
                     <% end %>
                     <% @all_users.each do |user| %>
                       <% if user.id == submilestone.user.id %>
@@ -209,15 +215,15 @@
                       <%= submilestone.date_completed.strftime("%b %d, %Y") %>
                     <% end %>
                   </td>
-                  <td class="status com-status px-4">
+                  <td class="status com-status px-5">
                     <div class="d-flex align-items-center justify-content-center">
                         <% case submilestone.complete %>
                           <% when 0 %>
                             <div class="bg-light px-2 py-1" style="flex:4">Not Started</div>
                           <% when 100 %>
-                            <div class="bg-success p-2 py-1" style="flex:4">Complete</div>
+                            <div class="bg-success px-2 py-1" style="flex:4">Complete</div>
                           <% else %>
-                            <div class="bg-warning p-2 py-1" style="flex:4">In Progress</div>
+                            <div class="bg-warning px-2 py-1" style="flex:4">In Progress</div>
                         <% end %>
         
                         <% if submilestone.finish >= Date.today %>
@@ -313,6 +319,13 @@ $(document).ready(function(){
       var rock_id = ".rock-" + id
       $(rock_id).show()
       $(rock_id + ".new-milestone").hide()
+      // Colapse Milestone when click escape
+      $(document).off('keydown');
+      $(document).on('keydown', function(event) {
+        if (event.which === 27) {
+          $(plus).next(".minus-icon").trigger("click")
+        }
+      });
     });
   });
   $(".minus-icon").each( function(index,minus) {
@@ -335,7 +348,13 @@ $(document).ready(function(){
       var id = $(plus).parents(".task-name").siblings("#milestone-id").text()
       var mile_id = ".mile-" + id
       $(mile_id).show()
-      // $(mile_id + ".new-milestone").hide()
+      // Colapse Milestone when click escape
+      $(document).off('keydown');
+      $(document).on('keydown', function(event) {
+        if (event.which === 27) {
+          $(plus).next(".m-minus-icon").trigger("click")
+        }
+      });
     });
   });
   $(".m-minus-icon").each( function(index,minus) {
