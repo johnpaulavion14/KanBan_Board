@@ -324,7 +324,7 @@
                 <td><%= f.text_area :output, class:"px-2", style:"height:100px; width:200px;" %></td>
                 <td><%= f.text_area :remarks, class:"px-2", style:"height:100px; width:200px;" %></td>
                 <td>
-                  <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-msub-submit" %></span>
+                  <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-subm-submit" %></span>
                   <span class="x-new-submilestone mx-2 btn btn-danger mt-1">Cancel</span>
                 </td>
               <% end %>
@@ -468,7 +468,7 @@
           <td><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px; width:200px;" %></td>
           <td><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px ;width:200px;" %></td>
           <td>
-            <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-msub-submit" %></span>
+            <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-subm-submit" %></span>
             <span class="x-update-submilestone mx-2 btn btn-danger mt-1">Cancel</span>
           </td>
         <% end %>
@@ -496,6 +496,20 @@
       $(this).hide();
 
       // trigger escape and enter key
+      $(document).off('keydown');
+      $(document).on('keydown', function(event) {
+        if (event.which === 27) {
+          $(".x-create").trigger("click")
+        }
+        if (event.ctrlKey && event.keyCode === 13) {
+          $(".new-rock-submit").trigger("click")
+        }
+      });
+    });
+
+    $(".new-rock").click(function(){
+      // trigger escape and enter key
+      $(document).off('keydown');
       $(document).on('keydown', function(event) {
         if (event.which === 27) {
           $(".x-create").trigger("click")
@@ -542,6 +556,7 @@
         $(".update-rock").show();
 
         // trigger escape and enter key
+        $(document).off('keydown');
         $(document).on('keydown', function(event) {
           if (event.which === 27) {
             $(".x-update").trigger("click")
@@ -602,12 +617,15 @@
         var rock_id = ".rock-" + id
         $(rock_id).show()
         $(rock_id + ".new-milestone").hide()
-      });
 
-      // trigger last click plus-icon using escape
-      // $(this).on('click', function(event) {
-      //   lastClickedElement = event.target;
-      // });
+        // Colapse Milestone when click escape
+        $(document).off('keydown');
+        $(document).on('keydown', function(event) {
+          if (event.which === 27) {
+            $(plus).next(".minus-icon").trigger("click")
+          }
+        });
+      });
     });
     $(".minus-icon").each( function(index,minus) {
       $(minus).click(function(){
@@ -668,6 +686,7 @@
         $(".update-milestone").find("#finish").attr("max", finish_date);
 
         // trigger escape and enter key
+        $(document).off('keydown');
         $(document).on('keydown', function(event) {
           if (event.which === 27) {
             $(".x-update-milestone").trigger("click")
@@ -691,6 +710,7 @@
         $(blank).hide()
 
         // trigger escape and enter key
+        $(document).off('keydown');
         $(document).on('keydown', function(event) {
           if (event.which === 27) {
             $(blank).next(".new-milestone").find(".x-new-milestone").trigger("click")
@@ -700,7 +720,20 @@
           }
         });
       });
+      $(blank).next(".new-milestone").click(function(){
+        // trigger escape and enter key
+        $(document).off('keydown');
+        $(document).on('keydown', function(event) {
+          if (event.which === 27) {
+            $(this).find(".x-new-milestone").trigger("click")
+          }
+          if (event.ctrlKey && event.keyCode === 13) {
+            $(this).find(".new-m-submit").trigger("click")
+          }
+        });
+      });
     });
+  
     // exit new milestone form
     $(".x-new-milestone").each( function(index,milestone) {
       $(milestone).click(function(){
@@ -731,6 +764,14 @@
         var mile_id = ".mile-" + id
         $(mile_id).show()
         // $(mile_id + ".new-milestone").hide()
+
+        // Colapse Milestone when click escape
+        $(document).off('keydown');
+        $(document).on('keydown', function(event) {
+          if (event.which === 27) {
+            $(plus).next(".m-minus-icon").trigger("click")
+          }
+        });
       });
     });
     $(".m-minus-icon").each( function(index,minus) {
@@ -791,6 +832,7 @@
         $(".update-submilestone").find("#finish").attr("max", finish_date);
 
         // trigger escape and enter key
+        $(document).off('keydown');
         $(document).on('keydown', function(event) {
           if (event.which === 27) {
             $(".x-update-submilestone").trigger("click")
@@ -807,24 +849,33 @@
     });
     // Show new submilestone form
     $(".blank-submilestone").each( function(index,blank) {
-      $(blank).click(function(){
+      $(blank).click(function(event){
         var user_email = $("#current-user-email").text()
         $(".new-milestone").find("#assigned").val(user_email)
         $(blank).next(".new-submilestone").show()
         $(blank).hide()
 
-        // trigger escape and enter key
+        $(document).off('keydown');
         $(document).on('keydown', function(event) {
           if (event.which === 27) {
             $(blank).next(".new-submilestone").find(".x-new-submilestone").trigger("click")
           }
+        });
+      });
+      $(blank).next(".new-submilestone").click(function(){
+        // trigger escape and enter key
+        $(document).off('keydown');
+        $(document).on('keydown', function(event) {
+          if (event.which === 27) {
+            $(this).find(".x-new-submilestone").trigger("click")
+          }
           if (event.ctrlKey && event.keyCode === 13) {
-            (".new-msub-submit").trigger("click")
+            $(this).find(".new-subm-submit").trigger("click")
           }
         });
       });
     });
-    // exit new milestone form
+    // exit new submilestone form
     $(".x-new-submilestone").each( function(index,milestone) {
       $(milestone).click(function(){
         $(this).parents(".new-submilestone").hide()
