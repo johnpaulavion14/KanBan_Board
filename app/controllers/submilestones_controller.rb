@@ -18,6 +18,10 @@ class SubmilestonesController < ApplicationController
         else
           Milestone.find(params[:milestone_id]).update(date_completed:"")
         end
+        percent_sum = Milestone.find(params[:milestone_id]).submilestones.pluck(:complete).reduce(:+) * 100
+        subm_count = Milestone.find(params[:milestone_id]).submilestones.count * 100
+        total_m_percent = percent_sum / subm_count
+        Milestone.find(params[:milestone_id]).update(complete: total_m_percent)
         format.html { redirect_to view_projects_path({rock_id:params[:rock_id],milestone_id: params[:milestone_id]}), notice: "You have successfully create a new milestone" }
       else
         redirect_to view_projects_path
@@ -39,16 +43,21 @@ class SubmilestonesController < ApplicationController
         else
           @milestone.update(date_completed:"")
         end
-        if Milestone.find(params[:id]).submilestones.average(:complete) == 100
-          Milestone.find(params[:id]).update(date_completed:Date.today)
+        if Milestone.find(params[:milestone_id]).submilestones.average(:complete) == 100
+          Milestone.find(params[:milestone_id]).update(date_completed:Date.today)
         else
-          Milestone.find(params[:id]).update(date_completed:"")
+          Milestone.find(params[:milestone_id]).update(date_completed:"")
         end
+       percent_sum = Milestone.find(params[:milestone_id]).submilestones.pluck(:complete).reduce(:+) * 100
+       subm_count = Milestone.find(params[:milestone_id]).submilestones.count * 100
+       total_m_percent = percent_sum / subm_count
+       Milestone.find(params[:milestone_id]).update(complete: total_m_percent)
         format.html { redirect_to view_projects_path({rock_id:params[:rock_id],milestone_id: params[:milestone_id]}), notice: "You have successfully updated your project" }
       else
         redirect_to view_projects_path
       end
     end
+  
     
   end
 
@@ -58,9 +67,14 @@ class SubmilestonesController < ApplicationController
     # @milestone.messages.destroy_all
     respond_to do |format|
       if @milestone.destroy
-        if Milestone.find(params[:rock_id]).submilestones.average(:complete) == 100
-          Milestone.find(params[:rock_id]).update(date_completed:Date.today)
+        if Milestone.find(params[:milestone_id]).submilestones.average(:complete) == 100
+          Milestone.find(params[:milestone_id]).update(date_completed:Date.today)
         end
+        # Update % complete of milestone
+        percent_sum = Milestone.find(params[:milestone_id]).submilestones.pluck(:complete).reduce(:+) * 100
+        subm_count = Milestone.find(params[:milestone_id]).submilestones.count * 100
+        total_m_percent = percent_sum / subm_count
+        Milestone.find(params[:milestone_id]).update(complete: total_m_percent)
         format.html { redirect_to view_projects_path({rock_id:params[:rock_id],milestone_id: params[:milestone_id]}), notice: "You have successfully deleted you milestone" }
       else
         redirect_to view_projects_path

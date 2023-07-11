@@ -291,7 +291,7 @@
                   <td class="notif-con" role="button" >
                     <div class="notif" style="margin-left: 30px;">
                       <% if submilestone.user_id == current_user.id %>
-                        <%= link_to delete_submilestones_path(params[:pw_id],milestone.id,submilestone.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+                        <%= link_to delete_submilestones_path(params[:pw_id],rock.id,milestone.id,submilestone.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
                           <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
                         <% end %>
                       <% end %>
@@ -461,6 +461,7 @@
        <!--Sub Milstones Update -->
       <tr class="update-submilestone">
         <%= form_with url:update_submilestones_path(), method: :patch, local: true do |f| %>
+          <td style="display: none;"><%= f.number_field :rock_id, required:true,id:"rock-id" %></td>
           <td style="display: none;"><%= f.number_field :milestone_id, required:true,id:"milestone-id" %></td>
           <td style="display: none;"><%= f.number_field :id, required:true,id:"submilestone-id" %></td>
           <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start",style:"margin-left:5.5rem" %></td>

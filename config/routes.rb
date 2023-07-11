@@ -85,7 +85,7 @@ Rails.application.routes.draw do
   # Sub Milestones
   post 'create/submilestones/:pw_id/:rock_id/:milestone_id' => 'submilestones#create_submilestones', as: 'create_submilestones'
   patch 'update/submilestones/:pw_id' => 'submilestones#update_submilestones', as: 'update_submilestones'
-  delete 'delete/submilestones/:pw_id/:milestone_id/:id' => 'submilestones#delete_submilestones', as: 'delete_submilestones'
+  delete 'delete/submilestones/:pw_id/:rock_id/:milestone_id/:id' => 'submilestones#delete_submilestones', as: 'delete_submilestones'
 
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
