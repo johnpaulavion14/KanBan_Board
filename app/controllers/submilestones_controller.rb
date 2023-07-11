@@ -18,7 +18,7 @@ class SubmilestonesController < ApplicationController
         else
           Milestone.find(params[:milestone_id]).update(date_completed:"")
         end
-        format.html { redirect_to view_projects_path({milestone_id: params[:milestone_id]}), notice: "You have successfully create a new milestone" }
+        format.html { redirect_to view_projects_path({rock_id:params[:rock_id],milestone_id: params[:milestone_id]}), notice: "You have successfully create a new milestone" }
       else
         redirect_to view_projects_path
       end
@@ -44,7 +44,7 @@ class SubmilestonesController < ApplicationController
         else
           Milestone.find(params[:id]).update(date_completed:"")
         end
-        format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully updated your project" }
+        format.html { redirect_to view_projects_path({rock_id:params[:rock_id],milestone_id: params[:milestone_id]}), notice: "You have successfully updated your project" }
       else
         redirect_to view_projects_path
       end
@@ -61,9 +61,9 @@ class SubmilestonesController < ApplicationController
         if Milestone.find(params[:rock_id]).submilestones.average(:complete) == 100
           Milestone.find(params[:rock_id]).update(date_completed:Date.today)
         end
-        format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully deleted you milestone" }
+        format.html { redirect_to view_projects_path({rock_id:params[:rock_id],milestone_id: params[:milestone_id]}), notice: "You have successfully deleted you milestone" }
       else
-        redirect_to view_projects_path({rock_id: params[:rock_id]})
+        redirect_to view_projects_path
       end
     end
   end

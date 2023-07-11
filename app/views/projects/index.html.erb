@@ -43,7 +43,7 @@
           <td style="display: none;" class="message-time"><%= rock.rockmessages.order(created_at: :asc).pluck(:time) %></td>
 
           <!-- display none -->
-          <td class="task-name" style="text-align: left; min-width: 100px;">
+          <td class="task-name" id="rockplus-<%= rock.id %>" style="text-align: left; min-width: 100px;">
             <% if rock.milestones.blank? %>
               <%= image_tag ("plus.png"),role:"button",style:"margin-left:1rem",class:"plus-icon" %>
               <%= image_tag ("minus.png"),role:"button", style:"margin-left:1rem",class:"minus-icon" %>
@@ -134,7 +134,7 @@
               <td style="display: none;" class="message-lastname"><%= milestone.messages.order(created_at: :asc).pluck(:last_name) %></td>
               <td style="display: none;" class="message-time"><%= milestone.messages.order(created_at: :asc).pluck(:time) %></td>
               <!-- display none -->
-              <td class="task-name" style="text-align: left; min-width: 100px; padding-left:4rem">
+              <td class="task-name" id="mileplus-<%= milestone.id %>" style="text-align: left; min-width: 100px; padding-left:4rem">
                 <% if milestone.submilestones.blank? %>
                   <%= image_tag ("plus.png"),role:"button",class:"m-plus-icon" %>
                   <%= image_tag ("minus.png"),role:"button",class:"m-minus-icon" %>
@@ -316,7 +316,7 @@
             </tr>
              <!-- Sub Milestone create form-->
             <tr class="new-submilestone create-subm-<%= milestone.id %>">
-              <%= form_with url:create_submilestones_path(params[:pw_id],milestone.id), method: :post, local: true do |f| %>
+              <%= form_with url:create_submilestones_path(params[:pw_id],rock.id,milestone.id), method: :post, local: true do |f| %>
                 <td class="d-none"><%= f.hidden_field :user_id, value:current_user.id, class:"px-2" %></td>
                 <td><%= f.text_field :task_name, required:true, class:"px-2", style:"margin-left: 5.5rem;"%></td>
                 <td></td>
@@ -391,6 +391,7 @@
       <div class="d-none rock-m-id"><%= params[:rock_m_id] %></div>
       <div class="d-none rock-params"><%= params[:rock_id] %></div>
       <div class="d-none milestone-params"><%= params[:milestone_id] %></div>
+      <div class="d-none milestone-m-id"><%= params[:mm_id] %></div>
       <!-- Rocks Create and Update -->
       <div id="current-user-email" class="d-none"><%= current_user.email %></div>
       <tr class="new-rock">
@@ -969,18 +970,29 @@
         $(".message-con").hide()
     })
 
-  });
-
+// url params
+  var rm_id = $(".rock-m-id").text().replace('.1','')
+  var r_id = $(".rock-params").text().replace('.1','')
+  var m_id = $(".milestone-params").text().replace('.1','')
+  var mm_id = $(".milestone-m-id").text().replace('.1','')
   
+// Trigger plus icon after create/delete/update submilestones
+  var rockplus = "#rockplus-" + r_id 
+  var mileplus = "#mileplus-" + m_id
+  $(rockplus).find(".plus-icon").trigger("click")
+  $(mileplus).find(".m-plus-icon").trigger("click")
+
+
 // Trigger message after create/delete/update
   // rock
-  var r_id = $(".rock-m-id").text().replace('.1','')
-  var rock_id = "#r-" + r_id
+  var rock_id = "#r-" + rm_id
   $(rock_id).find("img").trigger("click")
   // milestone
-  var m_id = $(".milestone-params").text().replace('.1','')
-  var milestone_id = "#m-" + m_id
+  var milestone_id = "#m-" + mm_id
   $(milestone_id).find("img").trigger("click")
+
+});
+
 
 // Reload Page Once
 var userAgent = navigator.userAgent.toLowerCase();
