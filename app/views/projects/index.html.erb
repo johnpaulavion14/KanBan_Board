@@ -318,7 +318,7 @@
             <tr class="new-submilestone create-subm-<%= milestone.id %>">
               <%= form_with url:create_submilestones_path(params[:pw_id],rock.id,milestone.id), method: :post, local: true do |f| %>
                 <td class="d-none"><%= f.hidden_field :user_id, value:current_user.id, class:"px-2" %></td>
-                <td><%= f.text_field :task_name, required:true, class:"px-2", style:"margin-left: 5.5rem;"%></td>
+                <td><%= f.text_field :task_name, required:true, class:"px-2 float-start", style:"margin-left: 5.5rem;"%></td>
                 <td></td>
                 <td><%= f.date_field :start, required:true, class:"px-2", min: rock.start, max: rock.finish %></td>
                 <td>>></td>
@@ -355,7 +355,7 @@
         <tr class="new-milestone create-m-<%= rock.id %>">
           <%= form_with url:create_milestones_path(params[:pw_id],rock.id), method: :post, local: true do |f| %>
             <td class="d-none"><%= f.hidden_field :user_id, value:current_user.id, class:"px-2" %></td>
-            <td><%= f.text_field :task_name, required:true, class:"px-2", style:"margin-left: 3.5rem;"%></td>
+            <td><%= f.text_field :task_name, required:true, class:"px-2 float-start", style:"margin-left: 3.5rem;"%></td>
             <td></td>
             <td><%= f.date_field :start, required:true, class:"px-2", min: rock.start, max: rock.finish %></td>
             <td>>></td>
@@ -397,7 +397,7 @@
       <tr class="new-rock">
         <%= form_with url:create_rocks_path, method: :post, local: true do |f| %>
           <td style="display: none;"><%= f.number_field :user_id,value:current_user.id, required:true %></td>
-          <td><%= f.text_field :task_name, required:true, class:"px-2" %></td>
+          <td><%= f.text_field :task_name, required:true, class:"px-2 float-start mx-3" %></td>
           <td></td>
           <td><%= f.date_field :start, required:true, class:"px-2" %></td>
           <td>>></td>
@@ -419,7 +419,7 @@
           <td style="display: none;"><%= f.number_field :user_id, required:true, id:"rock-user-id"%></td>
           <td style="display: none;"><%= f.number_field :id, required:true,id:"rock-id" %></td>
           <td style="display: none;"><%= f.number_field :pw_id, required:true,id:"pw-id" %></td>
-          <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2" %></td>
+          <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start mx-3" %></td>
           <td></td>
           <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
           <td>>></td>
@@ -441,7 +441,7 @@
         <%= form_with url:update_milestones_path(), method: :patch, local: true do |f| %>
           <td style="display: none;"><%= f.number_field :rock_id, required:true,id:"rock-id" %></td>
           <td style="display: none;"><%= f.number_field :id, required:true,id:"milestone-id" %></td>
-          <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2" %></td>
+          <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start", style:"margin-left: 3.5rem;" %></td>
           <td></td>
           <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
           <td>>></td>
@@ -463,7 +463,7 @@
         <%= form_with url:update_submilestones_path(), method: :patch, local: true do |f| %>
           <td style="display: none;"><%= f.number_field :milestone_id, required:true,id:"milestone-id" %></td>
           <td style="display: none;"><%= f.number_field :id, required:true,id:"submilestone-id" %></td>
-          <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2",style:"margin-left:5.5rem" %></td>
+          <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start",style:"margin-left:5.5rem" %></td>
           <td></td>
           <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
           <td>>></td>
