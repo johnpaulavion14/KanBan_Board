@@ -21,7 +21,7 @@
     <tbody>
       <% @rocks.each do |rock| %>
         <!-- All Rocks -->
-        <tr  class="all-rocks" style="background-color: rgb(215, 215, 215); font-weight: bold; vertical-align: middle;" role="button">
+        <tr  class="all-rocks thisrock-<%= rock.id %>" style="background-color: rgb(215, 215, 215); font-weight: bold; vertical-align: middle;" role="button">
           <!-- display none -->
           <td style="display: none;" id="isrock">rock</td>
           <td style="display: none;" id="rock-user-id"><%= rock.user_id %></td>
@@ -116,7 +116,7 @@
         <!-- All Milestones -->
         <% @milestones.each do |milestone| %> 
           <% if rock.id == milestone.rock_id %>
-            <tr class="all-milestones rock-<%= rock.id %> <%= milestone.assigned.include?(current_user.email) ? 'm-dblclick' : 'bg-light' %>" style="vertical-align: middle;">
+            <tr class="all-milestones rock-<%= rock.id %> milestone-<%= milestone.id %> <%= milestone.assigned.include?(current_user.email) ? 'm-dblclick' : 'bg-light' %>" style="vertical-align: middle;">
               <!-- display none -->
               <td style="display: none;" id="rock-id"><%= rock.id %></td>
               <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
@@ -708,8 +708,9 @@
     // Show new milestone form
     $(".blank-milestone").each( function(index,blank) {
       $(blank).click(function(){
-        var user_email = $("#current-user-email").text()
-        $(".new-milestone").find("#assigned").val(user_email)
+        var rock = '.thisrock-' + $(this).attr('class').match(/\d+/)[0]
+        var assigned =  $(rock).children("#rock-assigned").text()
+        $(".new-milestone").find("#assigned").val(JSON.parse(assigned))
         $(blank).next(".new-milestone").show()
         $(blank).hide()
 
@@ -854,8 +855,9 @@
     // Show new submilestone form
     $(".blank-submilestone").each( function(index,blank) {
       $(blank).click(function(event){
-        var user_email = $("#current-user-email").text()
-        $(".new-milestone").find("#assigned").val(user_email)
+        var milestone = '.milestone-' + $(this).attr('class').match(/\d+/)[0]
+        var assigned =  $(milestone).children("#milestone-assigned").text()
+        $(".new-submilestone").find("#assigned").val(JSON.parse(assigned))
         $(blank).next(".new-submilestone").show()
         $(blank).hide()
 
@@ -863,6 +865,7 @@
         $(document).on('keydown', function(event) {
           if (event.which === 27) {
             $(blank).next(".new-submilestone").find(".x-new-submilestone").trigger("click")
+            $(document).off('keydown');
           }
         });
       });
