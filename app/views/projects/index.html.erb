@@ -34,6 +34,13 @@
           <td style="display: none;" id="m-count"><%= rock.milestones.count %></td>
           <td class="output d-none" ><%= rock.output %></td>
           <td class="remarks d-none" ><%= rock.remarks %></td>
+          <td class="next-mdate d-none" >
+            <% if rock.milestones.blank? %>
+              <%= rock.finish + 1 %>
+            <% else %>
+              <%= rock.milestones.last.finish + 1 %>
+            <% end %>
+          </td>
             <!-- messages -->
           <td style="display: none;" class="m-current-user"><%= current_user.first_name %> <%= current_user.last_name%></td>
           <td style="display: none;" class="message-id"><%= rock.rockmessages.order(created_at: :asc).pluck(:id) %></td>
@@ -121,11 +128,18 @@
               <td style="display: none;" id="rock-id"><%= rock.id %></td>
               <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
               <td style="display: none;" id="pw-id"><%= rock.project_workspace.id %></td>
-              <td class="start d-none"><%= milestone.start %></td>
-              <td class="finish d-none"><%= milestone.finish %></td>
+              <td id="mstart-<%= milestone.id %>" class="start d-none"><%= milestone.start %></td>
+              <td id="mfinish-<%= milestone.id %>" class="finish d-none"><%= milestone.finish %></td>
               <td style="display: none;" id="milestone-assigned"><%= milestone.assigned %></td>
               <td class="output d-none"><%= milestone.output %></td>
               <td class="remarks d-none"><%= milestone.remarks %></td>
+              <td class="next-smdate d-none" >
+                <% if milestone.submilestones.blank? %>
+                  <%= milestone.finish + 1 %>
+                <% else %>
+                  <%= milestone.submilestones.order(start: :asc).pluck(:finish)[-1] %>
+                <% end %>
+              </td>
                 <!-- messages -->
               <td style="display: none;" class="m-current-user"><%= current_user.first_name %> <%= current_user.last_name%></td>
               <td style="display: none;" class="message-id"><%= milestone.messages.order(created_at: :asc).pluck(:id) %></td>
@@ -320,9 +334,9 @@
                 <td class="d-none"><%= f.hidden_field :user_id, value:current_user.id, class:"px-2" %></td>
                 <td><%= f.text_field :task_name, required:true, class:"px-2 float-start", style:"margin-left: 5.5rem;"%></td>
                 <td></td>
-                <td><%= f.date_field :start, required:true, class:"px-2", min: rock.start, max: rock.finish %></td>
+                <td><%= f.date_field :start, required:true, class:"px-2",id:"start", min: milestone.start, max: milestone.finish %></td>
                 <td>>></td>
-                <td><%= f.date_field :finish, required:true, class:"px-2", min: rock.start, max: rock.finish %></td>
+                <td><%= f.date_field :finish, required:true, class:"px-2",id:"finish", min: milestone.start, max: milestone.finish %></td>
                 <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
                 <td><%= f.number_field :complete, required:true, class:"px-2", style:"width: 65px; text-align:center", min:0, max:100, value:0 %> %</td>
                 <td></td>
@@ -357,9 +371,9 @@
             <td class="d-none"><%= f.hidden_field :user_id, value:current_user.id, class:"px-2" %></td>
             <td><%= f.text_field :task_name, required:true, class:"px-2 float-start", style:"margin-left: 3.5rem;"%></td>
             <td></td>
-            <td><%= f.date_field :start, required:true, class:"px-2", min: rock.start, max: rock.finish %></td>
+            <td><%= f.date_field :start, required:true, class:"px-2",id:"start", min: rock.start, max: rock.finish %></td>
             <td>>></td>
-            <td><%= f.date_field :finish, required:true, class:"px-2", min: rock.start, max: rock.finish %></td>
+            <td><%= f.date_field :finish, required:true, class:"px-2",id:"finish", min: rock.start, max: rock.finish %></td>
             <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
             <td><%= f.number_field :complete, required:true, class:"px-2", style:"width: 65px; text-align:center", min:0, max:100, value:0 %> %</td>
             <td></td>
@@ -709,6 +723,11 @@
     // Show new milestone form
     $(".blank-milestone").each( function(index,blank) {
       $(blank).click(function(){
+        // assign next date
+        var next_date =  $('.all-rocks').eq(index).children(".next-mdate").text().replace(/\s/g, "")
+        $(".new-milestone").find("#start").val(next_date)
+        $(".new-milestone").find("#finish").val(next_date)
+        // assigned users base on rock users
         var rock = '.thisrock-' + $(this).attr('class').match(/\d+/)[0]
         var assigned =  $(rock).children("#rock-assigned").text()
         $(".new-milestone").find("#assigned").val(JSON.parse(assigned))
@@ -830,8 +849,8 @@
         $(".update-submilestone").show();
 
         // get start and finish date
-        var start_date = $("#start-" + rock_id).text()
-        var finish_date = $("#finish-" + rock_id).text()
+        var start_date = $("#mstart-" + milestone_id).text()
+        var finish_date = $("#mfinish-" + milestone_id).text()
         $(".update-submilestone").find("#start").attr("min", start_date);
         $(".update-submilestone").find("#start").attr("max", finish_date);
         $(".update-submilestone").find("#finish").attr("min", start_date);
@@ -856,6 +875,11 @@
     // Show new submilestone form
     $(".blank-submilestone").each( function(index,blank) {
       $(blank).click(function(event){
+        // assign next date
+        var next_date =  $('.all-milestones').eq(index).children(".next-smdate").text().replace(/\s/g, "")
+        $(".new-submilestone").find("#start").val(next_date)
+        $(".new-submilestone").find("#finish").val(next_date)
+        // copy assigned from milestone
         var milestone = '.milestone-' + $(this).attr('class').match(/\d+/)[0]
         var assigned =  $(milestone).children("#milestone-assigned").text()
         $(".new-submilestone").find("#assigned").val(JSON.parse(assigned))
