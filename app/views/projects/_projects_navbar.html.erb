@@ -103,6 +103,7 @@ $(document).ready(function(){
   // account toggle
   $(".account-con").css("display", "none")
   $(".circle").click(function(){
+    $(".account-con").addClass("w3-animate-zoom")
     $(".account-con").toggle();
     $(".account-bg").toggle();
     $(".edit-account-con").hide();

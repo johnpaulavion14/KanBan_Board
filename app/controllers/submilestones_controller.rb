@@ -62,17 +62,18 @@ class SubmilestonesController < ApplicationController
   end
 
   def delete_submilestones
-    @milestone = Submilestone.find(params[:id])
-    @milestone.submessages.destroy_all
+    @all_submilestones = Milestone.find(params[:milestone_id]).submilestones
+    @submilestone = Submilestone.find(params[:id])
+    @submilestone.submessages.destroy_all
     respond_to do |format|
-      if @milestone.destroy
+      if @submilestone.destroy
         if Milestone.find(params[:milestone_id]).submilestones.average(:complete) == 100
           Milestone.find(params[:milestone_id]).update(date_completed:Date.today)
         end
         # Update % complete of milestone
-        percent_sum = Milestone.find(params[:milestone_id]).submilestones.pluck(:complete).reduce(:+) * 100
-        subm_count = Milestone.find(params[:milestone_id]).submilestones.count * 100
-        total_m_percent = percent_sum / subm_count
+        percent_sum = @all_submilestones.blank? ? 0 : @all_submilestones.pluck(:complete).reduce(:+) * 100
+        subm_count = @all_submilestones.blank? ? 0 : @all_submilestones.count * 100
+        total_m_percent = @all_submilestones.blank? ? 0 : percent_sum / subm_count
         Milestone.find(params[:milestone_id]).update(complete: total_m_percent)
         format.html { redirect_to view_projects_path({rock_id:params[:rock_id],milestone_id: params[:milestone_id]}), notice: "You have successfully deleted you milestone" }
       else

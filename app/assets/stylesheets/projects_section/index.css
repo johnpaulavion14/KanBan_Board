@@ -24,8 +24,10 @@
   width: 25px;
   height: 25px;
   border-radius: 50%;
+  transition: transform 0.3s ease;
 }
 
 .assigned-pics:hover {
   cursor: pointer;
+  transform: scale(5);
 }
