@@ -36,9 +36,9 @@
           <td class="remarks d-none" ><%= rock.remarks %></td>
           <td class="next-mdate d-none" >
             <% if rock.milestones.blank? %>
-              <%= rock.finish + 1 %>
+              <%= rock.start %>
             <% else %>
-              <%= rock.milestones.last.finish + 1 %>
+              <%= rock.milestones.order(start: :asc).last.finish + 1 %>
             <% end %>
           </td>
             <!-- messages -->
@@ -135,9 +135,9 @@
               <td class="remarks d-none"><%= milestone.remarks %></td>
               <td class="next-smdate d-none" >
                 <% if milestone.submilestones.blank? %>
-                  <%= milestone.finish + 1 %>
+                  <%= milestone.start %>
                 <% else %>
-                  <%= milestone.submilestones.order(start: :asc).pluck(:finish)[-1] %>
+                  <%= milestone.submilestones.order(start: :asc).last.finish + 1 %>
                 <% end %>
               </td>
                 <!-- messages -->
@@ -212,7 +212,7 @@
               <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= milestone.output %></div></td>
               <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= milestone.remarks %></div></td>
               <td class="notif-con" role="button" >
-                <div class="notif" style="margin-left: 30px;">
+                <div class="notif" style="margin-right: 15px;">
                   <% if milestone.messages.empty? %>
                     <span id="m-<%=milestone.id%>"><%= image_tag ("message.png"), class:"project-icon m-message" %></span>
                   <% else %>
@@ -231,9 +231,10 @@
               <% if milestone.id == submilestone.milestone_id %>
                 <tr class="all-submilestones mile-<%= milestone.id %> <%= submilestone.assigned.include?(current_user.email) ? 'subm-dblclick' : 'bg-light' %>" style="vertical-align: middle;">
                   <!-- display none -->
+                  <td style="display: none;" id="is_subm">submilestone</td>
                   <td style="display: none;" id="rock-id"><%= rock.id %></td>
-                  <td style="display: none;" id="submilestone-id"><%= submilestone.id %></td>
                   <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
+                  <td style="display: none;" id="submilestone-id"><%= submilestone.id %></td>
                   <td style="display: none;" id="pw-id"><%= rock.project_workspace.id %></td>
                   <td class="start d-none"><%= submilestone.start %></td>
                   <td class="finish d-none"><%= submilestone.finish %></td>
@@ -242,11 +243,11 @@
                   <td class="remarks d-none"><%= submilestone.remarks %></td>
                     <!-- messages -->
                   <td style="display: none;" class="m-current-user"><%= current_user.first_name %> <%= current_user.last_name%></td>
-                  <td style="display: none;" class="message-id"><%= milestone.messages.order(created_at: :asc).pluck(:id) %></td>
-                  <td style="display: none;" class="milestone-messages"><%= milestone.messages.order(created_at: :asc).pluck(:message) %></td>
-                  <td style="display: none;" class="message-firstname"><%= milestone.messages.order(created_at: :asc).pluck(:first_name) %></td>
-                  <td style="display: none;" class="message-lastname"><%= milestone.messages.order(created_at: :asc).pluck(:last_name) %></td>
-                  <td style="display: none;" class="message-time"><%= milestone.messages.order(created_at: :asc).pluck(:time) %></td>
+                  <td style="display: none;" class="message-id"><%= submilestone.submessages.order(created_at: :asc).pluck(:id) %></td>
+                  <td style="display: none;" class="milestone-messages"><%= submilestone.submessages.order(created_at: :asc).pluck(:message) %></td>
+                  <td style="display: none;" class="message-firstname"><%= submilestone.submessages.order(created_at: :asc).pluck(:first_name) %></td>
+                  <td style="display: none;" class="message-lastname"><%= submilestone.submessages.order(created_at: :asc).pluck(:last_name) %></td>
+                  <td style="display: none;" class="message-time"><%= submilestone.submessages.order(created_at: :asc).pluck(:time) %></td>
                   <!-- display none -->
                   <td class="task-name" style="text-align: left; min-width: 100px; padding-left:6rem"><%= submilestone.task_name %></td>
                   <td>
@@ -303,7 +304,12 @@
                   <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= submilestone.output %></div></td>
                   <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= submilestone.remarks %></div></td>
                   <td class="notif-con" role="button" >
-                    <div class="notif" style="margin-left: 30px;">
+                    <div class="notif" style="margin-right: 30px;">
+                      <% if submilestone.submessages.empty? %>
+                        <span id="sm-<%= submilestone.id %>"><%= image_tag ("message.png"), class:"project-icon m-message" %></span>
+                      <% else %>
+                        <span id="sm-<%= submilestone.id %>"><%= image_tag ("message_1.png"), class:"project-icon m-message" %></span>
+                      <% end %>
                       <% if submilestone.user_id == current_user.id %>
                         <%= link_to delete_submilestones_path(params[:pw_id],rock.id,milestone.id,submilestone.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
                           <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
@@ -401,11 +407,12 @@
           <td></td>
         </tr>
       <% end %>
-      <!-- rock and milestone params after create or edit -->
+      <!-- url params -->
       <div class="d-none rock-m-id"><%= params[:rock_m_id] %></div>
       <div class="d-none rock-params"><%= params[:rock_id] %></div>
       <div class="d-none milestone-params"><%= params[:milestone_id] %></div>
       <div class="d-none milestone-m-id"><%= params[:mm_id] %></div>
+      <div class="d-none submilestone-m-id"><%= params[:sm_id] %></div>
       <!-- Rocks Create and Update -->
       <div id="current-user-email" class="d-none"><%= current_user.email %></div>
       <tr class="new-rock">
@@ -899,10 +906,10 @@
         $(document).off('keydown');
         $(document).on('keydown', function(event) {
           if (event.which === 27) {
-            $(this).find(".x-new-submilestone").trigger("click")
+            $(blank).next(".new-submilestone").find(".x-new-submilestone").trigger("click")
           }
           if (event.ctrlKey && event.keyCode === 13) {
-            $(this).find(".new-subm-submit").trigger("click")
+            $(blank).next(".new-submilestone").find(".new-subm-submit").trigger("click")
           }
         });
       });
@@ -915,8 +922,6 @@
       });
     });
     // Show submilestone after create, delete or update
-    
-
     // Message Section
     $(".message-bg").css("display", "none")
     $(".message-con").css("display", "none")
@@ -930,15 +935,15 @@
         let current_user = $(this).parents(".notif-con").siblings(".m-current-user").text()
         let message_id = JSON.parse($(this).parents(".notif-con").siblings(".message-id").text())
         let isrock = $(this).parents(".notif-con").siblings("#isrock").text()
+        let is_subm = $(this).parents(".notif-con").siblings("#is_subm").text()
         let rock_id = $(this).parents(".notif-con").siblings("#rock-id").text()
         let pw_id = $(this).parents(".notif-con").siblings("#pw-id").text()
         let milestone_id = $(this).parents(".notif-con").siblings("#milestone-id").text()
+        let submilestone_id = $(this).parents(".notif-con").siblings("#submilestone-id").text()
         let message_firstname = JSON.parse($(this).parents(".notif-con").siblings(".message-firstname").text())
         let message_lastname = JSON.parse($(this).parents(".notif-con").siblings(".message-lastname").text())
         let message_time = JSON.parse($(this).parents(".notif-con").siblings(".message-time").text())
         let message_array = JSON.parse($(this).parents(".notif-con").siblings(".milestone-messages").text())
-
-        console.log(message_array)
 
         message_array.forEach( (message,index) => {
           $(".messages-container").append(
@@ -959,11 +964,11 @@
               </div>
             </div>`
           );
-          //Create message
-          $("#write-message").find("form").attr("method",'post');
           // Delete message
           if (isrock == "rock"){
             $(`#del-edit-${index}`).find("#delete-message").attr("href",`/delete/rockmessages/${pw_id}/${rock_id}/${message_id[index]}`);
+          }else if(is_subm == "submilestone"){
+            $(`#del-edit-${index}`).find("#delete-message").attr("href",`/delete/submessages/${pw_id}/${rock_id}/${milestone_id}/${submilestone_id}/${message_id[index]}`);
           }else{
             $(`#del-edit-${index}`).find("#delete-message").attr("href",`/delete/messages/${pw_id}/${rock_id}/${milestone_id}/${message_id[index]}`);
           }
@@ -972,6 +977,8 @@
             $("#write-message").find("#message-input").val(`${message}`)
             if (isrock == "rock"){
               $("#write-message").find("form").attr("action",`/projects/rockmessages/${pw_id}/${rock_id}/${message_id[index]}`);
+            }else if(is_subm == "submilestone"){
+              $("#write-message").find("form").attr("action",`/submilestones/submessages/${pw_id}/${rock_id}/${milestone_id}/${submilestone_id}/${message_id[index]}`);
             }else{
               $("#write-message").find("form").attr("action",`/projects/messages/${pw_id}/${milestone_id}/${message_id[index]}`);
             }
@@ -983,9 +990,14 @@
             $(`#del-edit-${index}`).hide()
           }
         })
-        // Create message/change milestone_id
+        //Create Milestone Message
+        $("#write-message").find("form").attr("method",'post');
+        // Create Message
         if (isrock == "rock"){
           $("#write-message").find("form").attr("action",`/projects/rockmessages/${pw_id}/${rock_id}`);
+        }else if (is_subm == "submilestone"){
+          $("#write-message").find("form").attr("action",`/submilestones/submessages/${pw_id}/${milestone_id}/${submilestone_id}`);
+          $("#m-hidden-forms").find("#r-id").val(`${rock_id}`);
         }else{
           $("#write-message").find("form").attr("action",`/projects/messages/${pw_id}/${milestone_id}`);
           $("#m-hidden-forms").find("#r-id").val(`${rock_id}`);
@@ -1003,6 +1015,7 @@
   var r_id = $(".rock-params").text().replace('.1','')
   var m_id = $(".milestone-params").text().replace('.1','')
   var mm_id = $(".milestone-m-id").text().replace('.1','')
+  var sm_id = $(".submilestone-m-id").text().replace('.1','')
   
 // Trigger plus icon after create/delete/update submilestones
   var rockplus = "#rockplus-" + r_id 
@@ -1018,6 +1031,10 @@
   // milestone
   var milestone_id = "#m-" + mm_id
   $(milestone_id).find("img").trigger("click")
+  // submilestone
+  var submilestone_id = "#sm-" + sm_id
+  $(submilestone_id).find("img").trigger("click")
+  console.log(submilestone_id)
 
 });
 

@@ -141,6 +141,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_08_090217) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "submessages", force: :cascade do |t|
+    t.text "message"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "time"
+    t.integer "submilestone_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "submilestones", force: :cascade do |t|
     t.string "task_name"
     t.date "start"

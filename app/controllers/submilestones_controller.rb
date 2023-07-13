@@ -63,8 +63,7 @@ class SubmilestonesController < ApplicationController
 
   def delete_submilestones
     @milestone = Submilestone.find(params[:id])
-    # delete milestone messages
-    # @milestone.messages.destroy_all
+    @milestone.submessages.destroy_all
     respond_to do |format|
       if @milestone.destroy
         if Milestone.find(params[:milestone_id]).submilestones.average(:complete) == 100
@@ -82,10 +81,46 @@ class SubmilestonesController < ApplicationController
     end
   end
 
+  # Sub Milestone Messages
+  def create_submessage
+    respond_to do |format|
+      if Submilestone.find(params[:submilestone_id]).submessages.create(submessage_params)
+        format.html { redirect_to view_projects_path({rock_id:params[:rock_id],milestone_id: params[:milestone_id],sm_id: params[:submilestone_id]}), notice: "You have successfully create a new message" }
+      else
+        redirect_to view_projects_path()
+      end
+    end
+  end
+
+  def update_submessage
+    respond_to do |format|
+      if Submilestone.find(params[:submilestone_id]).submessages.find(params[:id]).update(submessage_params)
+        format.html { redirect_to view_projects_path({rock_id:params[:rock_id],milestone_id: params[:milestone_id],sm_id: params[:submilestone_id]}), notice: "You have successfully updated a new message" }
+      else
+        redirect_to view_projects_path()
+      end
+    end
+  end
+
+  def delete_submessage
+    @message = Submilestone.find(params[:submilestone_id]).submessages.find(params[:id])
+    respond_to do |format|
+      if @message.destroy
+        format.html { redirect_to view_projects_path({rock_id:params[:rock_id],milestone_id: params[:milestone_id],sm_id: params[:submilestone_id]}), notice: "You have successfully deleted your message" }
+      else
+        redirect_to view_projects_path()
+      end
+    end
+  end
+
   private
 
   def submilestone_params
     params.permit(:task_name, :start, :finish, :assigned, :complete, :remarks,:user_id, :output, :date_completed)
+  end
+
+  def submessage_params
+    params.permit(:message, :first_name, :last_name, :time)
   end
 
 end
