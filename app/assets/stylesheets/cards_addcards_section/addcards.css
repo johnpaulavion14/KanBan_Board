@@ -87,8 +87,8 @@
 .addcard-name {
   text-decoration: none;
   color: black;
+  width: 260px;
 }
-
 .edit-desc {
   background-color: #ddddddd7;
   padding: 5px 1rem;

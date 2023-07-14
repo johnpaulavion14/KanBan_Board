@@ -83,9 +83,8 @@
   
   <!-- edit board modal -->
   <div class="edit-modal-con">
-    <div class="bg-con">
-    </div>
-    <div class="edit-board-con mx-auto mt-5">
+    <div class="bg-con"></div>
+    <div class="edit-board-con mx-auto mt-5 w3-animate-zoom">
       <h2 class="card-heading"><u>Edit Board</u></h2>
       <%= form_with scope: :create_board, url:"/create_boards" , method: :patch, local: true do |form| %>
         <div class="pb-1">

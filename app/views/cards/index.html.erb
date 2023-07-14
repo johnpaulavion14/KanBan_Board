@@ -46,8 +46,10 @@
         <div class="d-flex flex-column addcard-outercon">
           <% @addcards.each do |addcard| %>
             <% if card.id==addcard.card_id %>
-              <div class="addcard-con">
-                <%= link_to addcard.card_name, view_addcards_path(params[:cb_id],card.id, addcard.id), class:"addcard-name" %>
+              <div class="addcard-con d-flex">
+                <%= link_to view_addcards_path(params[:cb_id],card.id, addcard.id), class:"addcard-name" do %>
+                  <div><%= addcard.card_name %></div>
+                <% end %>
                 <%= link_to delete_addcard_path(params[:cb_id],card.id,addcard.id),class:"del-addcard", data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
                   <div class="addcard-pencon">
                     <div class="addcard-penbox"></div>
@@ -134,7 +136,6 @@
       $(this).attr("href", href);
     });
 
-    
     $(".cancel-desc").click(function(){
       $(".addcard-form").hide();
       $(".addcard").show();

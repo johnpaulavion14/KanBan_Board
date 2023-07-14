@@ -1,5 +1,6 @@
 .dashboard-con {
   position: relative;
+  min-height: 50vh;
 }
 
 .title-section {
