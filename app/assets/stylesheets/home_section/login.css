@@ -1,9 +1,5 @@
 /* Login Page */
-.login_bg {
-  font-family: 'Roboto', sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.home_bg {
   width: 100vw;
   height: 100vh;
   padding-top: 2em;
@@ -11,6 +7,14 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+.home_div {
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
 .login-title {

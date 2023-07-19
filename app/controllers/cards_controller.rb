@@ -10,7 +10,6 @@ class CardsController < ApplicationController
     @board = CreateBoard.find(params[:cb_id])
     @hosts = User.where(host:"true").order("created_at asc").pluck(:first_name)
     @scribes = User.where(scribe:"true").order("created_at asc").pluck(:first_name)
-    
   end
 
   # GET /cards/1 or /cards/1.json

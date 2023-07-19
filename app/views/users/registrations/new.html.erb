@@ -1,53 +1,54 @@
-<div class="login_bg w3-animate-right">
-  <div><%= image_tag ("cem-logo-full.png") %></div>
-  <h1 class="login-title title mt-4">CEM ITS L10 MEETING</h1>
-  <div class="login_container">
-    <p>Sign up to ITS L10 Meeting</p>
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+<div class="home_bg">
+  <div class="home_div w3-animate-right">
+    <div><%= image_tag ("cem-logo-full.png") %></div>
+    <h1 class="login-title title mt-4">CEM ITS L10 MEETING</h1>
+    <div class="login_container">
+      <p>Sign up to ITS L10 Meeting</p>
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
 
-      <div class="reg-error"><%= render "users/shared/error_messages", resource: resource %></div>
+        <div class="reg-error"><%= render "users/shared/error_messages", resource: resource %></div>
+        
+        <div class="field">
+          <b><%= f.label 'First Name' %></b>
+          <div><%= f.text_field :first_name, autofocus: true, autocomplete: "first_name",class:"w-100 px-2", placeholder:"Enter first name",required:true %></div>
+        </div>
+
+        <div class="field">
+          <b><%= f.label 'Last Name' %></b>
+          <div><%= f.text_field :last_name, autofocus: true, autocomplete: "last_name",class:"w-100 px-2", placeholder:"Enter last name",required:true %></div>
+        </div>
       
-      <div class="field">
-        <b><%= f.label 'First Name' %></b>
-        <div><%= f.text_field :first_name, autofocus: true, autocomplete: "first_name",class:"w-100 px-2", placeholder:"Enter first name",required:true %></div>
-      </div>
-
-      <div class="field">
-        <b><%= f.label 'Last Name' %></b>
-        <div><%= f.text_field :last_name, autofocus: true, autocomplete: "last_name",class:"w-100 px-2", placeholder:"Enter last name",required:true %></div>
-      </div>
-    
-      <div class="field mt-4">
-        <b><%= f.label :email %></b>
-        <div><%= f.email_field :email, autofocus: true, autocomplete: "email",class:"w-100 px-2", placeholder:"Enter email" %></div>
-      </div>
-    
-      <div class="field">
-        <b><%= f.label :password %></b>
-        <div>
-          <% if @minimum_password_length %>
-          <em>(<%= @minimum_password_length %> characters minimum)</em>
-          <% end %><br />
-          <%= f.password_field :password, autocomplete: "new-password",class:"w-100 px-2", placeholder:"Enter password" %>
+        <div class="field mt-4">
+          <b><%= f.label :email %></b>
+          <div><%= f.email_field :email, autofocus: true, autocomplete: "email",class:"w-100 px-2", placeholder:"Enter email" %></div>
         </div>
-      </div>
-    
-      <div class="field">
-        <b><%= f.label :password_confirmation %></b>
-        <div>
-          <%= f.password_field :password_confirmation, autocomplete: "new-password",class:"w-100 px-2",placeholder:"Confirm password" %>
+      
+        <div class="field">
+          <b><%= f.label :password %></b>
+          <div>
+            <% if @minimum_password_length %>
+            <em>(<%= @minimum_password_length %> characters minimum)</em>
+            <% end %><br />
+            <%= f.password_field :password, autocomplete: "new-password",class:"w-100 px-2", placeholder:"Enter password" %>
+          </div>
         </div>
+      
+        <div class="field">
+          <b><%= f.label :password_confirmation %></b>
+          <div>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password",class:"w-100 px-2",placeholder:"Confirm password" %>
+          </div>
+        </div>
+      
+        <div class="actions mt-3">
+          <%= f.submit "Sign up", class:"continue-btn" %>
+        </div>
+      <% end %>
+      <div class="mt-3">
+        <%= link_to "<-- go back", root_path, method: :get, class:"back-btn" %>
       </div>
-    
-      <div class="actions mt-3">
-        <%= f.submit "Sign up", class:"continue-btn" %>
-      </div>
-    <% end %>
-    <div class="mt-3">
-      <%= link_to "<-- go back", root_path, method: :get, class:"back-btn" %>
     </div>
   </div>
-
 </div>
 
 <script>

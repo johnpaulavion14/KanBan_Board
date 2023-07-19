@@ -5,6 +5,7 @@ class CreateBoardsController < ApplicationController
   # GET /create_boards or /create_boards.json
   def index
     @create_boards = current_user.create_boards.where(group:false)
+    
   end
 
   # GET /create_boards/1 or /create_boards/1.json
