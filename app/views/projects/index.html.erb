@@ -1,27 +1,27 @@
 <%= render 'projects/projects_navbar' %>
 <%= render 'projects/projects_header' %>
 <div style="height: 90vh;width: 100vw; overflow:scroll; " class="yourproject-con">
-  <table class="table table-hover text-center" style="width:max-content; min-width: 100%;">
+  <table class="table table-hover text-center" style="width:max-content; min-width: 100%;" id="exportTable">
     <thead>
-      <tr style="color: #0067a3; border-bottom: 3px solid #0067a3;border-top: 3px solid #0067a3; height: 50px; vertical-align: middle;">
-        <th scope="col" style="min-width: 200px;">Task Name</th>
-        <th scope="col" >Duration</th>
-        <th scope="col" style="width: 130px;">Start</th>
+      <tr style="color: #0067a3; border-bottom: 3px solid #0067a3;border-top: 3px solid #0067a3; height: 50px; vertical-align: middle;" class="export-tr" id="t-head">
+        <th scope="col" style="min-width: 200px;" class="export-td">Task Name</th>
+        <th scope="col" class="export-td">Duration</th>
+        <th scope="col" style="width: 130px;" class="export-td">Start</th>
         <th scope="col" ></th>
-        <th scope="col" style="width: 130px;">Finish</th>
-        <th scope="col" >Assigned To</th>
-        <th scope="col" style="min-width: 150px;">% Complete</th>
-        <th scope="col" style="min-width: 100px;">Date Completed</th>
-        <th scope="col" style="min-width: 200px;">Status</th>
-        <th scope="col" >Output</th>
-        <th scope="col" >Remarks</th>
-        <th scope="col" style="min-width:100px;">Actions</th>
+        <th scope="col" style="width: 130px;" class="export-td">Finish</th>
+        <th scope="col" class="export-td">Assigned To</th>
+        <th scope="col" style="min-width: 150px;" class="export-td">% Complete</th>
+        <th scope="col" style="min-width: 100px;" class="export-td">Date Completed</th>
+        <th scope="col" style="min-width: 200px;" class="export-td">Status</th>
+        <th scope="col" class="export-td">Output</th>
+        <th scope="col" class="export-td">Remarks</th>
+        <th scope="col" style="min-width:100px;" class="export-td">Actions</th>
       </tr>
     </thead>
     <tbody>
       <% @rocks.each do |rock| %>
         <!-- All Rocks -->
-        <tr  class="all-rocks thisrock-<%= rock.id %>" style="background-color: rgb(215, 215, 215); font-weight: bold; vertical-align: middle;" role="button">
+        <tr  class="all-rocks thisrock-<%= rock.id %> export-tr" style="background-color: rgb(215, 215, 215); font-weight: bold; vertical-align: middle;" role="button" id="rock-tr">
           <!-- display none -->
           <td style="display: none;" id="isrock">rock</td>
           <td style="display: none;" id="rock-user-id"><%= rock.user_id %></td>
@@ -32,9 +32,9 @@
           <td style="display: none;" id="rock-assigned"><%= rock.assigned %></td>
           <td style="display: none;" id="percent-sum"><%= rock.milestones.pluck(:complete).reduce(:+) %></td>
           <td style="display: none;" id="m-count"><%= rock.milestones.count %></td>
-          <td class="output d-none" ><%= rock.output %></td>
-          <td class="remarks d-none" ><%= rock.remarks %></td>
-          <td class="next-mdate d-none" >
+          <td style="display: none;" class="output" ><%= rock.output %></td>
+          <td style="display: none;" class="remarks" ><%= rock.remarks %></td>
+          <td style="display: none;" class="next-mdate" >
             <% if rock.milestones.blank? %>
               <%= rock.start %>
             <% else %>
@@ -50,7 +50,7 @@
           <td style="display: none;" class="message-time"><%= rock.rockmessages.order(created_at: :asc).pluck(:time) %></td>
 
           <!-- display none -->
-          <td class="task-name" id="rockplus-<%= rock.id %>" style="text-align: left; min-width: 100px;">
+          <td class="task-name export-td" id="rockplus-<%= rock.id %>" style="text-align: left; min-width: 100px;">
             <% if rock.milestones.blank? %>
               <%= image_tag ("plus.png"),role:"button",style:"margin-left:1rem",class:"plus-icon" %>
               <%= image_tag ("minus.png"),role:"button", style:"margin-left:1rem",class:"minus-icon" %>
@@ -60,14 +60,15 @@
             <% end %>
             <%= rock.task_name %>
           </td>
-          <td>
+          <td class="export-td dayordays">
             <%= (rock.start.to_date..rock.finish.to_date).count do |date|
               date.workday?
-            end %> days
+            end %> <span></span>
           </td>
-          <td>[ <%= rock.start.strftime("%b %d, %Y") %></td>
+          <td class="export-td">[ <%= rock.start.strftime("%b %d, %Y") %></td>
           <td>>></td>
-          <td><%= rock.finish.strftime("%b %d, %Y") %> ]</td>
+          <td class="export-td"><%= rock.finish.strftime("%b %d, %Y") %> ]</td>
+          <td class="export-td d-none"><%= rock.assigned %></td>
           <td class="assigned">
             <% if !User.find(rock.user_id).profilepics.blank? %>
               <%= image_tag User.find(rock.user_id).profilepics.last.pic, class:"assigned-pics", title:User.find(rock.user_id).email %>
@@ -85,15 +86,15 @@
               <% end %>
             <% end %>
           </td>
-          <td class="rock-percent"><span></span> %</td>
-          <td class="date-completed">
+          <td class="rock-percent export-td"><span></span> %</td>
+          <td class="date-completed export-td">
             <% if rock.date_completed.nil? %>
               - -
             <% else %>
               <%= rock.date_completed.strftime("%b %d, %Y") %>
             <% end %>
           </td>
-          <td class="rock-status com-status py-2">
+          <td class="rock-status com-status py-2 export-td">
             <div class="d-flex align-items-center justify-content-center">
               <div id="stat" class="px-3 py-2" style="flex:4"></div>
               <% if rock.finish >= Date.today %>
@@ -103,9 +104,9 @@
               <% end %>
             </div>
           </td>
-          <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= rock.output %></div></td>
-          <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= rock.remarks %></div></td>
-          <td class="notif-con" role="button">
+          <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= rock.output %></div></td>
+          <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= rock.remarks %></div></td>
+          <td class="notif-con export-td" role="button">
             <div class="notif">
               <% if rock.rockmessages.empty? %>
                 <span id="r-<%=rock.id%>"><%= image_tag ("message.png"), class:"project-icon m-message" %></span>
@@ -123,7 +124,7 @@
         <!-- All Milestones -->
         <% @milestones.each do |milestone| %> 
           <% if rock.id == milestone.rock_id %>
-            <tr class="all-milestones rock-<%= rock.id %> milestone-<%= milestone.id %> <%= milestone.assigned.include?(current_user.email) ? 'm-dblclick' : 'bg-light' %>" style="vertical-align: middle;">
+            <tr class="all-milestones rock-<%= rock.id %> milestone-<%= milestone.id %> <%= milestone.assigned.include?(current_user.email) ? 'm-dblclick' : 'bg-light' %> export-tr" style="vertical-align: middle;" id="milestone-tr">
               <!-- display none -->
               <td style="display: none;" id="rock-id"><%= rock.id %></td>
               <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
@@ -148,7 +149,7 @@
               <td style="display: none;" class="message-lastname"><%= milestone.messages.order(created_at: :asc).pluck(:last_name) %></td>
               <td style="display: none;" class="message-time"><%= milestone.messages.order(created_at: :asc).pluck(:time) %></td>
               <!-- display none -->
-              <td class="task-name" id="mileplus-<%= milestone.id %>" style="text-align: left; min-width: 100px; padding-left:4rem">
+              <td class="task-name export-td" id="mileplus-<%= milestone.id %>" style="text-align: left; min-width: 100px; padding-left:4rem">
                 <% if milestone.submilestones.blank? %>
                   <%= image_tag ("plus.png"),role:"button",class:"m-plus-icon" %>
                   <%= image_tag ("minus.png"),role:"button",class:"m-minus-icon" %>
@@ -158,14 +159,15 @@
                 <% end %>
                 <%= milestone.task_name %>
               </td>
-              <td>
+              <td class="export-td dayordays">
                 <%= (milestone.start.to_date..milestone.finish.to_date).count do |date|
                   date.workday?
-                end %> days
+                end %> <span></span>
               </td>
-              <td>[ <%= milestone.start.strftime("%b %d, %Y") %></td>
+              <td class="export-td">[ <%= milestone.start.strftime("%b %d, %Y") %></td>
               <td>>></td>
-              <td><%= milestone.finish.strftime("%b %d, %Y") %> ]</td>
+              <td class="export-td"><%= milestone.finish.strftime("%b %d, %Y") %> ]</td>
+              <td class="export-td d-none"><%= milestone.assigned %></td>
               <td class="assigned">
                 <% if !milestone.user.profilepics.blank? %>
                   <%= image_tag milestone.user.profilepics.last.pic, class:"assigned-pics", title:milestone.user.email %>
@@ -183,15 +185,15 @@
                   <% end %>
                 <% end %>
               </td>
-              <td><span class="complete"><%= milestone.complete %></span> %</td>
-              <td class="date-completed">
+              <td class="export-td"><span class="complete"><%= milestone.complete %></span> %</td>
+              <td class="date-completed export-td">
                 <% if milestone.date_completed.nil? %>
                   - -
                 <% else %>
                   <%= milestone.date_completed.strftime("%b %d, %Y") %>
                 <% end %>
               </td>
-              <td class="status com-status px-4">
+              <td class="status com-status px-4 export-td">
                 <div class="d-flex align-items-center justify-content-center">
                     <% case milestone.complete %>
                       <% when 0 %>
@@ -209,9 +211,9 @@
                     <% end %>
                 </div>
               </td>
-              <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= milestone.output %></div></td>
-              <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= milestone.remarks %></div></td>
-              <td class="notif-con" role="button" >
+              <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= milestone.output %></div></td>
+              <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= milestone.remarks %></div></td>
+              <td class="notif-con export-td" role="button" >
                 <div class="notif" style="margin-right: 15px;">
                   <% if milestone.messages.empty? %>
                     <span id="m-<%=milestone.id%>"><%= image_tag ("message.png"), class:"project-icon m-message" %></span>
@@ -229,8 +231,7 @@
             <!-- All Submilestones -->
             <% @submilestones.each do |submilestone| %> 
               <% if milestone.id == submilestone.milestone_id %>
-                <tr class="all-submilestones mile-<%= milestone.id %> <%= submilestone.assigned.include?(current_user.email) ? 'subm-dblclick' : 'bg-light' %>" style="vertical-align: middle;">
-                  <!-- display none -->
+                <tr class="all-submilestones mile-<%= milestone.id %> <%= submilestone.assigned.include?(current_user.email) ? 'subm-dblclick' : 'bg-light' %> export-tr" style="vertical-align: middle;" id="subm-tr">      
                   <td style="display: none;" id="is_subm">submilestone</td>
                   <td style="display: none;" id="rock-id"><%= rock.id %></td>
                   <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
@@ -249,15 +250,16 @@
                   <td style="display: none;" class="message-lastname"><%= submilestone.submessages.order(created_at: :asc).pluck(:last_name) %></td>
                   <td style="display: none;" class="message-time"><%= submilestone.submessages.order(created_at: :asc).pluck(:time) %></td>
                   <!-- display none -->
-                  <td class="task-name" style="text-align: left; min-width: 100px; padding-left:6rem"><%= submilestone.task_name %></td>
-                  <td>
+                  <td class="task-name export-td" style="text-align: left; min-width: 100px; padding-left:6rem"><%= submilestone.task_name %></td>
+                  <td class="export-td dayordays">
                     <%= (submilestone.start.to_date..submilestone.finish.to_date).count do |date|
                       date.workday?
-                    end %> days
+                    end %> <span></span>
                   </td>
-                  <td>[ <%= submilestone.start.strftime("%b %d, %Y") %></td>
+                  <td class="export-td">[ <%= submilestone.start.strftime("%b %d, %Y") %></td>
                   <td>>></td>
-                  <td><%= submilestone.finish.strftime("%b %d, %Y") %> ]</td>
+                  <td class="export-td"><%= submilestone.finish.strftime("%b %d, %Y") %> ]</td>
+                  <td class="export-td d-none"><%= submilestone.assigned %></td>
                   <td class="assigned">
                     <% if !submilestone.user.profilepics.blank? %>
                       <%= image_tag submilestone.user.profilepics.last.pic, class:"assigned-pics", title:submilestone.user.email %>
@@ -275,15 +277,15 @@
                       <% end %>
                     <% end %>
                   </td>
-                  <td><span class="complete"><%= submilestone.complete %></span> %</td>
-                  <td class="date-completed">
+                  <td class="export-td"><span class="complete"><%= submilestone.complete %></span> %</td>
+                  <td class="date-completed export-td">
                     <% if submilestone.date_completed.nil? %>
                       - -
                     <% else %>
                       <%= submilestone.date_completed.strftime("%b %d, %Y") %>
                     <% end %>
                   </td>
-                  <td class="status com-status px-5">
+                  <td class="status com-status px-5 export-td">
                     <div class="d-flex align-items-center justify-content-center">
                         <% case submilestone.complete %>
                           <% when 0 %>
@@ -301,9 +303,9 @@
                         <% end %>
                     </div>
                   </td>
-                  <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= submilestone.output %></div></td>
-                  <td><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= submilestone.remarks %></div></td>
-                  <td class="notif-con" role="button" >
+                  <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= submilestone.output %></div></td>
+                  <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= submilestone.remarks %></div></td>
+                  <td class="notif-con export-td" role="button" >
                     <div class="notif" style="margin-right: 30px;">
                       <% if submilestone.submessages.empty? %>
                         <span id="sm-<%= submilestone.id %>"><%= image_tag ("message.png"), class:"project-icon m-message" %></span>
@@ -625,6 +627,14 @@
         $(value).parents("tr").children("td").not(".notif-con").css("text-decoration-color", "red")
         $(value).parents("tr").children("td").not(".notif-con").css("font-style", "italic")
         $(value).find(".track").hide()
+      }
+    });
+    //Add day or days
+    $(".dayordays").each( function(index,day) {
+      if ($(day).text().replace(/\s/g, "") == "1"){
+        $(day).find("span").text("day")
+      } else {
+        $(day).find("span").text("days")
       }
     });
 
@@ -1034,8 +1044,77 @@
   // submilestone
   var submilestone_id = "#sm-" + sm_id
   $(submilestone_id).find("img").trigger("click")
-  console.log(submilestone_id)
 
+  // Function to add data to Excel file
+  function addDataToExcel() {
+      var data = []
+      $(".export-tr").each( function(index_tr,tr) {
+        let td_array = []
+        $(tr).find(".export-td").each( function(index_td,td) {
+          let trim_text = $(td).text().trimLeft()
+          if ($(tr).attr('id') == "rock-tr"){
+            if ($(td).attr('class').includes("task-name")){
+              td_array.push(" * " + trim_text)
+            }else{
+            td_array.push(trim_text)
+            }
+          }else if ($(tr).attr('id') == "milestone-tr"){
+            if ($(td).attr('class').includes("task-name")){
+              td_array.push("     - " + trim_text)
+            }else{
+            td_array.push(trim_text)
+            }
+          }else if($(tr).attr('id') == "subm-tr"){
+            if ($(td).attr('class').includes("task-name")){
+              td_array.push("           " + trim_text)
+            }else{
+            td_array.push(trim_text)
+            }
+          }else{
+            td_array.push(trim_text)
+          }
+        })
+        if ($(tr).attr('id') === "rock-tr" && index_tr !== 1 ){
+          data.push([])
+        }
+        data.push(td_array )
+      })
+      var ws = XLSX.utils.aoa_to_sheet(data);
+      var wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
+
+      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'binary' });
+
+      function s2ab(s) {
+        var buf = new ArrayBuffer(s.length);
+        var view = new Uint8Array(buf);
+        for (var i = 0; i < s.length; i++) {
+          view[i] = s.charCodeAt(i) & 0xFF;
+        }
+        return buf;
+      }
+
+      var blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
+
+      if (navigator.msSaveBlob) { // IE 10+
+        navigator.msSaveBlob(blob, 'data.xlsx');
+      } else {
+        var link = document.createElement('a');
+        if (link.download !== undefined) {
+          var url = URL.createObjectURL(blob);
+          link.setAttribute('href', url);
+          link.setAttribute('download', 'data.xlsx');
+          link.style.visibility = 'hidden';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      }
+    }
+    // Bind the click event to the addDataBtn button
+    $('#addDataBtn').on('click', function() {
+      addDataToExcel();
+    });
 });
 
 
@@ -1050,5 +1129,6 @@ if (userAgent.indexOf('firefox') > -1) {
   }
   setTimeout('reloadIt()', 1000);
 }
-
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>

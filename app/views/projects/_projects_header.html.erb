@@ -9,7 +9,7 @@
   <% elsif current_user.host == true %>
     <%= link_to "All Projects",view_allprojects_path, class:" #{'nav-active' if request.original_url.include? "allprojects"} p-1" %>
   <% end %>
-
+  <button id="addDataBtn">Export to Excel</button>
 </div>
 
 <script>
