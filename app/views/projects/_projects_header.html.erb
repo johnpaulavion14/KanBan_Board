@@ -1,18 +1,43 @@
 <div class="mx-2 mb-2 ">
+  <div class="d-none" id="owner-param"><%= params[:rocks_owner] %></div>
   <h3 class="text-center">- - <%= ProjectWorkspace.find(params[:pw_id]).folder_name %> - -</h3>
-  <%= link_to "Your Projects",view_projects_path, class:" #{'nav-active' if request.original_url.include? "yourprojects"} p-1"  %>
+  <%= link_to "Your Projects",view_projects_path({rocks_owner:"all_rocks"}), class:" #{'nav-active' if request.original_url.include? "yourprojects"} p-1"  %>
 
   <% if current_user.email == "jpbocatija@cem-inc.org.ph" %>
-    <%= link_to "All Projects",view_allprojects_path, class:" #{'nav-active' if request.original_url.include? "allprojects"} p-1" %>
+    <%= link_to "All Projects",view_allprojects_path({rocks_owner:"all_rocks"}), class:" #{'nav-active' if request.original_url.include? "allprojects"} p-1" %>
   <% elsif current_user.admin == true %>
-    <%= link_to "All Projects",view_allprojects_path, class:" #{'nav-active' if request.original_url.include? "allprojects"} p-1" %>
+    <%= link_to "All Projects",view_allprojects_path({rocks_owner:"all_rocks"}), class:" #{'nav-active' if request.original_url.include? "allprojects"} p-1" %>
   <% elsif current_user.host == true %>
-    <%= link_to "All Projects",view_allprojects_path, class:" #{'nav-active' if request.original_url.include? "allprojects"} p-1" %>
+    <%= link_to "All Projects",view_allprojects_path({rocks_owner:"all_rocks"}), class:" #{'nav-active' if request.original_url.include? "allprojects"} p-1" %>
   <% end %>
   <button id="addDataBtn">Export to Excel</button>
+   <!-- Select Rock Owner -->
+    <% if request.fullpath.include?("allprojects") %>
+      <div class="mt-2">
+          <%= form_with(url: view_allprojects_path,style:"display:inline", method: :get) do |form| %>
+            <%= form.select :rocks_owner, options_for_select(@pw_emails),id:"rocks_owner" %>
+            <%= form.submit "Sort", style: "display: none;" %>
+          <% end %>
+      </div>
+    <% else %>
+      <div class="mt-2">
+          <%= form_with(url: view_projects_path,style:"display:inline", method: :get) do |form| %>
+            <%= form.select :rocks_owner, options_for_select(@pw_emails),id:"rocks_owner" %>
+            <%= form.submit "Sort", style: "display: none;" %>
+          <% end %>
+      </div>
+    <% end %>
 </div>
 
 <script>
-
+  $(document).ready(function(){
+    // When the select element changes
+    $("#rocks_owner").change(function () {
+      // Trigger the form submission
+      $(this).closest("form").submit();
+    });
+    var owner_param = $("#owner-param").text().replace('.1','')
+    $("#rocks_owner").val(owner_param)
+  });
 
 </script>

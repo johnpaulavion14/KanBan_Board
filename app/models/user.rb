@@ -11,6 +11,7 @@ class User < ApplicationRecord
   has_many :cards, through: :create_boards
   has_many :addcards , through: :cards
   has_many :profilepics
+  has_many :rocks
   has_many :milestones
   has_many :project_workspaces
 end

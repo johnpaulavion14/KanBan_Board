@@ -21,7 +21,12 @@ class ProjectsController < ApplicationController
         @rocks.push(rock)
       end
     end
-
+    @pw_emails = ["all_rocks","my_rocks"]
+    params_gsub = params[:rocks_owner].nil? ? "" : params[:rocks_owner].gsub(".1","")
+    if params_gsub == "my_rocks"
+      @rocks = current_user.rocks
+    end
+   
     @milestones = Milestone.all.order(start: :asc)
     @submilestones = Submilestone.all.order(start: :asc)
     @users = User.all.pluck(:email)
@@ -33,6 +38,15 @@ class ProjectsController < ApplicationController
     User.all.each do |user|
       if user.admin == true || user.host == true || current_user.email == "jpbocatija@cem-inc.org.ph"
         @rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(start: :asc)
+
+        @pw_emails = ProjectWorkspace.find(params[:pw_id]).assigned
+        @pw_emails.unshift("all_rocks")
+        ProjectWorkspace.find(params[:pw_id]).assigned.each do |email|
+          if params[:rocks_owner] == email
+            @rocks = User.find_by(email: email).rocks
+          end
+        end
+
         @milestones = Milestone.all.order(start: :asc)
         @submilestones = Submilestone.all.order(start: :asc)
         @users = User.all.pluck(:email)
