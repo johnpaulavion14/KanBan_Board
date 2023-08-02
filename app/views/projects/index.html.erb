@@ -415,6 +415,7 @@
       <div class="d-none milestone-params"><%= params[:milestone_id] %></div>
       <div class="d-none milestone-m-id"><%= params[:mm_id] %></div>
       <div class="d-none submilestone-m-id"><%= params[:sm_id] %></div>
+      <div class="d-none rocks-owner"><%= params[:rocks_owner] %></div>
       <!-- Rocks Create and Update -->
       <div id="current-user-email" class="d-none"><%= current_user.email %></div>
       <tr class="new-rock">
@@ -942,6 +943,7 @@
         $(".message-con").show()
         $(".message-bg").show()
 
+        let rocks_owner = $(".rocks-owner").text()
         let current_user = $(this).parents(".notif-con").siblings(".m-current-user").text()
         let message_id = JSON.parse($(this).parents(".notif-con").siblings(".message-id").text())
         let isrock = $(this).parents(".notif-con").siblings("#isrock").text()
@@ -976,21 +978,21 @@
           );
           // Delete message
           if (isrock == "rock"){
-            $(`#del-edit-${index}`).find("#delete-message").attr("href",`/delete/rockmessages/${pw_id}/${rock_id}/${message_id[index]}`);
+            $(`#del-edit-${index}`).find("#delete-message").attr("href",`/delete/rockmessages/${pw_id}/${rock_id}/${message_id[index]}/${rocks_owner}`);
           }else if(is_subm == "submilestone"){
-            $(`#del-edit-${index}`).find("#delete-message").attr("href",`/delete/submessages/${pw_id}/${rock_id}/${milestone_id}/${submilestone_id}/${message_id[index]}`);
+            $(`#del-edit-${index}`).find("#delete-message").attr("href",`/delete/submessages/${pw_id}/${rock_id}/${milestone_id}/${submilestone_id}/${message_id[index]}/${rocks_owner}`);
           }else{
-            $(`#del-edit-${index}`).find("#delete-message").attr("href",`/delete/messages/${pw_id}/${rock_id}/${milestone_id}/${message_id[index]}`);
+            $(`#del-edit-${index}`).find("#delete-message").attr("href",`/delete/messages/${pw_id}/${rock_id}/${milestone_id}/${message_id[index]}/${rocks_owner}`);
           }
           // Edit message
           $(`#del-edit-${index}`).find("#edit-message").click(function(){
             $("#write-message").find("#message-input").val(`${message}`)
             if (isrock == "rock"){
-              $("#write-message").find("form").attr("action",`/projects/rockmessages/${pw_id}/${rock_id}/${message_id[index]}`);
+              $("#write-message").find("form").attr("action",`/projects/rockmessages/${pw_id}/${rock_id}/${message_id[index]}/${rocks_owner}`);
             }else if(is_subm == "submilestone"){
-              $("#write-message").find("form").attr("action",`/submilestones/submessages/${pw_id}/${rock_id}/${milestone_id}/${submilestone_id}/${message_id[index]}`);
+              $("#write-message").find("form").attr("action",`/submilestones/submessages/${pw_id}/${rock_id}/${milestone_id}/${submilestone_id}/${message_id[index]}/${rocks_owner}`);
             }else{
-              $("#write-message").find("form").attr("action",`/projects/messages/${pw_id}/${milestone_id}/${message_id[index]}`);
+              $("#write-message").find("form").attr("action",`/projects/messages/${pw_id}/${milestone_id}/${message_id[index]}/${rocks_owner}`);
             }
             $("#write-message").find("form").attr("method",'patch');
             $("#m-hidden-forms").find("#r-id").val(`${rock_id}`);
@@ -1004,12 +1006,12 @@
         $("#write-message").find("form").attr("method",'post');
         // Create Message
         if (isrock == "rock"){
-          $("#write-message").find("form").attr("action",`/projects/rockmessages/${pw_id}/${rock_id}`);
+          $("#write-message").find("form").attr("action",`/projects/rockmessages/${pw_id}/${rock_id}/${rocks_owner}`);
         }else if (is_subm == "submilestone"){
-          $("#write-message").find("form").attr("action",`/submilestones/submessages/${pw_id}/${milestone_id}/${submilestone_id}`);
+          $("#write-message").find("form").attr("action",`/submilestones/submessages/${pw_id}/${milestone_id}/${submilestone_id}/${rocks_owner}`);
           $("#m-hidden-forms").find("#r-id").val(`${rock_id}`);
         }else{
-          $("#write-message").find("form").attr("action",`/projects/messages/${pw_id}/${milestone_id}`);
+          $("#write-message").find("form").attr("action",`/projects/messages/${pw_id}/${milestone_id}/${rocks_owner}`);
           $("#m-hidden-forms").find("#r-id").val(`${rock_id}`);
         }
 
@@ -1056,7 +1058,7 @@
             if ($(td).attr('class').includes("task-name")){
               td_array.push(" * " + trim_text)
             }else{
-            td_array.push(trim_text)
+              td_array.push(trim_text)
             }
           }else if ($(tr).attr('id') == "milestone-tr"){
             if ($(td).attr('class').includes("task-name")){
@@ -1077,7 +1079,7 @@
         if ($(tr).attr('id') === "rock-tr" && index_tr !== 1 ){
           data.push([])
         }
-        data.push(td_array )
+        data.push(td_array)
       })
       var ws = XLSX.utils.aoa_to_sheet(data);
       var wb = XLSX.utils.book_new();
@@ -1115,6 +1117,8 @@
     $('#addDataBtn').on('click', function() {
       addDataToExcel();
     });
+
+    // alert($(".rocks-owner").text())
 });
 
 

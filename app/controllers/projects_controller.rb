@@ -15,16 +15,28 @@ class ProjectsController < ApplicationController
   
   def index
     @rocks = []
+    @pw_emails = []
+    @ids_array = []
     rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(start: :asc)
     rocks.all.each do |rock|
+      @rocks.push(rock)
       if rock.assigned.include? current_user.email
-        @rocks.push(rock)
+        if !@ids_array.include?(rock.user.id)
+          id_value = []
+          id_value.push(rock.user.email)
+          id_value.push(rock.user.id)
+          @pw_emails.push(id_value)
+          @ids_array.push(rock.user.id)
+        end
       end
     end
-    @pw_emails = ["all_rocks","my_rocks"]
-    params_gsub = params[:rocks_owner].nil? ? "" : params[:rocks_owner].gsub(".1","")
-    if params_gsub == "my_rocks"
-      @rocks = current_user.rocks
+    @pw_emails.unshift("all_rocks")
+
+    params_gsub = params[:rocks_owner].gsub(".1","")
+    @ids_array.each do |id|
+      if params_gsub == id.to_s
+        @rocks = User.find(id).rocks
+      end
     end
    
     @milestones = Milestone.all.order(start: :asc)
@@ -38,12 +50,21 @@ class ProjectsController < ApplicationController
     User.all.each do |user|
       if user.admin == true || user.host == true || current_user.email == "jpbocatija@cem-inc.org.ph"
         @rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(start: :asc)
-
-        @pw_emails = ProjectWorkspace.find(params[:pw_id]).assigned
+        @pw_emails = []
+        @ids_array = []
+        assigned_array = ProjectWorkspace.find(params[:pw_id]).assigned
+        assigned_array.each do |email| 
+          id_value = []
+          id_value.push(email)
+          id_value.push(User.find_by(email:email).id)
+          @pw_emails.push(id_value)
+          @ids_array.push(User.find_by(email:email).id)
+        end
         @pw_emails.unshift("all_rocks")
-        ProjectWorkspace.find(params[:pw_id]).assigned.each do |email|
-          if params[:rocks_owner] == email
-            @rocks = User.find_by(email: email).rocks
+
+        @ids_array.each do |id|
+          if params[:rocks_owner] == id.to_s
+            @rocks = User.find(id).rocks
           end
         end
 
@@ -54,7 +75,7 @@ class ProjectsController < ApplicationController
       end
     end
   end
-  
+
   # Rock
   def create_rocks
     @assigned_array = params[:assigned].reject(&:empty?)

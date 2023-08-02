@@ -56,8 +56,8 @@ Rails.application.routes.draw do
   # Project Management Monitoring System Section
   # Projects
   get 'projects/dashboard' => 'projects#dashboard', as: 'projects_dashboard'
-  get 'yourprojects/:pw_id' => 'projects#index', as: 'view_projects'
-  get 'allprojects/:pw_id' => 'projects#allprojects', as: 'view_allprojects'
+  get 'yourprojects/:pw_id/:rocks_owner' => 'projects#index', as: 'view_projects'
+  get 'allprojects/:pw_id/:rocks_owner' => 'projects#allprojects', as: 'view_allprojects'
 
   # Workspace
   post 'create/workspace' => 'project_workspaces#create_workspace', as: 'create_workspace'
@@ -65,38 +65,33 @@ Rails.application.routes.draw do
   delete 'delete/workspace/:id' => 'project_workspaces#delete_workspace', as: 'delete_workspace'
 
  # Rocks
-  post 'create/rocks/:pw_id' => 'projects#create_rocks', as: 'create_rocks'
-  patch 'update/rocks/:pw_id' => 'projects#update_rocks', as: 'update_rocks'
-  delete 'delete/rocks/:pw_id/:id' => 'projects#delete_rocks', as: 'delete_rocks'
+  post 'create/rocks/:pw_id/:rocks_owner' => 'projects#create_rocks', as: 'create_rocks'
+  patch 'update/rocks/:pw_id/:rocks_owner' => 'projects#update_rocks', as: 'update_rocks'
+  delete 'delete/rocks/:pw_id/:id/:rocks_owner' => 'projects#delete_rocks', as: 'delete_rocks'
 
   #Rock messages
-  post 'projects/rockmessages/:pw_id/:rock_id' => 'projects#create_rockmessage', as: 'create_rockmessage'
-  patch 'projects/rockmessages/:pw_id/:rock_id/:id' => 'projects#update_rockmessage', as: 'update_rockmessage'
-  delete 'delete/rockmessages/:pw_id/:rock_id/:id' => 'projects#delete_rockmessage', as: 'delete_rockmessage'
+  post 'projects/rockmessages/:pw_id/:rock_id/:rocks_owner' => 'projects#create_rockmessage', as: 'create_rockmessage'
+  patch 'projects/rockmessages/:pw_id/:rock_id/:id/:rocks_owner' => 'projects#update_rockmessage', as: 'update_rockmessage'
+  delete 'delete/rockmessages/:pw_id/:rock_id/:id/:rocks_owner' => 'projects#delete_rockmessage', as: 'delete_rockmessage'
 
   # Milestones
-  post 'create/milestones/:pw_id/:rock_id' => 'projects#create_milestones', as: 'create_milestones'
-  patch 'update/milestones/:pw_id' => 'projects#update_milestones', as: 'update_milestones'
-  delete 'delete/milestones/:pw_id/:rock_id/:id' => 'projects#delete_milestones', as: 'delete_milestones'
+  post 'create/milestones/:pw_id/:rock_id/:rocks_owner' => 'projects#create_milestones', as: 'create_milestones'
+  patch 'update/milestones/:pw_id/:rocks_owner' => 'projects#update_milestones', as: 'update_milestones'
+  delete 'delete/milestones/:pw_id/:rock_id/:id/:rocks_owner' => 'projects#delete_milestones', as: 'delete_milestones'
 
   #Milestone messages
-  post 'projects/messages/:pw_id/:milestone_id' => 'projects#create_message', as: 'create_message'
-  patch 'projects/messages/:pw_id/:milestone_id/:id' => 'projects#update_message', as: 'update_message'
-  delete 'delete/messages/:pw_id/:rock_id/:milestone_id/:id' => 'projects#delete_message', as: 'delete_message'
+  post 'projects/messages/:pw_id/:milestone_id/:rocks_owner' => 'projects#create_message', as: 'create_message'
+  patch 'projects/messages/:pw_id/:milestone_id/:id/:rocks_owner' => 'projects#update_message', as: 'update_message'
+  delete 'delete/messages/:pw_id/:rock_id/:milestone_id/:id/:rocks_owner' => 'projects#delete_message', as: 'delete_message'
 
   # Sub Milestones
-  post 'create/submilestones/:pw_id/:rock_id/:milestone_id' => 'submilestones#create_submilestones', as: 'create_submilestones'
-  patch 'update/submilestones/:pw_id' => 'submilestones#update_submilestones', as: 'update_submilestones'
-  delete 'delete/submilestones/:pw_id/:rock_id/:milestone_id/:id' => 'submilestones#delete_submilestones', as: 'delete_submilestones'
+  post 'create/submilestones/:pw_id/:rock_id/:milestone_id/:rocks_owner' => 'submilestones#create_submilestones', as: 'create_submilestones'
+  patch 'update/submilestones/:pw_id/:rocks_owner' => 'submilestones#update_submilestones', as: 'update_submilestones'
+  delete 'delete/submilestones/:pw_id/:rock_id/:milestone_id/:id/:rocks_owner' => 'submilestones#delete_submilestones', as: 'delete_submilestones'
 
   # Sub Milestone messages
-  post 'submilestones/submessages/:pw_id/:milestone_id/:submilestone_id' => 'submilestones#create_submessage', as: 'create_submessage'
-  patch 'submilestones/submessages/:pw_id/:rock_id/:milestone_id/:submilestone_id/:id' => 'submilestones#update_submessage', as: 'update_submessage'
-  delete 'delete/submessages/:pw_id/:rock_id/:milestone_id/:submilestone_id/:id' => 'submilestones#delete_submessage', as: 'delete_submessage'
+  post 'submilestones/submessages/:pw_id/:milestone_id/:submilestone_id/:rocks_owner' => 'submilestones#create_submessage', as: 'create_submessage'
+  patch 'submilestones/submessages/:pw_id/:rock_id/:milestone_id/:submilestone_id/:id/:rocks_owner' => 'submilestones#update_submessage', as: 'update_submessage'
+  delete 'delete/submessages/:pw_id/:rock_id/:milestone_id/:submilestone_id/:id/:rocks_owner' => 'submilestones#delete_submessage', as: 'delete_submessage'
 
-
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
 end

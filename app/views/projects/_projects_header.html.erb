@@ -11,33 +11,28 @@
     <%= link_to "All Projects",view_allprojects_path({rocks_owner:"all_rocks"}), class:" #{'nav-active' if request.original_url.include? "allprojects"} p-1" %>
   <% end %>
   <button id="addDataBtn">Export to Excel</button>
-   <!-- Select Rock Owner -->
-    <% if request.fullpath.include?("allprojects") %>
-      <div class="mt-2">
-          <%= form_with(url: view_allprojects_path,style:"display:inline", method: :get) do |form| %>
-            <%= form.select :rocks_owner, options_for_select(@pw_emails),id:"rocks_owner" %>
-            <%= form.submit "Sort", style: "display: none;" %>
-          <% end %>
-      </div>
-    <% else %>
-      <div class="mt-2">
-          <%= form_with(url: view_projects_path,style:"display:inline", method: :get) do |form| %>
-            <%= form.select :rocks_owner, options_for_select(@pw_emails),id:"rocks_owner" %>
-            <%= form.submit "Sort", style: "display: none;" %>
-          <% end %>
-      </div>
+
+  <!-- Select Rock Owner -->
+  <div class="mt-2">
+    <%= form_tag do %>
+      <%= select_tag 'selected_option', options_for_select(@pw_emails), id:"page_select", role:"button" %>
     <% end %>
+  </div>
+
 </div>
 
 <script>
   $(document).ready(function(){
-    // When the select element changes
-    $("#rocks_owner").change(function () {
-      // Trigger the form submission
-      $(this).closest("form").submit();
-    });
+ 
     var owner_param = $("#owner-param").text().replace('.1','')
-    $("#rocks_owner").val(owner_param)
+    $("#page_select").val(owner_param)
+
+    $('#page_select').on('change', function() {
+      const selectedValue = $(this).val();
+      if (selectedValue) {
+        window.location.href = selectedValue;
+      }
+    });
   });
 
 </script>
