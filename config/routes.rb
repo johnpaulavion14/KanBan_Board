@@ -67,6 +67,7 @@ Rails.application.routes.draw do
  # Rocks
   post 'create/rocks/:pw_id/:rocks_owner' => 'projects#create_rocks', as: 'create_rocks'
   patch 'update/rocks/:pw_id/:rocks_owner' => 'projects#update_rocks', as: 'update_rocks'
+  patch 'update/rocks_reviewed_by/:pw_id/:rocks_owner' => 'projects#update_rocks_reviewedby', as: 'update_rocks_reviewedby'
   delete 'delete/rocks/:pw_id/:id/:rocks_owner' => 'projects#delete_rocks', as: 'delete_rocks'
 
   #Rock messages

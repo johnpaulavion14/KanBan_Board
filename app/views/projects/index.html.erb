@@ -15,6 +15,7 @@
         <th scope="col" style="min-width: 200px;" class="export-td">Status</th>
         <th scope="col" class="export-td">Output</th>
         <th scope="col" class="export-td">Remarks</th>
+        <th scope="col" style="min-width:100px;" class="export-td">Reviewed By</th>
         <th scope="col" style="min-width:100px;" class="export-td">Actions</th>
       </tr>
     </thead>
@@ -86,7 +87,7 @@
               <% end %>
             <% end %>
           </td>
-          <td class="rock-percent export-td"><span></span> %</td>
+          <td class="export-td rock-complete"><span class="complete"><%= rock.complete %></span> %</td>
           <td class="date-completed export-td">
             <% if rock.date_completed.nil? %>
               - -
@@ -94,18 +95,50 @@
               <%= rock.date_completed.strftime("%b %d, %Y") %>
             <% end %>
           </td>
-          <td class="rock-status com-status py-2 export-td">
+          <td class="status com-status px-2 export-td">
             <div class="d-flex align-items-center justify-content-center">
-              <div id="stat" class="px-3 py-2" style="flex:4"></div>
-              <% if rock.finish >= Date.today %>
-                <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="on track" class="track"><%= image_tag ("blue_circle.png")%></div>  
-              <% else %>
-                <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="off track" class="track"><%= image_tag ("red_circle.png")%></div>  
-              <% end %>
+                <% case rock.complete %>
+                  <% when 0 %>
+                    <div class="bg-light px-2 py-1" style="flex:4">Not Started</div>
+                  <% when 100 %>
+                    <div class="bg-success px-2 py-1" style="flex:4">Complete</div>
+                  <% else %>
+                    <div class="bg-warning px-2 py-1" style="flex:4">In Progress</div>
+                <% end %>
+
+                <% if rock.finish >= Date.today %>
+                  <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="on track" class="track"><%= image_tag ("blue_circle.png")%></div>  
+                <% else %>
+                  <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="off track" class="track"><%= image_tag ("red_circle.png")%></div>  
+                <% end %>
             </div>
           </td>
           <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= rock.output %></div></td>
           <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= rock.remarks %></div></td>
+          <td class="reviewed-by">
+            <div>
+              <% if rock.reviewed_by.include? "checked"  %>
+                <div class="btn btn-success">Acknowledge by <%= User.find_by(email:rock.reviewed_by.split.first).first_name %></div>
+              <% else %>
+                <% if current_user.email == rock.user.email && rock.reviewed_by == "" && rock.assigned.length != 1  %>
+                  <%= form_with url:update_rocks_reviewedby_path, method: :patch, local: true do |f| %>
+                    <%= f.hidden_field :id, value:rock.id %>
+                    <%= f.select(:reviewed_by,rock.assigned.drop(1)) %>
+                    <%= f.submit "Send", class:"btn btn-success" %>
+                  <% end %>
+                <% elsif current_user.email == rock.reviewed_by %>
+                  <%= form_with url:update_rocks_reviewedby_path, method: :patch, local: true do |f| %>
+                    <%= f.hidden_field :id, value:rock.id %>
+                    <%= f.submit "Acknowledge", class:"btn btn-warning" %>
+                  <% end %>
+                <% elsif  rock.reviewed_by != "" %>
+                  <div class="btn btn-danger">To be reviewed by <%= User.find_by(email:rock.reviewed_by).first_name %></div>
+                <% else %>
+                  <div>- -</div>
+                <% end %>
+              <% end %>
+            </div>
+          </td>
           <td class="notif-con export-td" role="button">
             <div class="notif">
               <% if rock.rockmessages.empty? %>
@@ -213,6 +246,7 @@
               </td>
               <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= milestone.output %></div></td>
               <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= milestone.remarks %></div></td>
+              <td></td>
               <td class="notif-con export-td" role="button" >
                 <div class="notif" style="margin-right: 15px;">
                   <% if milestone.messages.empty? %>
@@ -305,6 +339,7 @@
                   </td>
                   <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= submilestone.output %></div></td>
                   <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= submilestone.remarks %></div></td>
+                  <td></td>
                   <td class="notif-con export-td" role="button" >
                     <div class="notif" style="margin-right: 30px;">
                       <% if submilestone.submessages.empty? %>
@@ -335,6 +370,7 @@
               <td>-</td>
               <td>-</td>
               <td>-</td>
+              <td>-</td>
             </tr>
              <!-- Sub Milestone create form-->
             <tr class="new-submilestone create-subm-<%= milestone.id %>">
@@ -351,6 +387,7 @@
                 <td></td>
                 <td><%= f.text_area :output, class:"px-2", style:"height:100px; width:200px;" %></td>
                 <td><%= f.text_area :remarks, class:"px-2", style:"height:100px; width:200px;" %></td>
+                <td></td>
                 <td>
                   <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-subm-submit" %></span>
                   <span class="x-new-submilestone mx-2 btn btn-danger mt-1">Cancel</span>
@@ -361,6 +398,7 @@
         <% end %>
         <tr class="blank-milestone rock-<%= rock.id %>" role="button">
           <td></td>
+          <td>-</td>
           <td>-</td>
           <td>-</td>
           <td>-</td>
@@ -388,6 +426,7 @@
             <td></td>
             <td><%= f.text_area :output, class:"px-2", style:"height:100px; width:200px;" %></td>
             <td><%= f.text_area :remarks, class:"px-2", style:"height:100px; width:200px;" %></td>
+            <td></td>
             <td>
               <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-m-submit" %></span>
               <span class="x-new-milestone mx-2 btn btn-danger mt-1">Cancel</span>
@@ -395,6 +434,7 @@
           <% end %>
         </tr>
         <tr>
+          <td></td>
           <td></td>
           <td></td>
           <td></td>
@@ -427,11 +467,12 @@
           <td>>></td>
           <td><%= f.date_field :finish, required:true, class:"px-2" %></td>
           <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5}) %></td>
-          <td></td>
+          <td><%= f.number_field :complete, required:true, class:"px-2",style:"width: 65px; text-align:center",id:"complete", min:0, max:100, value:0 %> %</td>
           <td></td>
           <td></td>
           <td><%= f.text_area :output, class:"px-2", style:"height:100px; width:200px;" %></td>
           <td><%= f.text_area :remarks, class:"px-2", style:"height:100px; width:200px;" %></td>
+          <td></td>
           <td>
             <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-rock-submit" %></span>
             <span class="x-create mx-2 btn btn-danger mt-1">Cancel</span>
@@ -449,11 +490,12 @@
           <td>>></td>
           <td><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
           <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5}) %></td>
-          <td></td>
+          <td><%= f.number_field :complete, required:true, class:"px-2",style:"width: 65px; text-align:center",id:"complete", min:0, max:100 %> %</td>
           <td></td>
           <td></td>
           <td><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px; width:200px;" %></td>
           <td><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px; width:200px;" %></td>
+          <td></td>
           <td>
             <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-r-submit" %></span>
             <span class="x-update mx-2 btn btn-danger mt-1">Cancel</span>
@@ -476,6 +518,7 @@
           <td></td>
           <td><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px; width:200px;" %></td>
           <td><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px ;width:200px;" %></td>
+          <td></td>
           <td>
             <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-m-submit" %></span>
             <span class="x-update-milestone mx-2 btn btn-danger mt-1">Cancel</span>
@@ -499,6 +542,7 @@
           <td></td>
           <td><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px; width:200px;" %></td>
           <td><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px ;width:200px;" %></td>
+          <td></td>
           <td>
             <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-subm-submit" %></span>
             <span class="x-update-submilestone mx-2 btn btn-danger mt-1">Cancel</span>
@@ -564,6 +608,7 @@
         var start =  $(this).children(".start").text()
         var finish =  $(this).children(".finish").text()
         var assigned =  $(this).children("#rock-assigned").text()
+        var complete =  $(this).find(".complete").text()
         var output =  $(this).children(".output").text()
         var remarks =  $(this).children(".remarks").text()
         var rock_id =  $(this).children("#rock-id").text()
@@ -574,6 +619,7 @@
         $(".update-rock").find("#start").val(start)
         $(".update-rock").find("#finish").val(finish)
         $(".update-rock").find("#assigned").val(JSON.parse(assigned))
+        $(".update-rock").find("#complete").val(complete)
         $(".update-rock").find("#output").val(output)
         $(".update-rock").find("#remarks").val(remarks)
         $(".update-rock").find("#rock-id").val(rock_id)
@@ -601,27 +647,15 @@
       $(".all-rocks").show();
     });
 
-    // Complete and Status Column
-    $(".rock-percent").each( function(index,value) {
-      // Rock Percentage Value
-      let percent_sum = $(value).siblings("#percent-sum").text()
-      let m_count = $(value).siblings("#m-count").text()
-      let total_rock_percent = m_count == "0" ? 0 : (parseInt(percent_sum) / (100 *  parseInt(m_count))) * 100
-      $(value).children("span").text(total_rock_percent.toFixed(2))
-      // Status Value and Complete status style
-      let rock_percent = $(value).children("span").text()
-      if (rock_percent == "0.00") {
-        $(value).siblings(".rock-status").find("#stat").text("Not Started")
-        $(value).siblings(".rock-status").find("#stat").css("background-color", "silver")
-      }else if (rock_percent == "100.00") {
-        $(value).siblings(".rock-status").find("#stat").text("Complete")
-        $(value).siblings(".rock-status").find("#stat").css("background-color", "green")
-      }else {
-        $(value).siblings(".rock-status").find("#stat").text("In Progress")
-        $(value).siblings(".rock-status").find("#stat").css("background-color", "yellow")
+    // Hide Reviewed by td
+    $(".reviewed-by").children("div").css("display", "none")
+    $(".rock-complete").each( function(index,complete) {
+      if ($(complete).children(".complete").text() == "100"){
+        $(complete).siblings(".reviewed-by").children("div").show()
       }
     });
 
+    // Strike through complete status Rock, Milestone, and Submilestone
     $(".com-status").each( function(index,value) {
       if ($(value).text().replace(/\s/g, "") == "Complete"){
         $(value).parents("tr").children("td").not(".notif-con").css("text-decoration", "line-through")

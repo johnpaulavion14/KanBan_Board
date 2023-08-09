@@ -15,7 +15,7 @@
       <tr role="button" class="all-workspace">
         <td style="display: none;" id="workspace-id"><%= folder.id %></td>
         <th scope="row"><%= index + 1%></th>
-        <td class="folder-name"><%= link_to folder.folder_name, view_projects_path(folder.id,{rocks_owner:"all_rocks"}) %></td>
+        <td class="folder-name"><%= link_to folder.folder_name, view_projects_path(folder.id,{rocks_owner:current_user.id}) %></td>
         <td class="assigned"><%= folder.assigned %></td>
         <td >
           <% if folder.user == current_user %>
