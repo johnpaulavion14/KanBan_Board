@@ -95,4 +95,15 @@ Rails.application.routes.draw do
   patch 'submilestones/submessages/:pw_id/:rock_id/:milestone_id/:submilestone_id/:id/:rocks_owner' => 'submilestones#update_submessage', as: 'update_submessage'
   delete 'delete/submessages/:pw_id/:rock_id/:milestone_id/:submilestone_id/:id/:rocks_owner' => 'submilestones#delete_submessage', as: 'delete_submessage'
 
+  # Sub2milestones
+  post 'create/sub2milestones/:pw_id/:rock_id/:milestone_id/:submilestone_id/:rocks_owner' => 'sub2milestones#create_sub2milestones', as: 'create_sub2milestones'
+  patch 'update/sub2milestones/:pw_id/:rocks_owner' => 'sub2milestones#update_sub2milestones', as: 'update_sub2milestones'
+  delete 'delete/sub2milestones/:pw_id/:rock_id/:milestone_id/:submilestone_id/:id/:rocks_owner' => 'sub2milestones#delete_sub2milestones', as: 'delete_sub2milestones'
+
+  # Sub2milestone messages
+  post 'sub2milestones/sub2messages/:pw_id/:milestone_id/:submilestone_id/:rocks_owner' => 'sub2milestones#create_sub2message', as: 'create_sub2message'
+  patch 'sub2milestones/sub2messages/:pw_id/:rock_id/:milestone_id/:submilestone_id/:id/:rocks_owner' => 'sub2milestones#update_sub2message', as: 'update_sub2message'
+  delete 'delete/sub2messages/:pw_id/:rock_id/:milestone_id/:submilestone_id/:id/:rocks_owner' => 'sub2milestones#delete_sub2message', as: 'delete_sub2message'
+
+
 end

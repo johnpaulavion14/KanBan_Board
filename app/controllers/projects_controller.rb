@@ -47,6 +47,7 @@ class ProjectsController < ApplicationController
    
     @milestones = Milestone.all.order(start: :asc)
     @submilestones = Submilestone.all.order(start: :asc)
+    @sub2milestones = Sub2milestone.all.order(start: :asc)
     @users = User.all.pluck(:email)
     @all_users = User.all
 
@@ -76,6 +77,7 @@ class ProjectsController < ApplicationController
 
         @milestones = Milestone.all.order(start: :asc)
         @submilestones = Submilestone.all.order(start: :asc)
+        @sub2milestones = Sub2milestone.all.order(start: :asc)
         @users = User.all.pluck(:email)
         @all_users = User.all
       end

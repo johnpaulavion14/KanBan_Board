@@ -34,7 +34,7 @@ class SubmilestonesController < ApplicationController
         else
           Milestone.find(params[:milestone_id]).rock.update(date_completed:"")
         end
-a        format.html { redirect_to view_projects_path({rock_id:params[:rock_id],milestone_id: params[:milestone_id]}), notice: "You have successfully create a new milestone" }
+        format.html { redirect_to view_projects_path({rock_id:params[:rock_id],milestone_id: params[:milestone_id]}), notice: "You have successfully create a new milestone" }
       else
         redirect_to view_projects_path
       end

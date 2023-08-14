@@ -141,6 +141,31 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_09_030928) do
     t.string "reviewed_by", default: ""
   end
 
+  create_table "sub2messages", force: :cascade do |t|
+    t.text "message"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "time"
+    t.integer "sub2milestone_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "sub2milestones", force: :cascade do |t|
+    t.string "task_name"
+    t.date "start"
+    t.date "finish"
+    t.text "assigned"
+    t.integer "complete"
+    t.date "date_completed"
+    t.text "output"
+    t.text "remarks"
+    t.integer "submilestone_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "submessages", force: :cascade do |t|
     t.text "message"
     t.string "first_name"
