@@ -36,9 +36,14 @@ class ProjectWorkspacesController < ApplicationController
       rock.milestones.each do |milestone|
         # delete submilestone messages 
         milestone.submilestones.each do |submilestone|
+          # delete sub2milestones
+          submilestone.sub2milestones.destroy_all
+          # delete submilestone messages 
           submilestone.submessages.destroy_all
         end
+        # delete milestone messages 
         milestone.messages.destroy_all
+        # delete submilestones
         milestone.submilestones.destroy_all
       end
       # delete rock messages
@@ -48,6 +53,7 @@ class ProjectWorkspacesController < ApplicationController
       rock.destroy
     end
     respond_to do |format|
+      # delete workspace
       if current_user.project_workspaces.find(params[:id]).destroy
         format.html { redirect_to projects_dashboard_path, notice: "You have successfully deleted your workspace" }
       else

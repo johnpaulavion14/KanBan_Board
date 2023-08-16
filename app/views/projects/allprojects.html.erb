@@ -80,7 +80,7 @@
               <%= rock.date_completed.strftime("%b %d, %Y") %>
             <% end %>
           </td>
-          <td class="status com-status px-2 export-td">
+          <td class="status com-status export-td">
             <div class="d-flex align-items-center justify-content-center">
                 <% case rock.complete %>
                   <% when 0 %>
@@ -176,7 +176,7 @@
                   <%= milestone.date_completed.strftime("%b %d, %Y") %>
                 <% end %>
               </td>
-              <td class="status com-status px-4 export-td">
+              <td class="status com-status export-td" style="padding-left: 1.5rem;">
                 <div class="d-flex align-items-center justify-content-center">
                   <% case milestone.complete %>
                     <% when 0 %>
@@ -253,7 +253,7 @@
                       <%= submilestone.date_completed.strftime("%b %d, %Y") %>
                     <% end %>
                   </td>
-                  <td class="status com-status px-5 export-td">
+                  <td class="status com-status export-td" style="padding-left: 3rem;">
                     <div class="d-flex align-items-center justify-content-center">
                         <% case submilestone.complete %>
                           <% when 0 %>
@@ -274,34 +274,16 @@
                   <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= submilestone.output %></div></td>
                   <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= submilestone.remarks %></div></td>
                   <td></td>
-                  <td class="notif-con export-td" role="button" >
-                    <div class="notif" style="margin-left: 30px;">
-                    </div>
-                  </td>
+                  <% if submilestone.submessages.empty? %>
+                    <td class="notif-con export-td" ><%= image_tag ("message.png"), class:"message-icon project-icon m-message", style:"margin-left: 60px;" %></td>
+                  <% else %>
+                    <td class="notif-con export-td" ><%= image_tag ("message_1.png"), class:"message-icon project-icon m-message", style:"margin-left: 60px;" %></td>
+                  <% end %>
                 </tr>
                  <!-- All Sub2milestones -->
                  <% @sub2milestones.each do |sub2milestone| %> 
                   <% if submilestone.id == sub2milestone.submilestone.id %>
                     <tr class="all-sub2milestones subm-<%= submilestone.id %> <%= sub2milestone.assigned.include?(current_user.email) ? 'sub2m-dblclick' : 'bg-light' %> export-tr" style="vertical-align: middle;" id="sub2m-tr">      
-                      <td style="display: none;" id="is_subm">submilestone</td>
-                      <td style="display: none;" id="rock-id"><%= rock.id %></td>
-                      <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
-                      <td style="display: none;" id="submilestone-id"><%= submilestone.id %></td>
-                      <td style="display: none;" id="sub2milestone-id"><%= sub2milestone.id %></td>
-                      <td style="display: none;" id="pw-id"><%= rock.project_workspace.id %></td>
-                      <td class="start d-none"><%= sub2milestone.start %></td>
-                      <td class="finish d-none"><%= sub2milestone.finish %></td>
-                      <td style="display: none;" id="sub2milestone-assigned"><%= sub2milestone.assigned %></td>
-                      <td class="output d-none"><%= sub2milestone.output %></td>
-                      <td class="remarks d-none"><%= sub2milestone.remarks %></td>
-                        <!-- messages -->
-                      <td style="display: none;" class="m-current-user"><%= current_user.first_name %> <%= current_user.last_name%></td>
-                      <td style="display: none;" class="message-id"><%= submilestone.submessages.order(created_at: :asc).pluck(:id) %></td>
-                      <td style="display: none;" class="milestone-messages"><%= submilestone.submessages.order(created_at: :asc).pluck(:message) %></td>
-                      <td style="display: none;" class="message-firstname"><%= submilestone.submessages.order(created_at: :asc).pluck(:first_name) %></td>
-                      <td style="display: none;" class="message-lastname"><%= submilestone.submessages.order(created_at: :asc).pluck(:last_name) %></td>
-                      <td style="display: none;" class="message-time"><%= submilestone.submessages.order(created_at: :asc).pluck(:time) %></td>
-                      <!-- display none -->
                       <td class="task-name export-td" style="text-align: left; min-width: 100px; padding-left:8rem"><%= sub2milestone.task_name %></td>
                       <td class="export-td dayordays">
                         <%= (sub2milestone.start.to_date..sub2milestone.finish.to_date).count do |date|
@@ -358,20 +340,11 @@
                       <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= sub2milestone.output %></div></td>
                       <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= sub2milestone.remarks %></div></td>
                       <td></td>
-                      <td class="notif-con export-td" role="button" >
-                        <div class="notif" style="margin-right: 30px;">
-                          <% if sub2milestone.sub2messages.empty? %>
-                            <span id="sm-<%= sub2milestone.id %>"><%= image_tag ("message.png"), class:"project-icon m-message" %></span>
-                          <% else %>
-                            <span id="sm-<%= sub2milestone.id %>"><%= image_tag ("message_1.png"), class:"project-icon m-message" %></span>
-                          <% end %>
-                          <% if sub2milestone.user_id == current_user.id %>
-                            <%= link_to delete_sub2milestones_path(params[:pw_id],rock.id,milestone.id,submilestone.id,sub2milestone.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
-                              <%= image_tag ("delete.png"), class:"project-icon mb-1"%>
-                            <% end %>
-                          <% end %>
-                        </div>
-                      </td>
+                      <% if sub2milestone.sub2messages.empty? %>
+                        <td class="notif-con export-td" ><%= image_tag ("message.png"), class:"message-icon project-icon m-message", style:"margin-left: 90px;" %></td>
+                      <% else %>
+                        <td class="notif-con export-td" ><%= image_tag ("message_1.png"), class:"message-icon project-icon m-message", style:"margin-left: 90px;" %></td>
+                      <% end %>                      
                     </tr>
                   <% end %>
                 <% end %><!--sub2milestone end -->
@@ -479,7 +452,7 @@ $(document).ready(function(){
       });
     });
   });
-
+  // -----SubMilestone Section------
   // Show / Hide / Create Sub Milestones
   $(".m-minus-icon").css("display", "none")
   $(".all-submilestones").css("display", "none")

@@ -36,7 +36,7 @@ class ProjectsController < ApplicationController
     @ids_array.each do |id|
       if params_gsub == id.to_s
         @rocks = []
-        user_rocks = User.find(id).rocks
+        user_rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(created_at: :asc).where(user_id: id)
         user_rocks.each do |rock| 
           if rock.assigned.include? current_user.email
             @rocks.push(rock)
@@ -110,11 +110,6 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if Rock.find(params[:id]).update(rock_params)
         Rock.find(params[:id]).update(assigned:@assigned_array)
-        if params[:complete] == "100"
-          Rock.find(params[:id]).update(date_completed:Date.today)
-        else
-          Rock.find(params[:id]).update(date_completed:"")
-        end
         format.html { redirect_to view_projects_path, notice: "You have successfully updated your project" }
       else
         redirect_to view_projects_path
@@ -138,19 +133,26 @@ class ProjectsController < ApplicationController
   end
 
   def delete_rocks
-    # delete rock messages
-    Rock.find(params[:id]).rockmessages.destroy_all
+   
     # delete milestone messages,submilestones messages and submilestones
     allmilestone = Rock.find(params[:id]).milestones
     allmilestone.each do |milestone|
       milestone.submilestones.each do |submilestone|
+        # delete sub2milestones
+        submilestone.sub2milestones.destroy_all
+        # delete submilestones ssubmessages
         submilestone.submessages.destroy_all
       end
-      milestone.messages.destroy_all
+      # delete submilestones
       milestone.submilestones.destroy_all
+      # delete milestones messages
+      milestone.messages.destroy_all
     end
     # delete milestones
     Rock.find(params[:id]).milestones.destroy_all
+     # delete rock messages
+    Rock.find(params[:id]).rockmessages.destroy_all
+    # delete rock
     respond_to do |format|
       if Rock.find(params[:id]).destroy
         format.html { redirect_to view_projects_path, notice: "You have successfully deleted you rock" }
@@ -169,18 +171,6 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if @milestone.save
         Rock.find(params[:rock_id]).milestones.last.update(assigned:@assigned_array)
-        if params[:complete] == "100"
-          Rock.find(params[:rock_id]).milestones.last.update(date_completed:Date.today)
-        end
-        if Rock.find(params[:rock_id]).milestones.average(:complete) == 100
-          Rock.find(params[:rock_id]).update(date_completed:Date.today)
-        else
-          Rock.find(params[:rock_id]).update(date_completed:"")
-        end
-        percent_sum = Rock.find(params[:rock_id]).milestones.pluck(:complete).reduce(:+) * 100
-        subm_count = Rock.find(params[:rock_id]).milestones.count * 100
-        total_m_percent = percent_sum / subm_count
-        Rock.find(params[:rock_id]).update(complete: total_m_percent)
         format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully create a new milestone" }
       else
         redirect_to view_projects_path
@@ -197,20 +187,6 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if @milestone.update(milestone_params)
         @milestone.update(assigned:@assigned_array)
-        if params[:complete] == "100"
-          @milestone.update(date_completed:Date.today)
-        else
-          @milestone.update(date_completed:"")
-        end
-        if Rock.find(params[:rock_id]).milestones.average(:complete) == 100
-          Rock.find(params[:rock_id]).update(date_completed:Date.today)
-        else
-          Rock.find(params[:rock_id]).update(date_completed:"")
-        end
-        percent_sum = Rock.find(params[:rock_id]).milestones.pluck(:complete).reduce(:+) * 100
-        subm_count = Rock.find(params[:rock_id]).milestones.count * 100
-        total_m_percent = percent_sum / subm_count
-        Rock.find(params[:rock_id]).update(complete: total_m_percent)
         format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully updated your project" }
       else
         redirect_to view_projects_path
@@ -222,26 +198,20 @@ class ProjectsController < ApplicationController
   def delete_milestones
     @all_milestones = Rock.find(params[:rock_id]).milestones
     @milestone = current_user.milestones.find(params[:id])
-    # delete submilestone messages
     @milestone.submilestones.each do |submilestone|
+      # delete sub2milestones
+      submilestone.sub2milestones.destroy_all
+      # delete submilestones
+      submilestone.destroy
+      # delete submilestones submessages
       submilestone.submessages.destroy_all
     end
-    # delete submilestones
-    @milestone.submilestones.destroy_all
     # delete milestone messages
     @milestone.messages.destroy_all
+    # delete milestone 
     respond_to do |format|
       if @milestone.destroy
-        if Rock.find(params[:rock_id]).milestones.average(:complete) == 100
-          Rock.find(params[:rock_id]).update(date_completed:Date.today)
-        else
-          Rock.find(params[:rock_id]).update(date_completed:"")
-        end
-         # Update % complete of Rock
-         percent_sum = @all_milestones.blank? ? 0 : @all_milestones.pluck(:complete).reduce(:+) * 100
-         subm_count = @all_milestones.blank? ? 0 : @all_milestones.count * 100
-         total_m_percent = @all_milestones.blank? ? 0 : percent_sum / subm_count
-         Rock.find(params[:rock_id]).update(complete: total_m_percent)
+        @milestone.handle_complete_change
         format.html { redirect_to view_projects_path({rock_id: params[:rock_id]}), notice: "You have successfully deleted you milestone" }
       else
         redirect_to view_projects_path({rock_id: params[:rock_id]})

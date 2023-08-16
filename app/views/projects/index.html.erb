@@ -276,6 +276,13 @@
                   <td style="display: none;" id="submilestone-assigned"><%= submilestone.assigned %></td>
                   <td class="output d-none"><%= submilestone.output %></td>
                   <td class="remarks d-none"><%= submilestone.remarks %></td>
+                  <td class="next-sub2date d-none" >
+                    <% if submilestone.sub2milestones.blank? %>
+                      <%= submilestone.start %>
+                    <% else %>
+                      <%= submilestone.sub2milestones.order(start: :asc).last.finish + 1 %>
+                    <% end %>
+                  </td>                  
                     <!-- messages -->
                   <td style="display: none;" class="m-current-user"><%= current_user.first_name %> <%= current_user.last_name%></td>
                   <td style="display: none;" class="message-id"><%= submilestone.submessages.order(created_at: :asc).pluck(:id) %></td>
@@ -284,7 +291,7 @@
                   <td style="display: none;" class="message-lastname"><%= submilestone.submessages.order(created_at: :asc).pluck(:last_name) %></td>
                   <td style="display: none;" class="message-time"><%= submilestone.submessages.order(created_at: :asc).pluck(:time) %></td>
                   <!-- display none -->
-                  <td class="task-name export-td" id="submplus-<%= milestone.id %>" style="text-align: left; min-width: 100px; padding-left:6rem">
+                  <td class="task-name export-td" id="submplus-<%= submilestone.id %>" style="text-align: left; min-width: 100px; padding-left:6rem">
                     <% if submilestone.sub2milestones.blank? %>
                       <%= image_tag ("plus_purple_blank.png"),role:"button",class:"subm-plus-icon" %>
                       <%= image_tag ("minus_purple_blank.png"),role:"button",class:"subm-minus-icon" %>
@@ -591,13 +598,6 @@
           <td></td>
         </tr>
       <% end %><!--Rock end-->
-      <!-- url params -->
-      <div class="d-none rock-m-id"><%= params[:rock_m_id] %></div>
-      <div class="d-none rock-params"><%= params[:rock_id] %></div>
-      <div class="d-none milestone-params"><%= params[:milestone_id] %></div>
-      <div class="d-none milestone-m-id"><%= params[:mm_id] %></div>
-      <div class="d-none submilestone-m-id"><%= params[:sm_id] %></div>
-      <div class="d-none rocks-owner"><%= params[:rocks_owner] %></div>
       <!-- Rocks Create and Update -->
       <div id="current-user-email" class="d-none"><%= current_user.email %></div>
       <tr class="new-rock">
@@ -715,6 +715,15 @@
             <span class="x-update-sub2milestone mx-2 btn btn-danger mt-1">Cancel</span>
           </td>
         <% end %>
+        <!-- url params plus icon-->
+        <div class="d-none rock-params"><%= params[:rock_id] %></div>
+        <div class="d-none milestone-params"><%= params[:milestone_id] %></div>
+        <div class="d-none subm-params"><%= params[:subm_id] %></div>
+        <!-- url params messages-->
+        <div class="d-none rock-m-id"><%= params[:rock_m_id] %></div>
+        <div class="d-none milestone-m-id"><%= params[:mm_id] %></div>
+        <div class="d-none submilestone-m-id"><%= params[:sm_id] %></div>
+        <div class="d-none rocks-owner"><%= params[:rocks_owner] %></div>
       </tr>      
     </tbody>
   </table>
@@ -1202,21 +1211,11 @@
         $(".update-sub2milestone").find("#milestone-id").val(milestone_id)
         $(".update-sub2milestone").find("#submilestone-id").val(submilestone_id)
         $(".update-sub2milestone").find("#sub2milestone-id").val(sub2milestone_id)
-        // show milestones
-        // $(`.mile-${submilestone_id}`).show();
-        // show update sub2milestone form
-        // $(".update-sub2milestone").prev("tr").not(".update-submilestone").show()
+        // show sub2milestones
+        $(`.subm-${submilestone_id}`).show();
         $(this).hide()
         $(".update-sub2milestone").insertAfter($(this))
         $(".update-sub2milestone").show();
-
-        // // get start and finish date
-        // var start_date = $("#mstart-" + milestone_id).text()
-        // var finish_date = $("#mfinish-" + milestone_id).text()
-        // $(".update-submilestone").find("#start").attr("min", start_date);
-        // $(".update-submilestone").find("#start").attr("max", finish_date);
-        // $(".update-submilestone").find("#finish").attr("min", start_date);
-        // $(".update-submilestone").find("#finish").attr("max", finish_date);
 
         // trigger escape and enter key
         $(document).off('keydown');
@@ -1238,9 +1237,9 @@
     $(".blank-sub2milestone").each( function(index,blank) {
       $(blank).click(function(event){
         // assign next date
-        // var next_date =  $('.all-milestones').eq(index).children(".next-smdate").text().replace(/\s/g, "")
-        // $(".new-submilestone").find("#start").val(next_date)
-        // $(".new-submilestone").find("#finish").val(next_date)
+        var next_date =  $('.all-submilestones').eq(index).children(".next-sub2date").text().replace(/\s/g, "")
+        $(".new-sub2milestone").find("#start").val(next_date)
+        $(".new-sub2milestone").find("#finish").val(next_date)
         // copy assigned from milestone
         var class_length = $(this).attr('class').split(/\s+/).length
         var submilestone = "." + $(this).attr('class').split(/\s+/)[class_length - 1]
@@ -1277,8 +1276,6 @@
         $(this).parents(".new-sub2milestone").prev(".blank-sub2milestone").show()
       });
     });
-
-
 
     // Message Section
     $(".message-bg").css("display", "none")
@@ -1369,18 +1366,22 @@
         $(".message-con").hide()
     })
 
-// url params
-  var rm_id = $(".rock-m-id").text().replace('.1','')
+// url params plus icon
   var r_id = $(".rock-params").text().replace('.1','')
   var m_id = $(".milestone-params").text().replace('.1','')
+  var subm_id = $(".subm-params").text().replace('.1','')
+// url params messages
+  var rm_id = $(".rock-m-id").text().replace('.1','')
   var mm_id = $(".milestone-m-id").text().replace('.1','')
   var sm_id = $(".submilestone-m-id").text().replace('.1','')
   
 // Trigger plus icon after create/delete/update submilestones
   var rockplus = "#rockplus-" + r_id 
   var mileplus = "#mileplus-" + m_id
+  var submplus = "#submplus-" + subm_id
   $(rockplus).find(".plus-icon").trigger("click")
   $(mileplus).find(".m-plus-icon").trigger("click")
+  $(submplus).find(".subm-plus-icon").trigger("click")
 
 
 // Trigger message after create/delete/update
