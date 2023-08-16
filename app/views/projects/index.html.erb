@@ -118,7 +118,7 @@
           <td class="reviewed-by">
             <div>
               <% if rock.reviewed_by.include? "checked"  %>
-                <div class="btn btn-success">Acknowledged by <%= User.find_by(email:rock.reviewed_by.split.first).first_name %></div>
+                <div class="btn btn-success export-td">Acknowledged by <%= User.find_by(email:rock.reviewed_by.split.first).first_name %></div>
               <% else %>
                 <% if current_user.email == rock.user.email && rock.reviewed_by == "" && rock.assigned.length != 1  %>
                   <%= form_with url:update_rocks_reviewedby_path, method: :patch, local: true do |f| %>
@@ -128,11 +128,12 @@
                   <% end %>
                 <% elsif current_user.email == rock.reviewed_by %>
                   <%= form_with url:update_rocks_reviewedby_path, method: :patch, local: true do |f| %>
+                    <div class="d-none export-td">Acknowledge</div>
                     <%= f.hidden_field :id, value:rock.id %>
                     <%= f.submit "Acknowledge", class:"btn btn-warning" %>
                   <% end %>
                 <% elsif  rock.reviewed_by != "" %>
-                  <div class="btn btn-danger">To be reviewed by <%= User.find_by(email:rock.reviewed_by).first_name %></div>
+                  <div class="btn btn-danger export-td">To be reviewed by <%= User.find_by(email:rock.reviewed_by).first_name %></div>
                 <% else %>
                   <div>- -</div>
                 <% end %>
@@ -1410,16 +1411,22 @@
             }
           }else if ($(tr).attr('id') == "milestone-tr"){
             if ($(td).attr('class').includes("task-name")){
-              td_array.push("     - " + trim_text)
+              td_array.push("     -  " + trim_text)
             }else{
             td_array.push(trim_text)
             }
           }else if($(tr).attr('id') == "subm-tr"){
             if ($(td).attr('class').includes("task-name")){
-              td_array.push("           " + trim_text)
+              td_array.push("        -  " + trim_text)
             }else{
             td_array.push(trim_text)
             }
+          }else if($(tr).attr('id') == "sub2m-tr"){
+            if ($(td).attr('class').includes("task-name")){
+              td_array.push("               " + trim_text)
+            }else{
+            td_array.push(trim_text)
+            }            
           }else{
             td_array.push(trim_text)
           }

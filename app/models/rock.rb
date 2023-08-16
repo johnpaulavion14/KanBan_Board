@@ -5,18 +5,17 @@ class Rock < ApplicationRecord
   has_many :milestones
   has_many :rockmessages
 
-  after_save :update_column_data, :update_column_data
+  after_save :update_column_data
 
   private
 
   def update_column_data
     reviewed_by_value = complete != 100 ? "" : reviewed_by
     self.update_columns(reviewed_by: reviewed_by_value)
-  end
 
-  def update_column_data
-    # Date completed of Rock
+     # Date completed of Rock
     date_comp = complete == 100 ? Date.today : ""
     self.update_columns(date_completed: date_comp)
   end
+
 end

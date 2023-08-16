@@ -103,10 +103,10 @@
           <td class="reviewed-by">
             <div>
               <% if rock.reviewed_by.include? "checked"  %>
-                <div class="btn btn-success">Acknowledged by <%= User.find_by(email:rock.reviewed_by.split.first).first_name %></div>
+                <div class="btn btn-success export-td">Acknowledged by <%= User.find_by(email:rock.reviewed_by.split.first).first_name %></div>
               <% else %>
                 <% if  rock.reviewed_by != "" %>
-                  <div class="btn btn-danger">To be reviewed by <%= User.find_by(email:rock.reviewed_by).first_name %></div>
+                  <div class="btn btn-danger export-td">To be reviewed by <%= User.find_by(email:rock.reviewed_by).first_name %></div>
                 <% else %>
                   <div>- -</div>
                 <% end %>
@@ -584,20 +584,26 @@ $(document).ready(function(){
           if ($(td).attr('class').includes("task-name")){
             td_array.push(" * " + trim_text)
           }else{
-          td_array.push(trim_text)
+            td_array.push(trim_text)
           }
         }else if ($(tr).attr('id') == "milestone-tr"){
           if ($(td).attr('class').includes("task-name")){
-            td_array.push("     - " + trim_text)
+            td_array.push("     -  " + trim_text)
           }else{
           td_array.push(trim_text)
           }
         }else if($(tr).attr('id') == "subm-tr"){
           if ($(td).attr('class').includes("task-name")){
-            td_array.push("           " + trim_text)
+            td_array.push("        -  " + trim_text)
           }else{
           td_array.push(trim_text)
           }
+        }else if($(tr).attr('id') == "sub2m-tr"){
+          if ($(td).attr('class').includes("task-name")){
+            td_array.push("               " + trim_text)
+          }else{
+          td_array.push(trim_text)
+          }            
         }else{
           td_array.push(trim_text)
         }
@@ -644,7 +650,7 @@ $(document).ready(function(){
     addDataToExcel();
   });
 });
-  
+
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
