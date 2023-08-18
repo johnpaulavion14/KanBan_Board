@@ -28,6 +28,9 @@ class CardsController < ApplicationController
 
     respond_to do |format|
       if @card.save
+        if Card.last.card_title.downcase.include?("scorecard")
+          Card.last.addcards.create(card_name:Card.last.card_title.capitalize, desc:"description")
+        end
         format.html { redirect_to view_cards_path({page_scroll:@page_value}), notice: "Card was successfully created." }
       else
         format.html { render :new, status: :unprocessable_entity }
