@@ -71,7 +71,7 @@ class ProjectsController < ApplicationController
 
         @ids_array.each do |id|
           if params[:rocks_owner] == id.to_s
-            @rocks = User.find(id).rocks.order(finish: :asc)
+            @rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc).where(user_id: id)
           end
         end
 
