@@ -17,7 +17,7 @@ class ProjectsController < ApplicationController
     @rocks = []
     @pw_emails = []
     @ids_array = []
-    rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(start: :asc)
+    rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc)
     rocks.all.each do |rock|
       if rock.assigned.include? current_user.email
         @rocks.push(rock)
@@ -36,7 +36,7 @@ class ProjectsController < ApplicationController
     @ids_array.each do |id|
       if params_gsub == id.to_s
         @rocks = []
-        user_rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(created_at: :asc).where(user_id: id)
+        user_rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc).where(user_id: id)
         user_rocks.each do |rock| 
           if rock.assigned.include? current_user.email
             @rocks.push(rock)
@@ -56,7 +56,7 @@ class ProjectsController < ApplicationController
   def allprojects
     User.all.each do |user|
       if user.admin == true || user.host == true || current_user.email == "jpbocatija@cem-inc.org.ph"
-        @rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(start: :asc)
+        @rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc)
         @pw_emails = []
         @ids_array = []
         assigned_array = ProjectWorkspace.find(params[:pw_id]).assigned
@@ -71,7 +71,7 @@ class ProjectsController < ApplicationController
 
         @ids_array.each do |id|
           if params[:rocks_owner] == id.to_s
-            @rocks = User.find(id).rocks
+            @rocks = User.find(id).rocks.order(finish: :asc)
           end
         end
 

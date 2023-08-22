@@ -76,11 +76,15 @@
               <% ProjectWorkspace.find(params[:format]).assigned.each do |email| %>
                 <% if email == "lvcagadas@cem-inc.org.ph" %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
-                  <% ProjectWorkspace.find(params[:format]).rocks.where(user_id:User.find_by(email:email).id).each_with_index do |rock, index| %>
+                  <% ProjectWorkspace.find(params[:format]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).each_with_index do |rock, index| %>
                     <div class="d-flex">
                       <div style="width: 50%;">
                         <span><%= index + 1 %>. </span>
-                        <span><%= rock.task_name %></span>
+                        <% if current_user.admin == true || current_user.host == true || current_user.email == "jpbocatija@cem-inc.org.ph" %>
+                          <span><%= link_to rock.task_name, view_allprojects_path(params[:format],User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"scorecards-rock" %></span>
+                        <% else %>
+                          <span><%= rock.task_name %></span>
+                        <% end %>
                       </div>
                       <div style="width: 50%;">
                         <span style="font-size: 12px;">| <i><%= rock.start.strftime("%b %d,%Y") %> - <%= rock.finish.strftime("%b %d,%Y") %></i></span>
@@ -92,7 +96,7 @@
                         <span>| <b><%= rock.complete %>%</b></span>
                         <span style="font-size: 12px;">| 
                           <% if rock.complete == 0 %>
-                            <span style="background-color: red;padding:0 5px; border-radius:3px;">not started</span>
+                            <span style="background-color: silver; padding:0 5px; border-radius:3px;">not started</span>
                           <% elsif rock.complete == 100 %>
                             <span style="background-color: green;padding:0 5px; border-radius:3px;">complete</span>
                           <% else %>
@@ -122,11 +126,15 @@
               <% ProjectWorkspace.find(params[:format]).assigned.each do |email| %>
                 <% if ["jpbocatija@cem-inc.org.ph","rmina@cem-inc.org.ph","rcjamilano@cem-inc.org.ph"].include?(email) %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
-                  <% ProjectWorkspace.find(params[:format]).rocks.where(user_id:User.find_by(email:email).id).each_with_index do |rock, index| %>
+                  <% ProjectWorkspace.find(params[:format]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).each_with_index do |rock, index| %>
                     <div class="d-flex">
                       <div style="width: 50%;">
                         <span><%= index + 1 %>. </span>
-                        <span><%= rock.task_name %></span>
+                        <% if current_user.admin == true || current_user.host == true || current_user.email == "jpbocatija@cem-inc.org.ph" %>
+                          <span><%= link_to rock.task_name, view_allprojects_path(params[:format],User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"scorecards-rock" %></span>
+                        <% else %>
+                          <span><%= rock.task_name %></span>
+                        <% end %>                        
                       </div>
                       <div style="width: 50%;">
                         <span style="font-size: 12px;">| <i><%= rock.start.strftime("%b %d,%Y") %> - <%= rock.finish.strftime("%b %d,%Y") %></i></span>
@@ -138,7 +146,7 @@
                         <span>| <b><%= rock.complete %>%</b></span>
                         <span style="font-size: 12px;">| 
                           <% if rock.complete == 0 %>
-                            <span style="background-color: red;padding:0 5px; border-radius:3px;">not started</span>
+                            <span style="background-color: silver;padding:0 5px; border-radius:3px;">not started</span>
                           <% elsif rock.complete == 100 %>
                             <span style="background-color: green;padding:0 5px; border-radius:3px;">complete</span>
                           <% else %>
@@ -168,11 +176,15 @@
               <% ProjectWorkspace.find(params[:format]).assigned.each do |email| %>
                 <% if ["gsibayan@cem-inc.org.ph","fviceral@cem-inc.org.ph"].include?(email) %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
-                  <% ProjectWorkspace.find(params[:format]).rocks.where(user_id:User.find_by(email:email).id).each_with_index do |rock, index| %>
+                  <% ProjectWorkspace.find(params[:format]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).each_with_index do |rock, index| %>
                     <div class="d-flex">
                       <div style="width: 50%;">
                         <span><%= index + 1 %>. </span>
-                        <span><%= rock.task_name %></span>
+                        <% if current_user.admin == true || current_user.host == true || current_user.email == "jpbocatija@cem-inc.org.ph" %>
+                          <span><%= link_to rock.task_name, view_allprojects_path(params[:format],User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"scorecards-rock" %></span>
+                        <% else %>
+                          <span><%= rock.task_name %></span>
+                        <% end %>
                       </div>
                       <div style="width: 50%;">
                         <span style="font-size: 12px;">| <i><%= rock.start.strftime("%b %d,%Y") %> - <%= rock.finish.strftime("%b %d,%Y") %></i></span>
@@ -184,7 +196,7 @@
                         <span>| <b><%= rock.complete %>%</b></span>
                         <span style="font-size: 12px;">| 
                           <% if rock.complete == 0 %>
-                            <span style="background-color: red;padding:0 5px; border-radius:3px;">not started</span>
+                            <span style="background-color: silver;padding:0 5px; border-radius:3px;">not started</span>
                           <% elsif rock.complete == 100 %>
                             <span style="background-color: green;padding:0 5px; border-radius:3px;">complete</span>
                           <% else %>
@@ -213,11 +225,15 @@
                 <% if ["gsibayan@cem-inc.org.ph","fviceral@cem-inc.org.ph","jpbocatija@cem-inc.org.ph","rmina@cem-inc.org.ph","rcjamilano@cem-inc.org.ph","lvcagadas@cem-inc.org.ph"].include?(email) %>
                 <% else %>   
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
-                  <% ProjectWorkspace.find(params[:format]).rocks.where(user_id:User.find_by(email:email).id).each_with_index do |rock, index| %>
+                  <% ProjectWorkspace.find(params[:format]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).each_with_index do |rock, index| %>
                     <div class="d-flex">
                       <div style="width: 50%;">
                         <span><%= index + 1 %>. </span>
-                        <span><%= rock.task_name %></span>
+                        <% if current_user.admin == true || current_user.host == true || current_user.email == "jpbocatija@cem-inc.org.ph" %>
+                          <span><%= link_to rock.task_name, view_allprojects_path(params[:format],User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"scorecards-rock" %></span>
+                        <% else %>
+                          <span><%= rock.task_name %></span>
+                        <% end %>                        
                       </div>
                       <div style="width: 50%;">
                         <span style="font-size: 12px;">| <i><%= rock.start.strftime("%b %d,%Y") %> - <%= rock.finish.strftime("%b %d,%Y") %></i></span>
@@ -229,7 +245,7 @@
                         <span>| <b><%= rock.complete %>%</b></span>
                         <span style="font-size: 12px;">| 
                           <% if rock.complete == 0 %>
-                            <span style="background-color: red;padding:0 5px; border-radius:3px;">not started</span>
+                            <span style="background-color: silver;padding:0 5px; border-radius:3px;">not started</span>
                           <% elsif rock.complete == 100 %>
                             <span style="background-color: green;padding:0 5px; border-radius:3px;">complete</span>
                           <% else %>

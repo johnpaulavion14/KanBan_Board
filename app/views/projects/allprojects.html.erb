@@ -22,9 +22,9 @@
     <tbody>
       <% @rocks.each do |rock| %>
         <!-- All Rocks -->
-        <tr class="all-rocks export-tr" style="background-color:#cccdd4; font-weight: bold; vertical-align: middle;" id="rock-tr">
+        <tr class="all-rocks export-tr" style="background-color:#cccdd4; font-weight: bold; vertical-align: middle;" id="rock-tr"> 
           <td style="display: none;" id="rock-id"><%= rock.id %></td>
-          <td class="task-name export-td" style="text-align: left; min-width: 100px;">
+          <td class="task-name export-td" id="rockplus-<%= rock.id %>" style="text-align: left; min-width: 100px;">
             <% if rock.milestones.blank? %>
               <%= image_tag ("plus.png"),role:"button",style:"margin-left:1rem",class:"plus-icon" %>
               <%= image_tag ("minus.png"),role:"button", style:"margin-left:1rem",class:"minus-icon" %>
@@ -122,7 +122,7 @@
         <!-- All Milestones -->
         <% @milestones.each do |milestone| %> 
           <% if rock.id == milestone.rock_id %>
-            <tr class="all-milestones rock-<%= rock.id %> export-tr" style="vertical-align: middle;" id="milestone-tr">
+            <tr class="all-milestones rock-<%= rock.id %> export-tr" style="vertical-align: middle;" id="milestone-tr"> 
               <td style="display: none;" id="rock-id"><%= rock.id %></td>
               <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
               <!-- messages -->
@@ -132,7 +132,7 @@
               <td style="display: none;" class="message-firstname"><%= milestone.messages.order(created_at: :asc).pluck(:first_name) %></td>
               <td style="display: none;" class="message-lastname"><%= milestone.messages.order(created_at: :asc).pluck(:last_name) %></td>
               <td style="display: none;" class="message-time"><%= milestone.messages.order(created_at: :asc).pluck(:time) %></td>
-              <td class="task-name export-td" style="text-align: left; min-width: 100px; padding-left:4rem">
+              <td class="task-name export-td mplus-<%= rock.id %>" id="mileplus-<%= milestone.id %>" style="text-align: left; min-width: 100px; padding-left:4rem">
                 <% if milestone.submilestones.blank? %>
                   <%= image_tag ("plus_blue_blank.png"),role:"button",class:"m-plus-icon" %>
                   <%= image_tag ("minus_blue_blank.png"),role:"button",class:"m-minus-icon" %>
@@ -209,7 +209,7 @@
                 <tr class="all-submilestones mile-<%= milestone.id %> <%= submilestone.assigned.include?(current_user.email) ? '' : 'bg-light' %> export-tr" style="vertical-align: middle;" id="subm-tr">
                   <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
                   <td style="display: none;" id="submilestone-id"><%= submilestone.id %></td>
-                  <td class="task-name export-td" style="text-align: left; min-width: 100px; padding-left:6rem">
+                  <td class="task-name export-td smplus-<%= rock.id %>" id="submplus-<%= submilestone.id %>" style="text-align: left; min-width: 100px; padding-left:6rem">
                     <% if submilestone.sub2milestones.blank? %>
                       <%= image_tag ("plus_purple_blank.png"),role:"button",class:"subm-plus-icon" %>
                       <%= image_tag ("minus_purple_blank.png"),role:"button",class:"subm-minus-icon" %>
@@ -367,10 +367,14 @@
           <td>-</td>
         </tr>
       <% end %>
+      <!-- url params plus icon-->
+      <div class="d-none rock-params"><%= params[:rock_id] %></div>
+      <!-- <div class="d-none subm-params"><%= params[:subm_id] %></div> -->
     </tbody>
     <%= render 'projects/messages' %>
   </table>
 </div>
+<button class="d-none" id="target-rock">Add url params</button>
 
 <script>
 
@@ -649,6 +653,24 @@ $(document).ready(function(){
   $('#addDataBtn').on('click', function() {
     addDataToExcel();
   });
+
+// url params plus icon
+  var r_id = $(".rock-params").text()
+
+// Trigger plus icon from scorecards link
+  var rockplus = "#rockplus-" + r_id 
+  var mileplus = ".mplus-" + r_id
+  var submplus = ".smplus-" + r_id
+  $(rockplus).find(".plus-icon").trigger("click")
+  $(mileplus).find(".m-plus-icon").trigger("click")
+  $(submplus).find(".subm-plus-icon").trigger("click")
+// Trigger target Rock
+  $("#target-rock").click(function(event) {
+      var currentURL = window.location.href;
+      var newURL = currentURL + rockplus;
+      window.location.href = newURL;
+    });
+  $("#target-rock").trigger("click")
 });
 
 </script>
