@@ -16,6 +16,17 @@ class AddcardsController < ApplicationController
     @hosts = User.where(host:"true").order("created_at asc").pluck(:first_name)
     @scribes = User.where(scribe:"true").order("created_at asc").pluck(:first_name)
 
+    @workspace_head = ["lvcagadas@cem-inc.org.ph"]
+    @workspace_isu = ["rcjamilano@cem-inc.org.ph", "rmina@cem-inc.org.ph", "jpbocatija@cem-inc.org.ph"]
+    @workspace_nssu = ["gsibayan@cem-inc.org.ph", "fviceral@cem-inc.org.ph"]
+    ProjectWorkspace.find(params[:format]).assigned.each do |user|
+      if !@workspace_isu.include?(user)
+        @workspace_isu.push(user)
+      end
+      if !@workspace_nssu.include?(user)
+        @workspace_nssu.push(user)
+      end
+    end
   end
 
   # GET /addcards/1 or /addcards/1.json

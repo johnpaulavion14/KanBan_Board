@@ -9,8 +9,7 @@ class ProjectsController < ApplicationController
         @project_workspaces.push(workspace)
       end
     end
-
-    @users = User.all.pluck(:email)
+    @users = User.all.order(id: :asc).pluck(:email)
   end
   
   def index
@@ -48,7 +47,7 @@ class ProjectsController < ApplicationController
     @milestones = Milestone.all.order(start: :asc)
     @submilestones = Submilestone.all.order(start: :asc)
     @sub2milestones = Sub2milestone.all.order(start: :asc)
-    @users = User.all.pluck(:email)
+    @users = ProjectWorkspace.find(params[:pw_id]).assigned
     @all_users = User.all
 
   end
@@ -78,7 +77,6 @@ class ProjectsController < ApplicationController
         @milestones = Milestone.all.order(start: :asc)
         @submilestones = Submilestone.all.order(start: :asc)
         @sub2milestones = Sub2milestone.all.order(start: :asc)
-        @users = User.all.pluck(:email)
         @all_users = User.all
       end
     end

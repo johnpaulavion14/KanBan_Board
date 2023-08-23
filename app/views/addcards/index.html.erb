@@ -73,7 +73,7 @@
               <!-- Head -->
               <h5><b>* Head *</b></h5>
               <hr style="margin: 2px 0;">
-              <% ProjectWorkspace.find(params[:format]).assigned.each do |email| %>
+              <% @workspace_head.each do |email| %>
                 <% if email == "lvcagadas@cem-inc.org.ph" %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
                   <% ProjectWorkspace.find(params[:format]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).each_with_index do |rock, index| %>
@@ -93,7 +93,7 @@
                           date.workday?
                         end %> <span>days</span>
                         </span>
-                        <span>| <b style="color: goldenrod; font-size: 20px;"><%= rock.complete %>%</b></span>
+                        <span>| <b style="color: goldenrod;"><%= rock.complete %>%</b></span>
                         <span style="font-size: 12px;">| 
                           <% if rock.complete == 0 %>
                             <span style="background-color: silver; padding:0 5px; border-radius:3px;">not started</span>
@@ -123,7 +123,7 @@
               <!-- ISU Team -->
               <h5 class="mt-4"><b>* ISU *</b></h5>
               <hr style="margin: 2px 0;">
-              <% ProjectWorkspace.find(params[:format]).assigned.each do |email| %>
+              <% @workspace_isu.each do |email| %>
                 <% if ["jpbocatija@cem-inc.org.ph","rmina@cem-inc.org.ph","rcjamilano@cem-inc.org.ph"].include?(email) %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
                   <% ProjectWorkspace.find(params[:format]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).each_with_index do |rock, index| %>
@@ -143,7 +143,7 @@
                           date.workday?
                         end %> <span>days</span>
                         </span>
-                        <span>| <b style="color: goldenrod; font-size: 20px;"><%= rock.complete %>%</b></span>
+                        <span>| <b style="color: goldenrod;"><%= rock.complete %>%</b></span>
                         <span style="font-size: 12px;">| 
                           <% if rock.complete == 0 %>
                             <span style="background-color: silver;padding:0 5px; border-radius:3px;">not started</span>
@@ -173,7 +173,7 @@
               <!-- NSSU Team -->
               <h5 class="mt-4"><b>* NSSU *</b></h5>
               <hr style="margin: 2px 0;">
-              <% ProjectWorkspace.find(params[:format]).assigned.each do |email| %>
+              <% @workspace_nssu.each do |email| %>
                 <% if ["gsibayan@cem-inc.org.ph","fviceral@cem-inc.org.ph"].include?(email) %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
                   <% ProjectWorkspace.find(params[:format]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).each_with_index do |rock, index| %>
@@ -193,7 +193,7 @@
                           date.workday?
                         end %> <span>days</span>
                         </span>
-                        <span>| <b style="color: goldenrod; font-size: 20px;"><%= rock.complete %>%</b></span>
+                        <span>| <b style="color: goldenrod;"><%= rock.complete %>%</b></span>
                         <span style="font-size: 12px;">| 
                           <% if rock.complete == 0 %>
                             <span style="background-color: silver;padding:0 5px; border-radius:3px;">not started</span>
@@ -222,8 +222,7 @@
               <hr style="margin: 2px 0;"> 
               <!-- Other Members -->
               <% ProjectWorkspace.find(params[:format]).assigned.each do |email| %>
-                <% if ["gsibayan@cem-inc.org.ph","fviceral@cem-inc.org.ph","jpbocatija@cem-inc.org.ph","rmina@cem-inc.org.ph","rcjamilano@cem-inc.org.ph","lvcagadas@cem-inc.org.ph"].include?(email) %>
-                <% else %>   
+                <% if !["gsibayan@cem-inc.org.ph","fviceral@cem-inc.org.ph","jpbocatija@cem-inc.org.ph","rmina@cem-inc.org.ph","rcjamilano@cem-inc.org.ph","lvcagadas@cem-inc.org.ph"].include?(email) %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
                   <% ProjectWorkspace.find(params[:format]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).each_with_index do |rock, index| %>
                     <div class="d-flex">
@@ -242,7 +241,7 @@
                           date.workday?
                         end %> <span>days</span>
                         </span>
-                        <span>| <b style="color: goldenrod; font-size: 20px;"><%= rock.complete %>%</b></span>
+                        <span>| <b style="color: goldenrod;"><%= rock.complete %>%</b></span>
                         <span style="font-size: 12px;">| 
                           <% if rock.complete == 0 %>
                             <span style="background-color: silver;padding:0 5px; border-radius:3px;">not started</span>
