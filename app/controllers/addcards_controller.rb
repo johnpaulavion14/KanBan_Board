@@ -19,12 +19,14 @@ class AddcardsController < ApplicationController
     @workspace_head = ["lvcagadas@cem-inc.org.ph"]
     @workspace_isu = ["rcjamilano@cem-inc.org.ph", "rmina@cem-inc.org.ph", "jpbocatija@cem-inc.org.ph"]
     @workspace_nssu = ["gsibayan@cem-inc.org.ph", "fviceral@cem-inc.org.ph"]
-    ProjectWorkspace.find(params[:format]).assigned.each do |user|
-      if !@workspace_isu.include?(user)
-        @workspace_isu.push(user)
-      end
-      if !@workspace_nssu.include?(user)
-        @workspace_nssu.push(user)
+    if params[:format]
+      ProjectWorkspace.find(params[:format]).assigned.each do |user|
+        if !@workspace_isu.include?(user)
+          @workspace_isu.push(user)
+        end
+        if !@workspace_nssu.include?(user)
+          @workspace_nssu.push(user)
+        end
       end
     end
   end
