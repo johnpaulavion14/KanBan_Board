@@ -59,7 +59,7 @@
               <%= image_tag ("plus_black.png"),role:"button",style:"margin-left:1rem",class:"plus-icon" %>
               <%= image_tag ("minus_black.png"),role:"button",style:"margin-left:1rem",class:"minus-icon" %>
             <% end %>
-            <%= rock.task_name %>
+            <span><%= rock.task_name %></span>
           </td>
           <td class="export-td dayordays">
             <%= (rock.start.to_date..rock.finish.to_date).count do |date|
@@ -733,6 +733,8 @@
   </div>
   <%= render 'projects/messages' %>
 
+  <button id="rock-tasknamee">Click Me</button>
+
 </div>
 
 <script>
@@ -848,6 +850,33 @@
       } else {
         $(day).find("span").text("days")
       }
+    });
+    // rightclick Rock task name
+    $("#rock-tasknamee").click(function(event) {
+      // $.ajax({
+      //   type: "GET", // Specify the HTTP method as GET
+      //   url: "/dashboard", // Replace with the URL of your API or server endpoint
+      //   dataType: "json", // Specify the expected data type of the response
+      //   success: function(response) {
+      //     // Handle the success response
+      //     console.log("Success:", response);
+          
+      //     // Update your UI with the data, if needed
+      //   },
+      //   error: function(xhr, textStatus, errorThrown) {
+      //     // Handle any errors that occur during the Ajax request
+      //     console.error("Error:", textStatus, errorThrown);
+          
+      //     // Display an error message or take appropriate action
+      //   }
+      // });  
+      $.ajax({
+        url: "/dashboard",
+        type: "get",
+        data: "",
+        success: function(data) {},
+        error: function(data) {}
+      })
     });
 
     // -----Milestone Section------

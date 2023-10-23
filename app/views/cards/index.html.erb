@@ -208,7 +208,7 @@
     if (hosts.includes(username) || scribes.includes(username)){
     }else if(group == "true"){
       $(".card-con").css("pointer-events", "none") // disable edit & delete card for non host and scribe
-      $(".addcard-pencon").css("pointer-events", "none") // disable edit & delete addcard for non host and scribe
+      $(".del-addcard").css("display", "none") // disable edit & delete addcard for non host and scribe
       $(".addcard").css("pointer-events", "none") // disable adding card for non host and scribe
       $(".clickAddList").css("pointer-events", "none") // disable adding card for non host and scribe
     } 

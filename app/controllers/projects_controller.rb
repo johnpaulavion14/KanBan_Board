@@ -160,6 +160,10 @@ class ProjectsController < ApplicationController
     end
   end
 
+  # def automate_rocks
+  #   Rock.first.update(complete:100)
+  # end
+
   # Milestones
   def create_milestones
     @milestone = Rock.find(params[:rock_id]).milestones.new(milestone_params)
