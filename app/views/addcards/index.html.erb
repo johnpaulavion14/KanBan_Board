@@ -174,7 +174,7 @@
               <h5 class="mt-4"><b>* NSSU *</b></h5>
               <hr style="margin: 2px 0;">
               <% @workspace_nssu.each do |email| %>
-                <% if ["gsibayan@cem-inc.org.ph","fviceral@cem-inc.org.ph"].include?(email) %>
+                <% if ["gsibayan@cem-inc.org.ph","fviceral@cem-inc.org.ph","jcaniedo@cem-inc.org.ph"].include?(email) %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
                   <% ProjectWorkspace.find(params[:format]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).each_with_index do |rock, index| %>
                     <div class="d-flex">
@@ -222,7 +222,7 @@
               <hr style="margin: 2px 0;"> 
               <!-- Other Members -->
               <% ProjectWorkspace.find(params[:format]).assigned.each do |email| %>
-                <% if !["gsibayan@cem-inc.org.ph","fviceral@cem-inc.org.ph","jpbocatija@cem-inc.org.ph","rmina@cem-inc.org.ph","rcjamilano@cem-inc.org.ph","lvcagadas@cem-inc.org.ph"].include?(email) %>
+                <% if !["gsibayan@cem-inc.org.ph","fviceral@cem-inc.org.ph","jpbocatija@cem-inc.org.ph","rmina@cem-inc.org.ph","rcjamilano@cem-inc.org.ph","lvcagadas@cem-inc.org.ph","jcaniedo@cem-inc.org.ph"].include?(email) %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
                   <% ProjectWorkspace.find(params[:format]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).each_with_index do |rock, index| %>
                     <div class="d-flex">
