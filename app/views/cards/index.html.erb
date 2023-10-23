@@ -21,7 +21,7 @@
   <div id="cards" class="card_container">
     <% @cards.each do |card| %>
       <div class="card_bg">
-        <% if card.card_title.downcase.include?("scorecard") %>
+        <% if card.card_title.downcase == "rocks" %>
           <div class="card-con">
             <b class="card_title">
               <%= card.card_title %>

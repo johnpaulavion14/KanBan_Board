@@ -1,8 +1,8 @@
-.scorecards-rock {
+.rock-link {
   text-decoration: none;
   color: black;
 }
-.scorecards-rock:hover {
+.rock-link:hover {
   color: blue;
   text-decoration: underline;
 }
