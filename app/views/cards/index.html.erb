@@ -42,6 +42,27 @@
               </div>
             <% end %>
           </div>
+        <% elsif card.card_title.downcase.include?("scorecard")%>
+         <div class="card-con">
+            <b class="card_title">
+              <%= card.card_title %>
+            </b>
+            <%= link_to delete_card_path({card_id:card.id}),class:"del-card", data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+              <div class="addcard-pencon">
+                <div class="addcard-penbox"></div>
+                <div class="addcard-pencil"><%= image_tag ("delete.png"),class:"addcard-pen" %></div>
+              </div>
+            <% end %>
+          </div>
+          <div class="d-flex flex-column addcard-outercon">
+            <% ProjectWorkspace.order("created_at asc").all.each do |workspace| %>
+              <div class="addcard-con d-flex">
+                <%= link_to gantt_path, class:"addcard-name",target: :_blank do %>
+                  <div><%= workspace.folder_name %></div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
         <% else %>
           <div class="card-con">
             <b class="card_title">

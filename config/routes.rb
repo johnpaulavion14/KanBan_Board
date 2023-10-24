@@ -106,5 +106,20 @@ Rails.application.routes.draw do
   patch 'sub2milestones/sub2messages/:pw_id/:rock_id/:milestone_id/:submilestone_id/:id/:rocks_owner' => 'sub2milestones#update_sub2message', as: 'update_sub2message'
   delete 'delete/sub2messages/:pw_id/:rock_id/:milestone_id/:submilestone_id/:id/:rocks_owner' => 'sub2milestones#delete_sub2message', as: 'delete_sub2message'
 
+  # Gantt Section
+  get 'gantt/index' => 'gantt#index', as: 'gantt'
+
+  scope '/api' do
+    get "/data", :to => "gantt#data"
+    
+    post "/task", :to => "task#add"
+    put "/task/:id", :to => "task#update"
+    delete "/task/:id", :to => "task#delete"
+
+    post "/link", :to => "link#add"
+    put "/link/:id", :to => "link#update"
+    delete "/link/:id", :to => "link#delete"
+  end
+
 
 end
