@@ -10,7 +10,9 @@ class AddcardsController < ApplicationController
     @card_name = @addcard.card
     @desc_value = @addcard.desc.to_s.gsub(/\n/, '<br/>').html_safe
     @comments = Addcomment.all.where(addcard_id: params[:id]).order("created_at desc")
-
+    # todo
+    @todo_list = @addcard.todos
+  
     @name_initial = current_user.first_name.chr + current_user.last_name.chr
 
     @hosts = User.where(host:"true").order("created_at asc").pluck(:first_name)
@@ -114,6 +116,30 @@ class AddcardsController < ApplicationController
     end
   end
 
+  def create_todo
+    @todo = current_user.todos.new(todo_params)
+    respond_to do |format|
+      if @todo.save
+        format.html { redirect_to view_addcards_path, notice: "Todo was successfully created." }
+        format.json { render :show, status: :created, location: @addcard }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @addcard.errors, status: :unprocessable_entity }
+      end
+    end  
+  end
+
+  def delete_todo
+    Todo.find(params[:todo_id]).destroy
+    redirect_to view_addcards_path
+  end
+
+  def update_todo
+    todo_id = params[:todo][:todo_id].to_i
+    Todo.find(todo_id).update(todo_params)
+    redirect_to view_addcards_path
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     # def set_addcard
@@ -127,5 +153,9 @@ class AddcardsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def addcard_params
       params.require(:addcard).permit(:card_name, :desc)
+    end
+
+    def todo_params
+      params.require(:todo).permit(:task, :addcard_id)
     end
 end

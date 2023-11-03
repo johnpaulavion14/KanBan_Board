@@ -34,8 +34,12 @@ Rails.application.routes.draw do
   patch 'attendance/:cb_id/:card_id/:id' => 'addcards#attendance', as: 'attendance'
   delete 'addcards/:cb_id/:card_id/:id' => 'addcards#destroy', as: 'delete_addcard'
   resources :addcards
+  # todo section
+  post 'todo/:cb_id/:card_id/:id' => 'addcards#create_todo', as: 'create_todo'
+  delete 'todo/:cb_id/:card_id/:id' => 'addcards#delete_todo', as: 'delete_todo'
+  patch 'updatetodo/:cb_id/:card_id/:id' => 'addcards#update_todo', as: 'update_todo'
 
-  # addcomments
+  # addcomments``
   post 'addcomments/:cb_id/:card_id/:id' => 'addcomments#create', as: 'create_addcomment'
   patch 'addcomments/:cb_id/:card_id/:id' => 'addcomments#update', as: 'update_addcomment'
   delete 'addcomments/:cb_id/:card_id/:id' => 'addcomments#destroy', as: 'delete_addcomment'

@@ -268,6 +268,50 @@
                 <% end %>
               <% end %> 
             </div>
+        <% elsif @card_name.card_title.downcase.include?("todo") %>
+          <div>
+            <div style="margin-bottom: 25px;">
+              <%= form_with scope: :todo, url:create_todo_path, method: :post,id:"todo-form", local: true do |form| %>
+                <%= form.hidden_field :addcard_id, value: @addcard.id %>
+                <%= form.hidden_field :todo_id, id:"todo-id" %>
+                <div class="comment-header">
+                  <span>
+                    <%= form.text_field :task,required: true,placeholder: "Write your task here...",class:"comment-field", id:"input-todo" %>
+                  </span>
+                  <span class="mx-2 d-none">
+                    <%= form.submit "Save" , class:"btn btn-primary" %>
+                  </span>
+                </div>
+              <% end %>
+            </div>
+          
+            <% User.all.each do |user| %>
+              <p class="m-0"><b>- <%= user.first_name %></b></p>
+              <hr style="margin: 2px 0;">
+              <% @todo_list.each do |list| %>
+                <% if user.id == list.user_id  %>
+                  <div class="d-flex justify-content-between">
+                    <div class="task-section">
+                      <input type="checkbox" id="myCheckbox<%= list.id %>" <%= current_user.id == list.user_id ? '':'disabled' %> <%= list.done ? 'checked':'' %>>
+                      <label for="myCheckbox<%= list.id %>" class="<%= list.done ? 'text-decoration-line-through' : '' %> task-text"><%= list.task %></label> 
+                    </div>
+                    <div class="todo-action">
+                      <span role="button" class="mx-2 edit-todo" id="<%= list.id %>"><%= image_tag ("edit.png"),style:"width:15px" %></span>
+                      <%= link_to delete_todo_path({todo_id:list.id}), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+                          <span><%= image_tag ("delete.png"),style:"width:15px" %></span>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+              <hr style="margin: 2px 0;">
+              <div class="my-4"></div>
+            
+            <% end %>
+
+            <br><br><br><br>
+
+          </div>
         <% else %>
           <div>
             <div class="d-flex align-items-center">
@@ -399,10 +443,21 @@
       $(".edit-desc").show();
     });
 
-    // trigger x addcard when addcard bg is click
-    // $(".addcard-bg").click(function(){
-    //   $(".addcards_X")[0].click()
-    // });
+    // Edit todo
+    $(".edit-todo").each( function(index,todo) {
+      $(todo).click(function(){
+        var todo_task = $(this).parent(".todo-action").siblings(".task-section").children(".task-text").text()
+        var url = window.location.href;
+        var newurl = new URL(url);
+        var urlParams = newurl.pathname;
+        var update_params = urlParams.replace("/addcards/view","/updatetodo")
+        var todo_id = $(this).attr("id")
+        $("#input-todo").val(todo_task)
+        $("#todo-id").val(todo_id)
+        $("#todo-form").attr("action",update_params)
+        $("#todo-form").attr("method","patch")
+      });
+    });    
 
     // Page Scroll
     $(".addcards_X").click(function(){
