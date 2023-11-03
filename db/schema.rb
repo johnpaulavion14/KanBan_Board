@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema[7.0].define(version: 2023_10_26_032457) do
+=======
+ActiveRecord::Schema[7.0].define(version: 2023_10_24_015536) do
+>>>>>>> 43e7114191dc68611c819e71fd92caf55275f650
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -208,6 +212,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_032457) do
     t.decimal "progress"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+<<<<<<< HEAD
   end
 
   create_table "todos", force: :cascade do |t|
@@ -217,6 +222,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_032457) do
     t.integer "addcard_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+=======
+>>>>>>> 43e7114191dc68611c819e71fd92caf55275f650
   end
 
   create_table "users", force: :cascade do |t|
