@@ -11,7 +11,7 @@ class AddcardsController < ApplicationController
     @desc_value = @addcard.desc.to_s.gsub(/\n/, '<br/>').html_safe
     @comments = Addcomment.all.where(addcard_id: params[:id]).order("created_at desc")
     # todo
-    @todo_list = @addcard.todos
+    @todo_list = @addcard.todos.order("created_at asc")
   
     @name_initial = current_user.first_name.chr + current_user.last_name.chr
 
@@ -137,6 +137,11 @@ class AddcardsController < ApplicationController
   def update_todo
     todo_id = params[:todo][:todo_id].to_i
     Todo.find(todo_id).update(todo_params)
+    redirect_to view_addcards_path
+  end
+  def update_checkbox
+    checkbox_id = params[:todo][:checkbox_id].to_i
+    Todo.find(checkbox_id).update(done:params[:todo][:checkbox_done])
     redirect_to view_addcards_path
   end
 

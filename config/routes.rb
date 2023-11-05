@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   post 'todo/:cb_id/:card_id/:id' => 'addcards#create_todo', as: 'create_todo'
   delete 'todo/:cb_id/:card_id/:id' => 'addcards#delete_todo', as: 'delete_todo'
   patch 'updatetodo/:cb_id/:card_id/:id' => 'addcards#update_todo', as: 'update_todo'
+  patch 'updatecheckbox/:cb_id/:card_id/:id' => 'addcards#update_checkbox', as: 'update_checkbox'
 
   # addcomments``
   post 'addcomments/:cb_id/:card_id/:id' => 'addcomments#create', as: 'create_addcomment'

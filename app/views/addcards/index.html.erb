@@ -284,7 +284,16 @@
                 </div>
               <% end %>
             </div>
-          
+
+            <div class="d-none">
+              <%= form_with scope: :todo, url:update_checkbox_path, method: :patch, local: true do |form| %>
+                <%= form.hidden_field :addcard_id, value: @addcard.id %>
+                <%= form.hidden_field :checkbox_id, id:"checkbox-id" %>
+                <%= form.hidden_field :checkbox_done, id:"checkbox-done" %>
+                <%= form.submit "Save" , id:"checkbox-submit" %>
+              <% end %>
+            </div>
+
             <% User.all.each do |user| %>
               <p class="m-0"><b>- <%= user.first_name %></b></p>
               <hr style="margin: 2px 0;">
@@ -292,7 +301,7 @@
                 <% if user.id == list.user_id  %>
                   <div class="d-flex justify-content-between">
                     <div class="task-section">
-                      <input type="checkbox" id="myCheckbox<%= list.id %>" <%= current_user.id == list.user_id ? '':'disabled' %> <%= list.done ? 'checked':'' %>>
+                      <input type="checkbox" id="myCheckbox<%= list.id %>" class="check-boxes <%= list.id %>" <%= current_user.id == list.user_id ? '':'disabled' %> <%= list.done ? 'checked':'' %>>
                       <label for="myCheckbox<%= list.id %>" class="<%= list.done ? 'text-decoration-line-through' : '' %> task-text"><%= list.task %></label> 
                     </div>
                     <div class="todo-action">
@@ -457,7 +466,20 @@
         $("#todo-form").attr("action",update_params)
         $("#todo-form").attr("method","patch")
       });
-    });    
+    });  
+    // Check todo  
+    $(".check-boxes").each( function(index,checkbox) {
+      $(checkbox).click(function(){
+        var checkbox_id = $(this).attr("class").split(' ')[1]
+        if (checkbox.checked) {
+          $("#checkbox-done").val(true)
+        }else{
+          $("#checkbox-done").val(false)
+        }
+        $("#checkbox-id").val(checkbox_id)
+        $("#checkbox-submit").trigger("click")
+      });
+    });   
 
     // Page Scroll
     $(".addcards_X").click(function(){
@@ -468,4 +490,4 @@
     
   });
 
-</script>
+</script>           
