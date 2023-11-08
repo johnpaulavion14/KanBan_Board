@@ -12,6 +12,8 @@ class AddcardsController < ApplicationController
     @comments = Addcomment.all.where(addcard_id: params[:id]).order("created_at desc")
     # todo
     @todo_list = @addcard.todos.order("created_at asc")
+    # identify
+    @identify_list = @addcard.identifies.order("created_at asc")
   
     @name_initial = current_user.first_name.chr + current_user.last_name.chr
 
@@ -116,6 +118,7 @@ class AddcardsController < ApplicationController
     end
   end
 
+  # Todo Section
   def create_todo
     @todo = current_user.todos.new(todo_params)
     respond_to do |format|
@@ -145,6 +148,36 @@ class AddcardsController < ApplicationController
     redirect_to view_addcards_path
   end
 
+  # Identify Section
+  def create_identify
+    @identify = current_user.identifies.new(identify_params)
+    respond_to do |format|
+      if @identify.save
+        format.html { redirect_to view_addcards_path, notice: "Identify was successfully created." }
+        format.json { render :show, status: :created, location: @addcard }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @addcard.errors, status: :unprocessable_entity }
+      end
+    end  
+  end
+
+  def delete_identify
+    Identify.find(params[:identify_id]).destroy
+    redirect_to view_addcards_path
+  end
+
+  def update_identify
+    identify_id = params[:identify][:identify_id].to_i
+    Identify.find(identify_id).update(identify_params)
+    redirect_to view_addcards_path
+  end
+  def update_identify_checkbox
+    checkbox_id = params[:identify][:checkbox_id].to_i
+    Identify.find(checkbox_id).update(done:params[:identify][:checkbox_done])
+    redirect_to view_addcards_path
+  end  
+
   private
     # Use callbacks to share common setup or constraints between actions.
     # def set_addcard
@@ -162,5 +195,9 @@ class AddcardsController < ApplicationController
 
     def todo_params
       params.require(:todo).permit(:task, :addcard_id)
+    end
+
+    def identify_params
+      params.require(:identify).permit(:task, :addcard_id, :solution)
     end
 end

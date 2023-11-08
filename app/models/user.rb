@@ -15,4 +15,5 @@ class User < ApplicationRecord
   has_many :milestones
   has_many :project_workspaces
   has_many :todos
+  has_many :identifies
 end

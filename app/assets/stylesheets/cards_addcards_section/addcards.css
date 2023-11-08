@@ -166,3 +166,8 @@
   min-height: 80px;
   border: none;
 }
+
+.solution-text:hover{
+  text-decoration: underline;
+  color: blue;
+}

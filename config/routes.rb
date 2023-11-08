@@ -39,6 +39,11 @@ Rails.application.routes.draw do
   delete 'todo/:cb_id/:card_id/:id' => 'addcards#delete_todo', as: 'delete_todo'
   patch 'updatetodo/:cb_id/:card_id/:id' => 'addcards#update_todo', as: 'update_todo'
   patch 'updatecheckbox/:cb_id/:card_id/:id' => 'addcards#update_checkbox', as: 'update_checkbox'
+  # identify section
+  post 'identify/:cb_id/:card_id/:id' => 'addcards#create_identify', as: 'create_identify'
+  delete 'identify/:cb_id/:card_id/:id' => 'addcards#delete_identify', as: 'delete_identify'
+  patch 'updateidentify/:cb_id/:card_id/:id' => 'addcards#update_identify', as: 'update_identify'
+  patch 'updateidentify_checkbox/:cb_id/:card_id/:id' => 'addcards#update_identify_checkbox', as: 'update_identify_checkbox'
 
   # addcomments``
   post 'addcomments/:cb_id/:card_id/:id' => 'addcomments#create', as: 'create_addcomment'

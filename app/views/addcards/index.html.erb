@@ -304,12 +304,14 @@
                       <input type="checkbox" id="myCheckbox<%= list.id %>" class="check-boxes <%= list.id %>" <%= current_user.id == list.user_id ? '':'disabled' %> <%= list.done ? 'checked':'' %>>
                       <label for="myCheckbox<%= list.id %>" class="<%= list.done ? 'text-decoration-line-through' : '' %> task-text"><%= list.task %></label> 
                     </div>
-                    <div class="todo-action">
-                      <span role="button" class="mx-2 edit-todo" id="<%= list.id %>"><%= image_tag ("edit.png"),style:"width:15px" %></span>
-                      <%= link_to delete_todo_path({todo_id:list.id}), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
-                          <span><%= image_tag ("delete.png"),style:"width:15px" %></span>
-                      <% end %>
-                    </div>
+                    <% if user.id == current_user.id  %>
+                      <div class="todo-action">
+                        <span role="button" class="mx-2 edit-todo" id="<%= list.id %>"><%= image_tag ("edit.png"),style:"width:15px" %></span>
+                        <%= link_to delete_todo_path({todo_id:list.id}), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+                            <span><%= image_tag ("delete.png"),style:"width:15px" %></span>
+                        <% end %>
+                      </div>
+                    <% end %>
                   </div>
                 <% end %>
               <% end %>
@@ -319,8 +321,74 @@
             <% end %>
 
             <br><br><br><br>
-
           </div>
+        <% elsif @card_name.card_title.downcase.include?("ids") %>
+          <div>
+            <div style="margin-bottom: 25px;">
+              <%= form_with scope: :identify, url:create_identify_path, method: :post,id:"identify-form", local: true do |form| %>
+                <%= form.hidden_field :addcard_id, value: @addcard.id %>
+                <%= form.hidden_field :identify_id, id:"identify-id" %>
+                <div class="comment-header">
+                  <span>
+                    <%= form.text_field :task,required: true,placeholder: "Write your IDS here...",class:"comment-field", id:"input-identify" %>
+                  </span>
+                  <span class="mx-2 d-none">
+                    <%= form.submit "Save" , class:"btn btn-primary" %>
+                  </span>
+                </div>
+              <% end %>
+            </div>
+
+            <div class="d-none">
+              <%= form_with scope: :identify, url:update_identify_checkbox_path, method: :patch, local: true do |form| %>
+                <%= form.hidden_field :addcard_id, value: @addcard.id %>
+                <%= form.hidden_field :checkbox_id, id:"identify-checkbox-id" %>
+                <%= form.hidden_field :checkbox_done, id:"identify-checkbox-done" %>
+                <%= form.submit "Save" , id:"identify-checkbox-submit" %>
+              <% end %>
+            </div>
+
+            <% User.all.each do |user| %>
+              <p class="m-0"><b>- <%= user.first_name %></b></p>
+              <hr style="margin: 2px 0;">
+              <% @identify_list.each do |list| %>
+                <% if user.id == list.user_id  %>
+                  <div class="d-flex justify-content-between ids-list">
+                    <div class="task-section">
+                      <input type="checkbox" class="identify-check-boxes <%= list.id %>" <%= current_user.id == list.user_id ? '':'disabled' %> <%= list.done ? 'checked':'' %>>
+                      <label class="<%= list.done ? 'text-decoration-line-through' : '' %> solution-text" role="button"><%= list.task %></label> 
+                    </div>
+                    <% if user.id == current_user.id  %>
+                      <div class="identify-action">
+                        <span role="button" class="mx-2 edit-identify" id="<%= list.id %>"><%= image_tag ("edit.png"),style:"width:15px" %></span>
+                        <%= link_to delete_identify_path({identify_id:list.id}), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+                            <span><%= image_tag ("delete.png"),style:"width:15px" %></span>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  </div>
+                  <div id="solution-textarea" class="d-none">
+                    <%= form_with scope: :identify, url:update_identify_path, method: :patch, local:true do |form| %>
+                      <%= form.hidden_field :identify_id, value:list.id %>
+                      <div class="d-flex">
+                        <div class="pb-1">
+                          <%= form.text_area :solution,value:list.solution, size: "75x3", style:"padding:5px 10px; background-color:#FFFFE0;"%>
+                        </div>
+                        <div class="mx-2">
+                          <div><%= form.submit "Save" , class:"save-desc" %></div>
+                          <div class="btn btn-danger mt-2 hide-solution">hide</div>
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
+                <% end %>
+              <% end %>
+              <hr style="margin: 2px 0;">
+              <div class="my-4"></div>
+            <% end %>
+            
+            <br><br><br><br>
+          </div>          
         <% else %>
           <div>
             <div class="d-flex align-items-center">
@@ -480,6 +548,46 @@
         $("#checkbox-submit").trigger("click")
       });
     });   
+    // Edit identify
+    $(".edit-identify").each( function(index,identify) {
+      $(identify).click(function(){
+        var identify_task = $(this).parent(".identify-action").siblings(".task-section").children(".solution-text").text()
+        var url = window.location.href;
+        var newurl = new URL(url);
+        var urlParams = newurl.pathname;
+        var update_params = urlParams.replace("/addcards/view","/updateidentify")
+        var identify_id = $(this).attr("id")
+        $("#input-identify").val(identify_task)
+        $("#identify-id").val(identify_id)
+        $("#identify-form").attr("action",update_params)
+        $("#identify-form").attr("method","patch")
+      });
+    }); 
+    // Check identify 
+    $(".identify-check-boxes").each( function(index,checkbox) {
+      $(checkbox).click(function(){
+        var checkbox_id = $(this).attr("class").split(' ')[1]
+        if (checkbox.checked) {
+          $("#identify-checkbox-done").val(true)
+        }else{
+          $("#identify-checkbox-done").val(false)
+        }
+        $("#identify-checkbox-id").val(checkbox_id)
+        $("#identify-checkbox-submit").trigger("click")
+      });
+    });   
+    // hide solution
+    $(".hide-solution").each( function(index,hide) {
+      $(hide).click(function(){
+        $(this).closest("#solution-textarea").attr("class","d-none")
+      })
+    })
+    // toggle solution
+    $(".solution-text").each( function(index,text) {
+      $(text).click(function(){
+        $(this).closest(".ids-list").next("#solution-textarea").toggleClass("d-none");
+      })
+    })
 
     // Page Scroll
     $(".addcards_X").click(function(){
