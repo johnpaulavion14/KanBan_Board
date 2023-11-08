@@ -300,12 +300,12 @@
               <% @todo_list.each do |list| %>
                 <% if user.id == list.user_id  %>
                   <div class="d-flex justify-content-between">
-                    <div class="task-section">
-                      <input type="checkbox" id="myCheckbox<%= list.id %>" class="check-boxes <%= list.id %>" <%= current_user.id == list.user_id ? '':'disabled' %> <%= list.done ? 'checked':'' %>>
-                      <label for="myCheckbox<%= list.id %>" class="<%= list.done ? 'text-decoration-line-through' : '' %> task-text"><%= list.task %></label> 
+                    <div class="task-section d-flex align-items-start">
+                      <input type="checkbox" id="myCheckbox<%= list.id %>" class="check-boxes <%= list.id %> mx-2" style="margin-top:6px;" role="button" <%= current_user.id == list.user_id ? '':'disabled' %> <%= list.done ? 'checked':'' %>>
+                      <label class="<%= list.done ? 'text-decoration-line-through' : '' %> task-text" ><%= list.task %></label> 
                     </div>
                     <% if user.id == current_user.id  %>
-                      <div class="todo-action">
+                      <div class="todo-action d-flex">
                         <span role="button" class="mx-2 edit-todo" id="<%= list.id %>"><%= image_tag ("edit.png"),style:"width:15px" %></span>
                         <%= link_to delete_todo_path({todo_id:list.id}), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
                             <span><%= image_tag ("delete.png"),style:"width:15px" %></span>
@@ -354,12 +354,12 @@
               <% @identify_list.each do |list| %>
                 <% if user.id == list.user_id  %>
                   <div class="d-flex justify-content-between ids-list">
-                    <div class="task-section">
-                      <input type="checkbox" class="identify-check-boxes <%= list.id %>" <%= current_user.id == list.user_id ? '':'disabled' %> <%= list.done ? 'checked':'' %>>
+                    <div class="task-section d-flex align-items-start">
+                      <input type="checkbox" class="identify-check-boxes <%= list.id %> mx-2" style="margin-top:6px;" role="button" <%= current_user.id == list.user_id ? '':'disabled' %> <%= list.done ? 'checked':'' %>>
                       <label class="<%= list.done ? 'text-decoration-line-through' : '' %> solution-text" role="button"><%= list.task %></label> 
                     </div>
                     <% if user.id == current_user.id  %>
-                      <div class="identify-action">
+                      <div class="identify-action d-flex">
                         <span role="button" class="mx-2 edit-identify" id="<%= list.id %>"><%= image_tag ("edit.png"),style:"width:15px" %></span>
                         <%= link_to delete_identify_path({identify_id:list.id}), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
                             <span><%= image_tag ("delete.png"),style:"width:15px" %></span>
