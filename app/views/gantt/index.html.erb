@@ -1,9 +1,20 @@
+<div id="gantt_here" style='width:100%; height:950px;'></div>
+<div class="m-2"> 
+  <%= button_to "Update Gantt",update_gantt_path,method: :post, class:"btn btn-success" %>
+</div>
+<div class="d-none">
+  <% @tasks_content.each do |content| %>
+    <span class="tasks-content"><%= content %></span>
+  <% end %>
+  <% @off_track_array.each do |off_track| %>
+    <span class="off-track"><%= off_track %></span>
+  <% end %>
+</div>
+
 <% content_for :head do %>
     <%= stylesheet_link_tag 'https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css' %>
     <%= javascript_include_tag 'https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.js' %>
 <% end %>
- 
-<div id="gantt_here" style='width:100%; height:800px;'></div>
  
 <script>
   gantt.config.order_branch = true;
@@ -16,5 +27,28 @@
   var dp = new gantt.dataProcessor("/api");
   dp.init(gantt);
   dp.setTransactionMode("REST");
+
+  $(document).ready(function(){
+    let tasks_content_array = []
+    let off_track_array = []
+    $(".tasks-content").each( function(index,content) {
+      tasks_content_array.push($(content).text())
+    });
+    $(".off-track").each( function(index,content) {
+      off_track_array.push($(content).text())
+    });
+
+    setTimeout(function() {
+      setInterval(function() {
+        $(".gantt_cell_tree").children(".gantt_tree_content").each( function(index,content) {
+          if (tasks_content_array.includes($(content).text())){
+            $(content).parent(".gantt_cell_tree").parent(".gantt_row_task").css("text-decoration","line-through")
+          }else if (off_track_array.includes($(content).text())){
+            $(content).css("color","red")
+          }
+        });
+      }, 1000);
+    }, 2000);
+  });
 
 </script>

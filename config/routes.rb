@@ -118,6 +118,7 @@ Rails.application.routes.draw do
 
   # Gantt Section
   get 'gantt/index' => 'gantt#index', as: 'gantt'
+  post 'gantt/update_gantt' => 'gantt#update_gantt', as: 'update_gantt'
 
   scope '/api' do
     get "/data", :to => "gantt#data"

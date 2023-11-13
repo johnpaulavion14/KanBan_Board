@@ -1,0 +1,10 @@
+.gantt_task_progress{
+    background: green !important;
+}
+.gantt_task_content {
+    text-align: start !important;
+    margin-left: 1rem !important;
+}
+.gantt_task_line {
+    background-color: gray !important;
+}
