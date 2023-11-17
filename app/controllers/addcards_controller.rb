@@ -87,7 +87,7 @@ class AddcardsController < ApplicationController
     @present = @card.addcards.find(params[:id])
     if params[:status] == "present"
       if @present.desc.blank?
-        @present.update(desc:Date.current.strftime("%B %d, %Y") + "\n" + current_user.first_name + " - " + "Present")
+        @present.update(desc:current_user.first_name + " - " + "Present")
         redirect_to view_addcards_path
       else
         if @present.desc.include? current_user.first_name
@@ -177,6 +177,85 @@ class AddcardsController < ApplicationController
     Identify.find(checkbox_id).update(done:params[:identify][:checkbox_done])
     redirect_to view_addcards_path
   end  
+
+  def generate_mom
+    current_date = Date.current.strftime("%B %d, %Y").to_s
+    mom_summary = current_date + ""
+    CreateBoard.find(params[:cb_id]).cards.each do |card|
+      case 
+        when card.card_title.downcase.include?("attendance")
+          mom_summary += "\n \n* Attendance * \n" + card.addcards.last.desc
+          card.addcards.last.addcomments.create(comment: current_date + "\n" + card.addcards.last.desc, first_name: User.find_by(scribe:true).first_name, last_name: User.find_by(scribe:true).last_name, addcard_id: card.addcards.last.id)
+          card.addcards.last.update(desc:"")
+        when card.card_title.downcase.include?("segue")
+          mom_summary += "\n \n* Intro / Segue * \n" + card.addcards.last.desc
+          card.addcards.last.addcomments.create(comment: current_date + "\n" + card.addcards.last.desc, first_name: User.find_by(scribe:true).first_name, last_name: User.find_by(scribe:true).last_name, addcard_id: card.addcards.last.id)
+          card.addcards.last.update(desc:"")
+        when card.card_title.downcase.include?("headlines")
+          mom_summary += "\n \n* People Headlines * \n" + card.addcards.last.desc
+          card.addcards.last.addcomments.create(comment: current_date + "\n" + card.addcards.last.desc, first_name: User.find_by(scribe:true).first_name, last_name: User.find_by(scribe:true).last_name, addcard_id: card.addcards.last.id)
+          card.addcards.last.update(desc:"")
+        when card.card_title.downcase.include?("todo")
+          todo_summary = ""
+          reyn,jp,ralph,larry,george,vice,jesstoni = " - Renante \n"," \n - John Paul \n"," \n - Ralph Christian \n"," \n - Larry Vincent \n", " \n - George \n", " \n - FRANCISCO \n", " \n - Jesstoni \n"
+          card.addcards.last.todos.each do |todo|
+            status = todo.done ? " - done" : " - in progress"
+            if todo.user_id == 13
+              reyn += todo.task + status + "\n"
+            elsif todo.user_id == 2
+              jp += todo.task + status + "\n"
+            elsif todo.user_id == 15
+              ralph += todo.task + status + "\n"
+            elsif todo.user_id == 14
+              larry += todo.task + status + "\n"
+            elsif todo.user_id == 12
+              george += todo.task + status + "\n"
+            elsif todo.user_id == 16
+              vice += todo.task + status + "\n"
+            elsif todo.user_id == 18
+              jesstoni += todo.task + status + "\n"
+            else
+            end
+          end
+          todo_summary = reyn + jp + ralph + larry + george + vice + jesstoni
+          mom_summary += "\n \n * Todo's * \n " + todo_summary
+        when card.card_title.downcase.include?("ids")
+          ids_summary = ""
+          reyn,jp,ralph,larry,george,vice,jesstoni = " - Renante \n"," \n - John Paul \n"," \n - Ralph Christian \n"," \n - Larry Vincent \n", " \n - George \n", " \n - FRANCISCO \n", " \n - Jesstoni \n"
+          card.addcards.last.identifies.each do |identify|
+            if identify.user_id == 13
+              reyn += "* * " + identify.task + "\n" + identify.solution + "\n"
+            elsif identify.user_id == 2
+              jp += "* * " + identify.task + "\n" + identify.solution + "\n"
+            elsif identify.user_id == 15
+              ralph += "* * " + identify.task + "\n" + identify.solution + "\n"
+            elsif identify.user_id == 14
+              larry += "* * " + identify.task + "\n" + identify.solution + "\n"
+            elsif identify.user_id == 12
+              george += "* * " + identify.task + "\n" + identify.solution + "\n"
+            elsif identify.user_id == 16
+              vice += "* * " + identify.task + "\n" + identify.solution + "\n"
+            elsif identify.user_id == 18
+              jesstoni += "* * " + identify.task + "\n" + identify.solution + "\n"
+            else
+            end
+          end
+          ids_summary = reyn + jp + ralph + larry + george + vice + jesstoni
+          mom_summary += "\n \n * IDS * \n " + ids_summary          
+        when card.card_title.downcase.include?("conclusion")
+          mom_summary += "\n \n* Conclusion * \n" + card.addcards.last.desc
+          card.addcards.last.addcomments.create(comment: current_date + "\n" + card.addcards.last.desc, first_name: User.find_by(scribe:true).first_name, last_name: User.find_by(scribe:true).last_name, addcard_id: card.addcards.last.id)
+          card.addcards.last.update(desc:"")
+        else
+      end
+    end
+    Addcard.find(params[:id]).addcomments.create(comment: mom_summary, first_name: User.find_by(scribe:true).first_name, last_name: User.find_by(scribe:true).last_name, addcard_id: params[:id])
+
+    respond_to do |format|
+      format.html { redirect_to view_addcards_path, notice: "MoM generation successful!" }
+    end
+    # byebug
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

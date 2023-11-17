@@ -53,19 +53,10 @@
               <span><%= button_to "Present",attendance_path({status:"present"}),method: :patch, class:"present" %></span>
               <span class="undo-attendance"><%= button_to "Undo attendance",attendance_path,method: :patch, class:"undo" %></span>
             </div>
-            <div class="mt-3 desc-form">
-              <%= form_with scope: :addcard, url:update_addcard_path, method: :patch, local:true do |form| %>
-                <div class="pb-1">
-                  <%= form.text_area :desc , value:@addcard.desc, size: "68x10", style:"margin-left:43px; padding:10px 15px;"%>
-                </div>
-          
-                <div style="margin-left: 43px;">
-                  <%= form.submit "Save" , class:"save-desc" %>
-                  <span class="cancel-desc">Cancel</span>
-                </div>
-              <% end %>
+            <div class="mt-3 desc-area">
+              <div><b><%= Date.current.strftime("%B %d, %Y") %></b></div>
+              <p><%= @desc_value %></p>
             </div>
-            <p class="mt-3 desc-area"><%= @desc_value %></p>
           </div>
         <!-- Rocks Section -->
         <% elsif @card_name.card_title.downcase == "rocks" %>
@@ -268,6 +259,7 @@
                 <% end %>
               <% end %> 
             </div>
+        <!-- Todo Section -->
         <% elsif @card_name.card_title.downcase.include?("todo") %>
           <div>
             <div style="margin-bottom: 25px;">
@@ -322,6 +314,7 @@
 
             <br><br><br><br>
           </div>
+        <!-- IDS Section -->
         <% elsif @card_name.card_title.downcase.include?("ids") %>
           <div>
             <div style="margin-bottom: 25px;">
@@ -388,7 +381,19 @@
             <% end %>
             
             <br><br><br><br>
-          </div>          
+          </div>   
+        <!-- MoM Section -->
+        <% elsif @card_name.card_title.downcase.include?("mom") %>
+          <% if current_user.scribe == true  %> 
+            <% if notice  %>
+              <div class="alert alert-success text-center"><b><%= notice %></b></div>
+            <% end %>
+            <%= form_with scope: :addcard, url:generate_mom_path, method: :post, local:true do |form| %>
+              <div>
+                <%= form.submit "Generate MoM" , class:"btn btn-success" %>
+              </div>
+            <% end %>
+          <% end %>
         <% else %>
           <div>
             <div class="d-flex align-items-center">
@@ -408,7 +413,10 @@
                 </div>
               <% end %>
             </div>
-            <p class="mt-3 desc-area"><%= @desc_value %></p>
+            <div  class="mt-3 desc-area">
+              <div><b><%= Date.current.strftime("%B %d, %Y") %></b></div>
+              <p><%= @desc_value %></p>
+            </div>
           </div>
         <% end %>
         <!-- Add comment section -->
