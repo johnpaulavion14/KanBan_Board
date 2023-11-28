@@ -1,6 +1,6 @@
 class AddcardsController < ApplicationController
   before_action :authenticate_user!
-  before_action :get_card, only: %i[ index edit edit_desc create update destroy attendance]
+  before_action :get_card, only: %i[ index edit edit_desc create update destroy attendance update_conclusion]
   # before_action :set_addcard, only: %i[ show edit update destroy ]
 
   # GET /addcards or /addcards.json
@@ -33,6 +33,8 @@ class AddcardsController < ApplicationController
         end
       end
     end
+    #names must not have spaces
+    @conclusion_lists = ["Larry","Ralph","JohnPaul","George","Jess","Reyn","Vice"].shuffle()
   end
 
   # GET /addcards/1 or /addcards/1.json
@@ -177,6 +179,48 @@ class AddcardsController < ApplicationController
     Identify.find(checkbox_id).update(done:params[:identify][:checkbox_done])
     redirect_to view_addcards_path
   end  
+
+  def update_conclusion
+    desc = ""
+    params_value = params[:addcard]
+    jp = "John Paul - " + params_value["JohnPaul 0"] + ", " + params_value["JohnPaul 1"] + ", " + params_value["JohnPaul 2"] + " = " + params_value["JohnPaul 3"] + "\n"
+    jess = "Jess - " + params_value["Jess 0"] + ", " + params_value["Jess 1"] + ", " + params_value["Jess 2"] + " = " + params_value["Jess 3"] + "\n"
+    vice = "Vice - " + params_value["Vice 0"] + ", " + params_value["Vice 1"] + ", " + params_value["Vice 2"] + " = " + params_value["Vice 3"] + "\n"
+    larry = "Larry - " + params_value["Larry 0"] + ", " + params_value["Larry 1"] + ", " + params_value["Larry 2"] + " = " + params_value["Larry 3"] + "\n"
+    george = "George - " + params_value["George 0"] + ", " + params_value["George 1"] + ", " + params_value["George 2"] + " = " + params_value["George 3"] + "\n"
+    reyn = "Reyn - " + params_value["Reyn 0"] + ", " + params_value["Reyn 1"] + ", " + params_value["Reyn 2"] + " = " + params_value["Reyn 3"] + "\n"
+    ralph = "Ralph - " + params_value["Ralph 0"] + ", " + params_value["Ralph 1"] + ", " + params_value["Ralph 2"] + " = " + params_value["Ralph 3"] + "\n"
+    params_value[:conclusion_lists].split(" ").each do |name|
+      case 
+        when name == "JohnPaul"
+          desc += jp
+        when name == "Vice"
+          desc += vice
+        when name == "Reyn"
+          desc += reyn
+        when name == "Ralph"
+          desc += ralph
+        when name == "Larry"
+          desc += larry
+        when name == "George"
+          desc += george
+        when name == "Jess"
+          desc += jess
+        else
+      end
+    end
+
+    @addcard = @card.addcards.find(params[:id])
+    respond_to do |format|
+      if @addcard.update(desc: desc)
+        format.html { redirect_to view_addcards_path, notice: "Addcard was successfully updated." }
+        format.json { render :show, status: :ok, location: @addcard }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @addcard.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 
   def generate_mom
     current_date = Date.current.strftime("%B %d, %Y").to_s
