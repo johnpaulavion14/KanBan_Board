@@ -145,8 +145,13 @@ class AddcardsController < ApplicationController
     redirect_to view_addcards_path
   end
   def update_checkbox
+    if params[:todo][:checkbox_done] == "true"
+      finish_date = Date.today
+    else
+      finish_date = ""
+    end
     checkbox_id = params[:todo][:checkbox_id].to_i
-    Todo.find(checkbox_id).update(done:params[:todo][:checkbox_done])
+    Todo.find(checkbox_id).update(done:params[:todo][:checkbox_done],done_date:finish_date)
     redirect_to view_addcards_path
   end
 
@@ -175,8 +180,13 @@ class AddcardsController < ApplicationController
     redirect_to view_addcards_path
   end
   def update_identify_checkbox
+    if params[:identify][:checkbox_done] == "true"
+      finish_date = Date.today
+    else
+      finish_date = ""
+    end
     checkbox_id = params[:identify][:checkbox_id].to_i
-    Identify.find(checkbox_id).update(done:params[:identify][:checkbox_done])
+    Identify.find(checkbox_id).update(done:params[:identify][:checkbox_done], done_date:finish_date)
     redirect_to view_addcards_path
   end  
 

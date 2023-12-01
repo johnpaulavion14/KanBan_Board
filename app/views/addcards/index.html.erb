@@ -291,15 +291,20 @@
               <hr style="margin: 2px 0;">
               <% @todo_list.each do |list| %>
                 <% if user.id == list.user_id  %>
-                  <div class="d-flex justify-content-between">
-                    <div class="task-section d-flex align-items-start">
-                      <input type="checkbox" id="myCheckbox<%= list.id %>" class="check-boxes <%= list.id %> mx-2" style="margin-top:6px;" role="button" <%= current_user.id == list.user_id ? '':'disabled' %> <%= list.done ? 'checked':'' %>>
-                      <label class="<%= list.done ? 'text-decoration-line-through' : '' %> task-text" ><%= list.task %></label> 
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="task-section d-flex justify-content-between w-100">
+                      <div class="d-flex align-items-start">
+                        <input type="checkbox" id="myCheckbox<%= list.id %>" class="check-boxes <%= list.id %> mx-2" style="margin-top:6px;" role="button" <%= current_user.id == list.user_id ? '':'disabled' %> <%= list.done ? 'checked':'' %>>
+                        <label class="<%= list.done ? 'text-decoration-line-through' : '' %> task-text" ><%= list.task %></label> 
+                      </div>
+                      <div style="font-size:10px;" class="d-flex align-items-center">
+                        <span style="width:120px;">start:<b><%= list.created_at.strftime("%m/%d") %></b> - finish:<b><%= list.done_date == nil ? "" : list.done_date.strftime("%m/%d") %></b></span>
+                      </div>
                     </div>
                     <% if user.id == current_user.id  %>
-                      <div class="todo-action d-flex">
+                      <div class="todo-action d-flex" style="margin-bottom:5px">
                         <span role="button" class="mx-2 edit-todo" id="<%= list.id %>"><%= image_tag ("edit.png"),style:"width:15px" %></span>
-                        <%= link_to delete_todo_path({todo_id:list.id}), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+                        <%= link_to delete_todo_path({todo_id:list.id}), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'},class:"delete-todo" do %>
                             <span><%= image_tag ("delete.png"),style:"width:15px" %></span>
                         <% end %>
                       </div>
@@ -347,14 +352,19 @@
               <% @identify_list.each do |list| %>
                 <% if user.id == list.user_id  %>
                   <div class="d-flex justify-content-between ids-list">
-                    <div class="task-section d-flex align-items-start">
-                      <input type="checkbox" class="identify-check-boxes <%= list.id %> mx-2" style="margin-top:6px;" role="button" <%= current_user.id == list.user_id ? '':'disabled' %> <%= list.done ? 'checked':'' %>>
-                      <label class="<%= list.done ? 'text-decoration-line-through' : '' %> solution-text" role="button"><%= list.task %></label> 
+                    <div class="task-section d-flex justify-content-between w-100">
+                      <div class="d-flex align-items-start">
+                        <input type="checkbox" class="identify-check-boxes <%= list.id %> mx-2" style="margin-top:6px;" role="button" <%= current_user.id == list.user_id ? '':'disabled' %> <%= list.done ? 'checked':'' %>>
+                        <label class="<%= list.done ? 'text-decoration-line-through' : '' %> solution-text" role="button"><%= list.task %></label> 
+                      </div>
+                      <div style="font-size:10px;" class="d-flex align-items-center">
+                        <span style="width:120px;">start:<b><%= list.created_at.strftime("%m/%d") %></b> - finish:<b><%= list.done_date == nil ? "" : list.done_date.strftime("%m/%d") %></b></span>
+                      </div>
                     </div>
                     <% if user.id == current_user.id  %>
                       <div class="identify-action d-flex">
                         <span role="button" class="mx-2 edit-identify" id="<%= list.id %>"><%= image_tag ("edit.png"),style:"width:15px" %></span>
-                        <%= link_to delete_identify_path({identify_id:list.id}), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
+                        <%= link_to delete_identify_path({identify_id:list.id}), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, class:"delete-identify" do %>
                             <span><%= image_tag ("delete.png"),style:"width:15px" %></span>
                         <% end %>
                       </div>
@@ -569,7 +579,7 @@
     // Edit todo
     $(".edit-todo").each( function(index,todo) {
       $(todo).click(function(){
-        var todo_task = $(this).parent(".todo-action").siblings(".task-section").children(".task-text").text()
+        var todo_task = $(this).parent(".todo-action").siblings(".task-section").find(".task-text").text()
         var url = window.location.href;
         var newurl = new URL(url);
         var urlParams = newurl.pathname;
@@ -580,7 +590,20 @@
         $("#todo-form").attr("action",update_params)
         $("#todo-form").attr("method","patch")
       });
-    });  
+    }); 
+    //hover text when edit and delete todos    
+    $(".edit-todo").mouseover(function(){
+      $(this).parent(".todo-action").siblings(".task-section").find(".task-text").css("background-color", "lightgray");
+    })
+    $(".edit-todo").mouseout(function(){
+      $(this).parent(".todo-action").siblings(".task-section").find(".task-text").css("background-color", "transparent" );
+    })
+    $(".delete-todo").mouseover(function(){
+      $(this).parent(".todo-action").siblings(".task-section").find(".task-text").css("background-color", "lightgray");
+    })
+    $(".delete-todo").mouseout(function(){
+      $(this).parent(".todo-action").siblings(".task-section").find(".task-text").css("background-color", "transparent" );
+    })
     // Check todo  
     $(".check-boxes").each( function(index,checkbox) {
       $(checkbox).click(function(){
@@ -597,7 +620,7 @@
     // Edit identify
     $(".edit-identify").each( function(index,identify) {
       $(identify).click(function(){
-        var identify_task = $(this).parent(".identify-action").siblings(".task-section").children(".solution-text").text()
+        var identify_task = $(this).parent(".identify-action").siblings(".task-section").find(".solution-text").text()
         var url = window.location.href;
         var newurl = new URL(url);
         var urlParams = newurl.pathname;
@@ -609,6 +632,19 @@
         $("#identify-form").attr("method","patch")
       });
     }); 
+     //hover text when edit and delete identify  
+    $(".edit-identify").mouseover(function(){
+      $(this).parent(".identify-action").siblings(".task-section").find(".solution-text").css("background-color", "lightgray");
+    })
+    $(".edit-identify").mouseout(function(){
+      $(this).parent(".identify-action").siblings(".task-section").find(".solution-text").css("background-color", "transparent");
+    })
+    $(".delete-identify").mouseover(function(){
+      $(this).parent(".identify-action").siblings(".task-section").find(".solution-text").css("background-color", "lightgray");
+    })
+    $(".delete-identify").mouseout(function(){
+      $(this).parent(".identify-action").siblings(".task-section").find(".solution-text").css("background-color", "transparent");
+    })
     // Check identify 
     $(".identify-check-boxes").each( function(index,checkbox) {
       $(checkbox).click(function(){
