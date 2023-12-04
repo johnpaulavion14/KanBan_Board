@@ -38,3 +38,8 @@
   color: white;
   font-family: 'Roboto', sans-serif;
 }
+
+.mom-date:hover {
+  color: blue;
+  text-decoration: underline;
+}

@@ -441,6 +441,13 @@
                 <%= form.submit "Generate MoM" , class:"btn btn-success" %>
               </div>
             <% end %>
+            <div id="download-pdf-section" class="mt-3">
+              <button id="download-all-mom">Download All MoM PDF</button>
+              <% @comments.each do |comment| %>
+                <div class="mom-date" role="button">MoM_<%= comment.created_at.strftime("%b %d, %Y") %>.pdf</div>
+                <div class="d-none mom-scribe"><%= "#{comment.first_name} #{comment.last_name}" %></div>
+              <% end %>
+            </div>
           <% end %>
         <% else %>
           <div>
@@ -496,10 +503,12 @@
               <div style="margin-left: 10px;">
                 <div>
                   <b><%= "#{comment.first_name} #{comment.last_name}" %></b>
-                  <span><%= comment.updated_at.strftime("%b %d at %I:%M%p") %></span>
+                  <span><%= comment.created_at.strftime("%b %d at %I:%M%p") %></span>
                 </div>
                 <div class="comments-list">
-                  <%= comment.comment.to_s.gsub(/\n/, '<br/>').html_safe %>
+                  <div class="mom-list">
+                    <%= comment.comment.to_s.gsub(/\n/, '<br/>').html_safe %>
+                  </div>
                 </div>
                 <% if "#{comment.first_name} #{comment.last_name}" == "#{current_user.first_name} #{current_user.last_name}" %>
                   <div>
@@ -677,7 +686,61 @@
       let href = $(this).attr("href") + `?page_scroll=${scroll}`
       $(this).attr("href", href);
     });
-    
+    // Download MoM pdf
+    //download per date
+    $(".mom-date").each( function(index,date) {
+      $(date).on('click', function () {
+        // const editedFilename = editFilename("MoM", timestamp);
+        let scribe_name = $(".mom-scribe")[index].innerHTML
+        let filename = $(date).text()
+        const contentElement = $(".mom-list")[index]
+        const titleElement = document.createElement('div');
+        titleElement.innerHTML = `<h3 class="text-center"><b>MoM Summary</b></h3><p><b>Scribe: ${scribe_name}</b></p>`;
+        // Create a temporary element to hold the combined content
+        const combinedContentElement = document.createElement('div');
+        // Append the title at the top
+        combinedContentElement.appendChild(titleElement);
+        combinedContentElement.appendChild(contentElement.cloneNode(true))
+        // Convert HTML to PDF
+        html2pdf(combinedContentElement, {
+          margin: 10,
+          filename: filename,
+        });
+      })
+    })
+    //download all date
+    $('#download-all-mom').on('click', function () {
+      $(".mom-list").each( function(index,mom) {
+        let scribe_name = $(".mom-scribe")[index].innerHTML
+        let filename = $(".mom-date")[index].innerHTML
+        const contentElement = mom
+        const titleElement = document.createElement('div');
+        titleElement.innerHTML = `<h3 class="text-center"><b>MoM Summary</b></h3><p><b>Scribe: ${scribe_name}</b></p>`;
+        // Create a temporary element to hold the combined content
+        const combinedContentElement = document.createElement('div');
+        // Append the title at the top
+        combinedContentElement.appendChild(titleElement);
+        combinedContentElement.appendChild(contentElement.cloneNode(true))
+        // Convert HTML to PDF
+        html2pdf(combinedContentElement, {
+          margin: 10,
+          filename: filename,
+        });
+      })
+    });
+    function editFilename(filename, suffix) {
+      // Split the filename into its base name and extension
+      let parts = filename.split('.');
+      // Get the base name and extension
+      let baseName = parts[0];
+      let extension = parts.length > 1 ? '.' + parts[parts.length - 1] : '';
+      // Append the suffix to the base name
+      let editedFilename = baseName + '_' + suffix + extension;
+      return editedFilename;
+    }
   });
 
+
 </script>           
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>

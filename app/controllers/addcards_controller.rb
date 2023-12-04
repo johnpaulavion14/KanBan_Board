@@ -234,19 +234,19 @@ class AddcardsController < ApplicationController
 
   def generate_mom
     current_date = Date.current.strftime("%B %d, %Y").to_s
-    mom_summary = current_date + ""
+    mom_summary = "<b><u> #{current_date} </u></b>" + ""
     CreateBoard.find(params[:cb_id]).cards.each do |card|
       case 
         when card.card_title.downcase.include?("attendance")
-          mom_summary += "\n \n* Attendance * \n" + card.addcards.last.desc
+          mom_summary += "\n <b>* Attendance *</b>" + "<p>#{card.addcards.last.desc}</p>"
           card.addcards.last.addcomments.create(comment: current_date + "\n" + card.addcards.last.desc, first_name: User.find_by(scribe:true).first_name, last_name: User.find_by(scribe:true).last_name, addcard_id: card.addcards.last.id)
           card.addcards.last.update(desc:"")
         when card.card_title.downcase.include?("segue")
-          mom_summary += "\n \n* Intro / Segue * \n" + card.addcards.last.desc
+          mom_summary += "\n <b>* Intro / Segue * </b>" + "<p>#{card.addcards.last.desc}</p>"
           card.addcards.last.addcomments.create(comment: current_date + "\n" + card.addcards.last.desc, first_name: User.find_by(scribe:true).first_name, last_name: User.find_by(scribe:true).last_name, addcard_id: card.addcards.last.id)
           card.addcards.last.update(desc:"")
         when card.card_title.downcase.include?("headlines")
-          mom_summary += "\n \n* People Headlines * \n" + card.addcards.last.desc
+          mom_summary += "\n <b>* People Headlines * </b>" + "<p>#{card.addcards.last.desc}</p>"
           card.addcards.last.addcomments.create(comment: current_date + "\n" + card.addcards.last.desc, first_name: User.find_by(scribe:true).first_name, last_name: User.find_by(scribe:true).last_name, addcard_id: card.addcards.last.id)
           card.addcards.last.update(desc:"")
         when card.card_title.downcase.include?("todo")
@@ -272,32 +272,32 @@ class AddcardsController < ApplicationController
             end
           end
           todo_summary = reyn + jp + ralph + larry + george + vice + jesstoni
-          mom_summary += "\n \n * Todo's * \n " + todo_summary
+          mom_summary += "\n <b> * Todo's * </b> " + "<p> #{todo_summary} </p>"
         when card.card_title.downcase.include?("ids")
           ids_summary = ""
           reyn,jp,ralph,larry,george,vice,jesstoni = " - Renante \n"," \n - John Paul \n"," \n - Ralph Christian \n"," \n - Larry Vincent \n", " \n - George \n", " \n - FRANCISCO \n", " \n - Jesstoni \n"
           card.addcards.last.identifies.each do |identify|
             if identify.user_id == 13
-              reyn += "* * " + identify.task + "\n" + identify.solution + "\n"
+              reyn += "* * " + identify.task + "\n" + "<i>#{identify.solution}</i>" + "\n"
             elsif identify.user_id == 2
-              jp += "* * " + identify.task + "\n" + identify.solution + "\n"
+              jp += "* * " + identify.task + "\n" + "<i>#{identify.solution}</i>" + "\n"
             elsif identify.user_id == 15
-              ralph += "* * " + identify.task + "\n" + identify.solution + "\n"
+              ralph += "* * " + identify.task + "\n" + "<i>#{identify.solution}</i>" + "\n"
             elsif identify.user_id == 14
-              larry += "* * " + identify.task + "\n" + identify.solution + "\n"
+              larry += "* * " + identify.task + "\n" + "<i>#{identify.solution}</i>" + "\n"
             elsif identify.user_id == 12
-              george += "* * " + identify.task + "\n" + identify.solution + "\n"
+              george += "* * " + identify.task + "\n" + "<i>#{identify.solution}</i>" + "\n"
             elsif identify.user_id == 16
-              vice += "* * " + identify.task + "\n" + identify.solution + "\n"
+              vice += "* * " + identify.task + "\n" + "<i>#{identify.solution}</i>" + "\n"
             elsif identify.user_id == 18
-              jesstoni += "* * " + identify.task + "\n" + identify.solution + "\n"
+              jesstoni += "* * " + identify.task + "\n" + "<i>#{identify.solution}</i>" + "\n"
             else
             end
           end
           ids_summary = reyn + jp + ralph + larry + george + vice + jesstoni
-          mom_summary += "\n \n * IDS * \n " + ids_summary          
+          mom_summary += "\n <b> * IDS * </b> " + "<p> #{ids_summary} </p>"          
         when card.card_title.downcase.include?("conclusion")
-          mom_summary += "\n \n* Conclusion * \n" + card.addcards.last.desc
+          mom_summary += "\n <b>* Conclusion * </b>" + card.addcards.last.desc
           card.addcards.last.addcomments.create(comment: current_date + "\n" + card.addcards.last.desc, first_name: User.find_by(scribe:true).first_name, last_name: User.find_by(scribe:true).last_name, addcard_id: card.addcards.last.id)
           card.addcards.last.update(desc:"")
         else

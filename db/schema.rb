@@ -44,7 +44,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_01_024558) do
 
   create_table "addcards", force: :cascade do |t|
     t.string "card_name"
-    t.text "desc", default: ""
+    t.text "desc"
     t.integer "card_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
