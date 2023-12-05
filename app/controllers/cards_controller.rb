@@ -8,8 +8,8 @@ class CardsController < ApplicationController
     @cards = CreateBoard.find(params[:cb_id]).cards.order("created_at asc")
     @addcards = CreateBoard.find(params[:cb_id]).addcards.order("created_at asc")
     @board = CreateBoard.find(params[:cb_id])
-    @hosts = User.where(host:"true").order("created_at asc").pluck(:first_name)
-    @scribes = User.where(scribe:"true").order("created_at asc").pluck(:first_name)
+    @host = HostScribe.where('date <= ?',Date.today) == [] ? "" : HostScribe.where('date <= ?',Date.today).order("date asc").last.host
+    @scribe = HostScribe.where('date <= ?',Date.today) == [] ? "" : HostScribe.where('date <= ?',Date.today).order("date asc").last.scribe
   end
 
   # GET /cards/1 or /cards/1.json

@@ -34,6 +34,7 @@ Rails.application.routes.draw do
   patch 'attendance/:cb_id/:card_id/:id' => 'addcards#attendance', as: 'attendance'
   patch 'update_conclusion/:cb_id/:card_id/:id' => 'addcards#update_conclusion', as: 'update_conclusion'
   post 'generate_mom/:cb_id/:card_id/:id' => 'addcards#generate_mom', as: 'generate_mom'
+  post 'create_hostandscribe/:cb_id/:card_id/:id' => 'addcards#create_hostandscribe', as: 'create_hostandscribe'
   delete 'addcards/:cb_id/:card_id/:id' => 'addcards#destroy', as: 'delete_addcard'
   resources :addcards
   # todo section

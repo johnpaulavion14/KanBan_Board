@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date: 2023-12-05
+  host: MyString
+  scribe: MyString
+
+two:
+  date: 2023-12-05
+  host: MyString
+  scribe: MyString

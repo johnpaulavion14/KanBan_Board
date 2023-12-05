@@ -49,6 +49,7 @@ class ProjectsController < ApplicationController
     @sub2milestones = Sub2milestone.all.order(start: :asc)
     @users = ProjectWorkspace.find(params[:pw_id]).assigned
     @all_users = User.all
+    @scribe = HostScribe.where('date <= ?',Date.today) == [] ? "" : HostScribe.where('date <= ?',Date.today).order("date asc").last.scribe
 
   end
 

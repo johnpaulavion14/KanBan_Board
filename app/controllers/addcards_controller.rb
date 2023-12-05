@@ -14,11 +14,11 @@ class AddcardsController < ApplicationController
     @todo_list = @addcard.todos.order("created_at asc")
     # identify
     @identify_list = @addcard.identifies.order("created_at asc")
+
+    @host = HostScribe.where('date <= ?',Date.today) == [] ? "" : HostScribe.where('date <= ?',Date.today).order("date asc").last.host
+    @scribe = HostScribe.where('date <= ?',Date.today) == [] ? "" : HostScribe.where('date <= ?',Date.today).order("date asc").last.scribe
   
     @name_initial = current_user.first_name.chr + current_user.last_name.chr
-
-    @hosts = User.where(host:"true").order("created_at asc").pluck(:first_name)
-    @scribes = User.where(scribe:"true").order("created_at asc").pluck(:first_name)
 
     @workspace_head = ["lvcagadas@cem-inc.org.ph"]
     @workspace_isu = ["rcjamilano@cem-inc.org.ph", "rmina@cem-inc.org.ph", "jpbocatija@cem-inc.org.ph"]
@@ -35,6 +35,11 @@ class AddcardsController < ApplicationController
     end
     #names must not have spaces
     @conclusion_lists = ["Larry","Ralph","JohnPaul","George","Jess","Reyn","Vice"].shuffle()
+    #Host and Scribe
+    @hostscribe_date = Addcard.find(params[:id]).host_scribes.pluck(:date)
+    @hosts_list = Addcard.find(params[:id]).host_scribes.pluck(:host)
+    @scribes_list = Addcard.find(params[:id]).host_scribes.pluck(:scribe)
+    @users = ["Select User:"] + User.pluck(:first_name)
   end
 
   # GET /addcards/1 or /addcards/1.json
@@ -235,19 +240,21 @@ class AddcardsController < ApplicationController
   def generate_mom
     current_date = Date.current.strftime("%B %d, %Y").to_s
     mom_summary = "<b><u> #{current_date} </u></b>" + ""
+    first_name = User.find_by(first_name:params[:addcard]["scribe_name"]).first_name
+    last_name = User.find_by(first_name:params[:addcard]["scribe_name"]).last_name
     CreateBoard.find(params[:cb_id]).cards.each do |card|
       case 
         when card.card_title.downcase.include?("attendance")
           mom_summary += "\n <b>* Attendance *</b>" + "<p>#{card.addcards.last.desc}</p>"
-          card.addcards.last.addcomments.create(comment: current_date + "\n" + card.addcards.last.desc, first_name: User.find_by(scribe:true).first_name, last_name: User.find_by(scribe:true).last_name, addcard_id: card.addcards.last.id)
+          card.addcards.last.addcomments.create(comment: current_date + "\n" + card.addcards.last.desc, first_name:first_name, last_name:last_name, addcard_id: card.addcards.last.id)
           card.addcards.last.update(desc:"")
         when card.card_title.downcase.include?("segue")
           mom_summary += "\n <b>* Intro / Segue * </b>" + "<p>#{card.addcards.last.desc}</p>"
-          card.addcards.last.addcomments.create(comment: current_date + "\n" + card.addcards.last.desc, first_name: User.find_by(scribe:true).first_name, last_name: User.find_by(scribe:true).last_name, addcard_id: card.addcards.last.id)
+          card.addcards.last.addcomments.create(comment: current_date + "\n" + card.addcards.last.desc, first_name:first_name, last_name:last_name, addcard_id: card.addcards.last.id)
           card.addcards.last.update(desc:"")
         when card.card_title.downcase.include?("headlines")
           mom_summary += "\n <b>* People Headlines * </b>" + "<p>#{card.addcards.last.desc}</p>"
-          card.addcards.last.addcomments.create(comment: current_date + "\n" + card.addcards.last.desc, first_name: User.find_by(scribe:true).first_name, last_name: User.find_by(scribe:true).last_name, addcard_id: card.addcards.last.id)
+          card.addcards.last.addcomments.create(comment: current_date + "\n" + card.addcards.last.desc, first_name:first_name, last_name:last_name, addcard_id: card.addcards.last.id)
           card.addcards.last.update(desc:"")
         when card.card_title.downcase.include?("todo")
           todo_summary = ""
@@ -298,17 +305,23 @@ class AddcardsController < ApplicationController
           mom_summary += "\n <b> * IDS * </b> " + "<p> #{ids_summary} </p>"          
         when card.card_title.downcase.include?("conclusion")
           mom_summary += "\n <b>* Conclusion * </b>" + card.addcards.last.desc
-          card.addcards.last.addcomments.create(comment: current_date + "\n" + card.addcards.last.desc, first_name: User.find_by(scribe:true).first_name, last_name: User.find_by(scribe:true).last_name, addcard_id: card.addcards.last.id)
+          card.addcards.last.addcomments.create(comment: current_date + "\n" + card.addcards.last.desc, first_name:first_name, last_name:last_name, addcard_id: card.addcards.last.id)
           card.addcards.last.update(desc:"")
         else
       end
     end
-    Addcard.find(params[:id]).addcomments.create(comment: mom_summary, first_name: User.find_by(scribe:true).first_name, last_name: User.find_by(scribe:true).last_name, addcard_id: params[:id])
+    Addcard.find(params[:id]).addcomments.create(comment: mom_summary, first_name:first_name, last_name:last_name, addcard_id: params[:id])
 
     respond_to do |format|
       format.html { redirect_to view_addcards_path, notice: "MoM generation successful!" }
     end
-    # byebug
+  end
+  def create_hostandscribe
+    Addcard.find(params[:id]).host_scribes.destroy_all
+    [1,2,3,4].each do |number|
+      HostScribe.create(date:params[:addcard]["date#{number}"], host:params[:addcard]["host#{number}"],scribe:params[:addcard]["scribe#{number}"],addcard_id:params[:id])
+    end
+    redirect_to view_addcards_path
   end
 
   private
