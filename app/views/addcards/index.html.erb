@@ -514,7 +514,7 @@
             <%= form.submit "Save Host and Scribe" , class:"btn btn-success" %>
           </div>
           <% end %>
-
+      <!-- Standard UI-->  
         <% else %>
           <div>
             <div class="d-flex align-items-center">
@@ -608,6 +608,12 @@
     element.style.height = "5px";
     element.style.height = (element.scrollHeight)+"px";
   }
+
+  $(".save-desc").click(function(){
+    // let scroll = $(".card_container").scrollLeft()
+    let href = $(this).attr("href") + `?page_scroll=1234`
+    $(this).attr("href", href);
+  });
 
   $(document).ready(function(){
     // edit addcard name

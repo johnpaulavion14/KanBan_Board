@@ -198,6 +198,8 @@ class AddcardsController < ApplicationController
   def update_conclusion
     desc = ""
     params_value = params[:addcard]
+    average = (params_value["JohnPaul 3"].to_i + params_value["Jess 3"].to_i + params_value["Vice 3"].to_i  + params_value["Larry 3"].to_i  + params_value["George 3"].to_i  + params_value["Reyn 3"].to_i  + params_value["Ralph 3"].to_i) / 7.00
+    average_score= "<div class='btn btn-success' style='font-weight:bold'>" + "AVERAGE SCORE = " + sprintf('%.2f', average) + "</div>"
     jp = "John Paul - " + params_value["JohnPaul 0"] + ", " + params_value["JohnPaul 1"] + ", " + params_value["JohnPaul 2"] + " = " + params_value["JohnPaul 3"] + "\n"
     jess = "Jess - " + params_value["Jess 0"] + ", " + params_value["Jess 1"] + ", " + params_value["Jess 2"] + " = " + params_value["Jess 3"] + "\n"
     vice = "Vice - " + params_value["Vice 0"] + ", " + params_value["Vice 1"] + ", " + params_value["Vice 2"] + " = " + params_value["Vice 3"] + "\n"
@@ -227,7 +229,7 @@ class AddcardsController < ApplicationController
 
     @addcard = @card.addcards.find(params[:id])
     respond_to do |format|
-      if @addcard.update(desc: desc)
+      if @addcard.update(desc: desc + average_score)
         format.html { redirect_to view_addcards_path, notice: "Addcard was successfully updated." }
         format.json { render :show, status: :ok, location: @addcard }
       else
@@ -304,7 +306,7 @@ class AddcardsController < ApplicationController
           ids_summary = reyn + jp + ralph + larry + george + vice + jesstoni
           mom_summary += "\n <b> * IDS * </b> " + "<p> #{ids_summary} </p>"          
         when card.card_title.downcase.include?("conclusion")
-          mom_summary += "\n <b>* Conclusion * </b>" + card.addcards.last.desc
+          mom_summary += "\n <b>* Conclusion * </b>" + "<div> #{card.addcards.last.desc} </div>" 
           card.addcards.last.addcomments.create(comment: current_date + "\n" + card.addcards.last.desc, first_name:first_name, last_name:last_name, addcard_id: card.addcards.last.id)
           card.addcards.last.update(desc:"")
         else
