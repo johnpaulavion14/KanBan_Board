@@ -1,0 +1,702 @@
+<%= render 'projects/projects_navbar' %>
+<div class="mx-2 mb-2 ">
+  <div class="d-none" id="owner-param"><%= params[:rocks_owner] %></div>
+  <h3 class="text-center">- - <%= ProjectWorkspace.find(params[:pw_id]).folder_name %> - -</h3>
+  <%= link_to "Your Projects",view_projects_path({rocks_owner:current_user.id}), class:" #{'nav-active' if request.original_url.include? "yourprojects"} p-1"  %>
+
+  <% if current_user.email == "jpbocatija@cem-inc.org.ph" %>
+    <%= link_to "All Projects",view_allprojects_path({rocks_owner:"all_rocks"}), class:" #{'nav-active' if request.original_url.include? "allprojects"} p-1" %>
+  <% elsif current_user.admin == true %>
+    <%= link_to "All Projects",view_allprojects_path({rocks_owner:"all_rocks"}), class:" #{'nav-active' if request.original_url.include? "allprojects"} p-1" %>
+  <% elsif current_user.first_name == @scribe %>
+    <%= link_to "All Projects",view_allprojects_path({rocks_owner:"all_rocks"}), class:" #{'nav-active' if request.original_url.include? "allprojects"} p-1" %>
+  <% end %>
+
+  <%= link_to "Archived",view_archived_path({rocks_owner:current_user.id}), class:" #{'nav-active' if request.original_url.include? "archived"} p-1"  %>
+
+  <button id="addDataBtn">Export to Excel</button>
+</div>
+
+<div style="height: 90vh;width: 100vw; overflow:scroll;">
+  <table class="table table-hover text-center" style="width:max-content; min-width: 100%;" id="exportTable">
+    <thead>
+      <tr style="color: #0067a3; border-bottom: 3px solid #0067a3;border-top: 3px solid #0067a3; height: 50px; vertical-align: middle;" class="export-tr" id="t-head">
+        <th class="export-td" scope="col" style="min-width: 200px;">Task Name</th>
+        <th class="export-td" scope="col" >Duration</th>
+        <th class="export-td" scope="col" style="width: 130px;">Start</th>
+        <th scope="col" ></th>
+        <th class="export-td" scope="col" style="width: 130px;">Finish</th>
+        <th class="export-td" scope="col" >Assigned To</th>
+        <th class="export-td" scope="col" style="min-width: 150px;">% Complete</th>
+        <th class="export-td" scope="col" style="min-width: 100px;">Date Completed</th>
+        <th class="export-td" scope="col" style="min-width: 200px;">Status</th>
+        <th class="export-td" scope="col" >Output</th>
+        <th class="export-td" scope="col" >Remarks</th>
+        <th class="export-td" scope="col" >Reviewed By</th>
+        <th class="export-td" scope="col" >Archived</th>
+        <th class="export-td" scope="col" style="min-width:100px;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @rocks.each do |rock| %>
+        <!-- All Rocks -->
+        <tr class="all-rocks export-tr" style="background-color:#cccdd4; font-weight: bold; vertical-align: middle;" id="rock-tr"> 
+          <td style="display: none;" id="rock-id"><%= rock.id %></td>
+          <td class="task-name export-td" id="rockplus-<%= rock.id %>" style="text-align: left; min-width: 100px;">
+            <% if rock.milestones.blank? %>
+              <%= image_tag ("plus.png"),role:"button",style:"margin-left:1rem",class:"plus-icon" %>
+              <%= image_tag ("minus.png"),role:"button", style:"margin-left:1rem",class:"minus-icon" %>
+            <% else %>
+              <%= image_tag ("plus_black.png"),role:"button",style:"margin-left:1rem",class:"plus-icon" %>
+              <%= image_tag ("minus_black.png"),role:"button",style:"margin-left:1rem",class:"minus-icon" %>
+            <% end %>
+            <%= rock.task_name %>
+          </td>
+          <!-- display none -->
+          <td style="display: none;" id="isrock">rock</td>
+          <td style="display: none;" id="percent-sum"><%= rock.milestones.pluck(:complete).reduce(:+) %></td>
+          <td style="display: none;" id="m-count"><%= rock.milestones.count %></td>
+          <!-- messages -->
+          <td style="display: none;" class="m-current-user"><%= current_user.first_name %> <%= current_user.last_name%></td>
+          <td style="display: none;" class="message-id"><%= rock.rockmessages.order(created_at: :asc).pluck(:id) %></td>
+          <td style="display: none;" class="milestone-messages"><%= rock.rockmessages.order(created_at: :asc).pluck(:message) %></td>
+          <td style="display: none;" class="message-firstname"><%= rock.rockmessages.order(created_at: :asc).pluck(:first_name) %></td>
+          <td style="display: none;" class="message-lastname"><%= rock.rockmessages.order(created_at: :asc).pluck(:last_name) %></td>
+          <td style="display: none;" class="message-time"><%= rock.rockmessages.order(created_at: :asc).pluck(:time) %></td>
+          <!-- display none -->
+          <td class="export-td dayordays">
+            <%= (rock.start.to_date..rock.finish.to_date).count do |date|
+              date.workday?
+            end %> <span></span>
+          </td>
+          <td class="export-td">[ <%= rock.start.strftime("%b %d, %Y") %></td>
+          <td>>></td>
+          <td class="export-td"><%= rock.finish.strftime("%b %d, %Y") %> ]</td>
+          <td class="export-td d-none"><%= rock.assigned %></td>
+          <td class="assigned">
+            <% if !User.find(rock.user_id).profilepics.blank? %>
+              <%= image_tag User.find(rock.user_id).profilepics.last.pic, class:"assigned-pics", title:User.find(rock.user_id).email %>
+            <% else %>
+              <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:User.find(rock.user_id).email %>
+            <% end %>
+            <% @all_users.each do |user| %>
+              <% if rock.assigned.include? user.email %>
+                <% if user.id == User.find(rock.user_id).id %>
+                <% elsif !user.profilepics.blank?%>
+                  <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
+                <% else %>
+                  <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:user.email %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </td>
+          <td class="export-td rock-complete"><span class="complete"><%= rock.complete %></span> %</td>
+          <td class="date-completed export-td">
+            <% if rock.date_completed.nil? %>
+              - -
+            <% else %>
+              <%= rock.date_completed.strftime("%b %d, %Y") %>
+            <% end %>
+          </td>
+          <td class="status com-status export-td">
+            <div class="d-flex align-items-center justify-content-center">
+                <% case rock.complete %>
+                  <% when 0 %>
+                    <div class="bg-light px-2 py-1" style="flex:4">Not Started</div>
+                  <% when 100 %>
+                    <div class="bg-success px-2 py-1" style="flex:4">Complete</div>
+                  <% else %>
+                    <div class="bg-warning px-2 py-1" style="flex:4">In Progress</div>
+                <% end %>
+
+                <% if rock.finish >= Date.today %>
+                  <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="on track" class="track"><%= image_tag ("blue_circle.png")%></div>  
+                <% else %>
+                  <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="off track" class="track"><%= image_tag ("red_circle.png")%></div>  
+                <% end %>
+            </div>
+          </td>
+          <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= rock.output %></div></td>
+          <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= rock.remarks %></div></td>
+          <td class="reviewed-by">
+            <div>
+              <% if rock.reviewed_by.include? "checked"  %>
+                <div class="btn btn-success export-td">Acknowledged by <%= User.find_by(email:rock.reviewed_by.split.first).first_name %></div>
+              <% else %>
+                <% if  rock.reviewed_by != "" %>
+                  <div class="btn btn-danger export-td">To be reviewed by <%= User.find_by(email:rock.reviewed_by).first_name %></div>
+                <% else %>
+                  <div>- -</div>
+                <% end %>
+              <% end %>
+            </div>
+          </td>
+          <td> <%= button_to "return", return_archived_path({archived_id:rock.id}),method: :patch,class:"btn btn-danger" %></td>
+          <% if rock.rockmessages.empty? %>
+            <td class="notif-con export-td"><%= image_tag ("message.png"), class:"message-icon project-icon m-message"%></td>
+          <% else %>
+            <td class="notif-con export-td"><%= image_tag ("message_1.png"), class:"message-icon project-icon m-message"%></td>
+          <% end %>
+        </tr>
+        <!-- All Milestones -->
+        <% @milestones.each do |milestone| %> 
+          <% if rock.id == milestone.rock_id %>
+            <tr class="all-milestones rock-<%= rock.id %> export-tr" style="vertical-align: middle;" id="milestone-tr"> 
+              <td style="display: none;" id="rock-id"><%= rock.id %></td>
+              <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
+              <!-- messages -->
+              <td style="display: none;" class="m-current-user"><%= current_user.first_name %> <%= current_user.last_name%></td>
+              <td style="display: none;" class="message-id"><%= milestone.messages.order(created_at: :asc).pluck(:id) %></td>
+              <td style="display: none;" class="milestone-messages"><%= milestone.messages.order(created_at: :asc).pluck(:message) %></td>
+              <td style="display: none;" class="message-firstname"><%= milestone.messages.order(created_at: :asc).pluck(:first_name) %></td>
+              <td style="display: none;" class="message-lastname"><%= milestone.messages.order(created_at: :asc).pluck(:last_name) %></td>
+              <td style="display: none;" class="message-time"><%= milestone.messages.order(created_at: :asc).pluck(:time) %></td>
+              <td class="task-name export-td mplus-<%= rock.id %>" id="mileplus-<%= milestone.id %>" style="text-align: left; min-width: 100px; padding-left:4rem">
+                <% if milestone.submilestones.blank? %>
+                  <%= image_tag ("plus_blue_blank.png"),role:"button",class:"m-plus-icon" %>
+                  <%= image_tag ("minus_blue_blank.png"),role:"button",class:"m-minus-icon" %>
+                <% else %>
+                  <%= image_tag ("plus_blue.png"),role:"button",class:"m-plus-icon" %>
+                  <%= image_tag ("minus_blue.png"),role:"button",class:"m-minus-icon" %>
+                <% end %>
+                <%= milestone.task_name %>
+              </td>
+              <td class="export-td dayordays">
+                <%= (milestone.start.to_date..milestone.finish.to_date).count do |date|
+                  date.workday?
+                end %> <span></span>
+              </td>
+              <td class="export-td">[ <%= milestone.start.strftime("%b %d, %Y") %></td>
+              <td>>></td>
+              <td class="export-td"><%= milestone.finish.strftime("%b %d, %Y") %> ]</td>
+              <td class="export-td d-none"><%= milestone.assigned %></td>
+              <td class="assigned">
+                <% if !milestone.user.profilepics.blank? %>
+                  <%= image_tag milestone.user.profilepics.last.pic, class:"assigned-pics", title:milestone.user.email %>
+                <% else %>
+                  <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:milestone.user.email %>
+                <% end %>
+                <% @all_users.each do |user| %>
+                  <% if user.id == milestone.user.id %>
+                  <% elsif milestone.assigned.include? user.email %>
+                    <% if !user.profilepics.blank? %>
+                      <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
+                    <% else %>
+                      <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:user.email %>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              </td>
+              <td class="export-td"><span class="complete"><%= milestone.complete %></span> %</td>
+              <td class="date-completed export-td">
+                <% if milestone.date_completed.nil? %>
+                  - -
+                <% else %>
+                  <%= milestone.date_completed.strftime("%b %d, %Y") %>
+                <% end %>
+              </td>
+              <td class="status com-status export-td" style="padding-left: 1.5rem;">
+                <div class="d-flex align-items-center justify-content-center">
+                  <% case milestone.complete %>
+                    <% when 0 %>
+                      <div class="bg-light px-2 py-1" style="flex:4">Not Started</div>
+                    <% when 100 %>
+                      <div class="bg-success px-2 py-1" style="flex:4">Complete</div>
+                    <% else %>
+                      <div class="bg-warning px-2 py-1" style="flex:4">In Progress</div>
+                  <% end %>
+  
+                  <% if milestone.finish >= Date.today %>
+                    <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="on track" class="track"><%= image_tag ("blue_circle.png")%></div>  
+                  <% else %>
+                    <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="off track" class="track"><%= image_tag ("red_circle.png")%></div>  
+                  <% end %>
+                </div>
+              </td>
+              <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= milestone.output %></div></td>
+              <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= milestone.remarks %></div></td>
+              <td></td>
+              <td></td>
+              <% if milestone.messages.empty? %>
+                <td class="notif-con export-td" ><%= image_tag ("message.png"), class:"message-icon project-icon m-message", style:"margin-left: 30px;" %></td>
+              <% else %>
+                <td class="notif-con export-td" ><%= image_tag ("message_1.png"), class:"message-icon project-icon m-message", style:"margin-left: 30px;" %></td>
+              <% end %>
+            </tr>
+            <!-- All Submilestones -->
+            <% @submilestones.each do |submilestone| %> 
+              <% if milestone.id == submilestone.milestone_id %>
+                <tr class="all-submilestones mile-<%= milestone.id %> <%= submilestone.assigned.include?(current_user.email) ? '' : 'bg-light' %> export-tr" style="vertical-align: middle;" id="subm-tr">
+                  <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
+                  <td style="display: none;" id="submilestone-id"><%= submilestone.id %></td>
+                  <td class="task-name export-td smplus-<%= rock.id %>" id="submplus-<%= submilestone.id %>" style="text-align: left; min-width: 100px; padding-left:6rem">
+                    <% if submilestone.sub2milestones.blank? %>
+                      <%= image_tag ("plus_purple_blank.png"),role:"button",class:"subm-plus-icon" %>
+                      <%= image_tag ("minus_purple_blank.png"),role:"button",class:"subm-minus-icon" %>
+                    <% else %>
+                      <%= image_tag ("plus_purple.png"),role:"button",class:"subm-plus-icon" %>
+                      <%= image_tag ("minus_purple.png"),role:"button",class:"subm-minus-icon" %>
+                    <% end %>
+                    <%= submilestone.task_name %>
+                  </td>
+                  <td class="export-td dayordays">
+                    <%= (submilestone.start.to_date..submilestone.finish.to_date).count do |date|
+                      date.workday?
+                    end %> <span></span>
+                  </td>
+                  <td class="export-td">[ <%= submilestone.start.strftime("%b %d, %Y") %></td>
+                  <td>>></td>
+                  <td class="export-td"><%= submilestone.finish.strftime("%b %d, %Y") %> ]</td>
+                  <td class="export-td d-none"><%= submilestone.assigned %></td>
+                  <td class="assigned">
+                    <% if !submilestone.user.profilepics.blank? %>
+                      <%= image_tag submilestone.user.profilepics.last.pic, class:"assigned-pics", title:submilestone.user.email %>
+                    <% else %>
+                      <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:submilestone.user.email %>
+                    <% end %>
+                    <% @all_users.each do |user| %>
+                      <% if user.id == submilestone.user.id %>
+                      <% elsif submilestone.assigned.include? user.email %>
+                        <% if !user.profilepics.blank? %>
+                          <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
+                        <% else %>
+                          <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:user.email %>
+                        <% end %>
+                      <% end %>
+                    <% end %>
+                  </td>
+                  <td class="export-td"><span class="complete"><%= submilestone.complete %></span> %</td>
+                  <td class="date-completed export-td">
+                    <% if submilestone.date_completed.nil? %>
+                      - -
+                    <% else %>
+                      <%= submilestone.date_completed.strftime("%b %d, %Y") %>
+                    <% end %>
+                  </td>
+                  <td class="status com-status export-td" style="padding-left: 3rem;">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <% case submilestone.complete %>
+                          <% when 0 %>
+                            <div class="bg-light px-2 py-1" style="flex:4">Not Started</div>
+                          <% when 100 %>
+                            <div class="bg-success px-2 py-1" style="flex:4">Complete</div>
+                          <% else %>
+                            <div class="bg-warning px-2 py-1" style="flex:4">In Progress</div>
+                        <% end %>
+        
+                        <% if submilestone.finish >= Date.today %>
+                          <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="on track" class="track"><%= image_tag ("blue_circle.png")%></div>  
+                        <% else %>
+                          <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="off track" class="track"><%= image_tag ("red_circle.png")%></div>  
+                        <% end %>
+                    </div>
+                  </td>
+                  <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= submilestone.output %></div></td>
+                  <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= submilestone.remarks %></div></td>
+                  <td></td>
+                  <td></td>
+                  <% if submilestone.submessages.empty? %>
+                    <td class="notif-con export-td" ><%= image_tag ("message.png"), class:"message-icon project-icon m-message", style:"margin-left: 60px;" %></td>
+                  <% else %>
+                    <td class="notif-con export-td" ><%= image_tag ("message_1.png"), class:"message-icon project-icon m-message", style:"margin-left: 60px;" %></td>
+                  <% end %>
+                </tr>
+                 <!-- All Sub2milestones -->
+                 <% @sub2milestones.each do |sub2milestone| %> 
+                  <% if submilestone.id == sub2milestone.submilestone.id %>
+                    <tr class="all-sub2milestones subm-<%= submilestone.id %> <%= sub2milestone.assigned.include?(current_user.email) ? 'sub2m-dblclick' : 'bg-light' %> export-tr" style="vertical-align: middle;" id="sub2m-tr">      
+                      <td class="task-name export-td" style="text-align: left; min-width: 100px; padding-left:8rem"><%= sub2milestone.task_name %></td>
+                      <td class="export-td dayordays">
+                        <%= (sub2milestone.start.to_date..sub2milestone.finish.to_date).count do |date|
+                          date.workday?
+                        end %> <span></span>
+                      </td>
+                      <td class="export-td">[ <%= sub2milestone.start.strftime("%b %d, %Y") %></td>
+                      <td>>></td>
+                      <td class="export-td"><%= sub2milestone.finish.strftime("%b %d, %Y") %> ]</td>
+                      <td class="export-td d-none"><%= sub2milestone.assigned %></td>
+                      <td class="assigned">
+                        <% if !sub2milestone.user.profilepics.blank? %>
+                          <%= image_tag sub2milestone.user.profilepics.last.pic, class:"assigned-pics", title:sub2milestone.user.email %>
+                        <% else %>
+                          <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:sub2milestone.user.email %>
+                        <% end %>
+                        <% @all_users.each do |user| %>
+                          <% if user.id == sub2milestone.user.id %>
+                          <% elsif sub2milestone.assigned.include? user.email %>
+                            <% if !user.profilepics.blank? %>
+                              <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
+                            <% else %>
+                              <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:user.email %>
+                            <% end %>
+                          <% end %>
+                        <% end %>
+                      </td>
+                      <td class="export-td"><span class="complete"><%= sub2milestone.complete %></span> %</td>
+                      <td class="date-completed export-td">
+                        <% if sub2milestone.date_completed.nil? %>
+                          - -
+                        <% else %>
+                          <%= sub2milestone.date_completed.strftime("%b %d, %Y") %>
+                        <% end %>
+                      </td>
+                      <td class="status com-status export-td" style="padding-left: 4.5rem;">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <% case sub2milestone.complete %>
+                              <% when 0 %>
+                                <div class="bg-light px-2 py-1" style="flex:4">Not Started</div>
+                              <% when 100 %>
+                                <div class="bg-success px-2 py-1" style="flex:4">Complete</div>
+                              <% else %>
+                                <div class="bg-warning px-2 py-1" style="flex:4">In Progress</div>
+                            <% end %>
+            
+                            <% if sub2milestone.finish >= Date.today %>
+                              <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="on track" class="track"><%= image_tag ("blue_circle.png")%></div>  
+                            <% else %>
+                              <div style="margin-left: 1rem; flex:1;text-align:start;" role="button" title="off track" class="track"><%= image_tag ("red_circle.png")%></div>  
+                            <% end %>
+                        </div>
+                      </td>
+                      <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= sub2milestone.output %></div></td>
+                      <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= sub2milestone.remarks %></div></td>
+                      <td></td>
+                      <td></td>
+                      <% if sub2milestone.sub2messages.empty? %>
+                        <td class="notif-con export-td" ><%= image_tag ("message.png"), class:"message-icon project-icon m-message", style:"margin-left: 90px;" %></td>
+                      <% else %>
+                        <td class="notif-con export-td" ><%= image_tag ("message_1.png"), class:"message-icon project-icon m-message", style:"margin-left: 90px;" %></td>
+                      <% end %>                      
+                    </tr>
+                  <% end %>
+                <% end %><!--sub2milestone end -->
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+        <tr>
+          <td></td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+      <% end %>
+      <!-- url params plus icon-->
+      <div class="d-none rock-params"><%= params[:rock_id] %></div>
+      <!-- <div class="d-none subm-params"><%= params[:subm_id] %></div> -->
+    </tbody>
+    <%= render 'projects/messages' %>
+  </table>
+</div>
+<button class="d-none" id="target-rock">Add url params</button>
+
+<script>
+
+$(document).ready(function(){
+
+    // hover messages
+  // $(".message-icon").css("display","none")
+  // $(".notif-con").hover(function(){
+  //   $(this).children(".message-icon").toggle()
+  // })
+
+  // Complete and Status Column
+  $(".rock-percent").each( function(index,value) {
+    // Rock Percentage Value
+    let percent_sum = $(value).siblings("#percent-sum").text()
+    let m_count = $(value).siblings("#m-count").text()
+    let total_rock_percent = m_count == "0" ? 0 : (parseInt(percent_sum) / (100 *  parseInt(m_count))) * 100
+    $(value).children("span").text(total_rock_percent.toFixed(2))
+  });
+  
+  $(".com-status").each( function(index,value) {
+    if ($(value).text().replace(/\s/g, "") == "Complete"){
+      $(value).parents("tr").children("td").not(".notif-con").css("text-decoration", "line-through")
+      $(value).parents("tr").children("td").not(".notif-con").css("text-decoration-color", "red")
+      $(value).parents("tr").children("td").not(".notif-con").css("font-style", "italic")
+      $(value).find(".track").hide()
+    }
+  });
+  // Hide Reviewed by td
+  $(".reviewed-by").children("div").css("display", "none")
+  $(".rock-complete").each( function(index,complete) {
+    if ($(complete).children(".complete").text() == "100"){
+      $(complete).siblings(".reviewed-by").children("div").show()
+    }
+  });
+  //Add day or days
+  $(".dayordays").each( function(index,day) {
+      if ($(day).text().replace(/\s/g, "") == "1"){
+        $(day).find("span").text("day")
+      } else {
+        $(day).find("span").text("days")
+      }
+    });
+
+  // -----Milestone Section------
+
+  // Show / Hide Milestones
+  $(".minus-icon").css("display", "none")
+  $(".all-milestones").css("display", "none")
+  $(".new-milestone").css("display", "none")
+  $(".blank-milestone").css("display", "none")
+  $(".plus-icon").each( function(index,plus) {
+    $(plus).click(function(){
+      $(this).hide()
+      $(this).next(".minus-icon").show()
+      var id = $(plus).parents(".task-name").siblings("#rock-id").text()
+      var rock_id = ".rock-" + id
+      $(rock_id).show()
+      $(rock_id + ".new-milestone").hide()
+      // Colapse Milestone when click escape
+      $(document).off('keydown');
+      $(document).on('keydown', function(event) {
+        if (event.which === 27) {
+          $(plus).next(".minus-icon").trigger("click")
+        }
+      });
+    });
+  });
+  $(".minus-icon").each( function(index,minus) {
+    $(minus).click(function(){
+      $(this).hide()
+      $(this).prev(".plus-icon").show()
+      var id = $(minus).parents(".task-name").siblings("#rock-id").text()
+      var rock_id = ".rock-" + id
+      $(rock_id).hide()
+
+      $(".m-minus-icon").each( function(index,minus) {
+        $(minus).trigger("click")
+      });
+    });
+  });
+  // -----SubMilestone Section------
+  // Show / Hide / Create Sub Milestones
+  $(".m-minus-icon").css("display", "none")
+  $(".all-submilestones").css("display", "none")
+  $(".m-plus-icon").each( function(index,plus) {
+    $(plus).click(function(){
+      $(this).hide()
+      $(this).next(".m-minus-icon").show()
+      var id = $(plus).parents(".task-name").siblings("#milestone-id").text()
+      var mile_id = ".mile-" + id
+      $(mile_id).show()
+      // Colapse Milestone when click escape
+      $(document).off('keydown');
+      $(document).on('keydown', function(event) {
+        if (event.which === 27) {
+          $(plus).next(".m-minus-icon").trigger("click")
+        }
+      });
+    });
+  });
+  $(".m-minus-icon").each( function(index,minus) {
+    $(minus).click(function(){
+      $(this).hide()
+      $(this).prev(".m-plus-icon").show()
+      var id = $(minus).parents(".task-name").siblings("#milestone-id").text()
+      var mile_id = ".mile-" + id
+      var create_subm_id = ".create-subm-" + id
+      $(mile_id).hide()
+      $(create_subm_id).hide()
+      $(".update-submilestone").hide()
+      $(".update-submilestone").insertAfter($(".update-milestone"))
+      // trigger submilestone minus icon
+      $(mile_id).find(".subm-minus-icon").trigger("click")
+    });
+  });
+    // -----Sub2milestone Section------
+    // Show / Hide / Create Sub2milestones
+    $(".subm-minus-icon").css("display", "none")
+    $(".all-sub2milestones").css("display", "none")
+    $(".subm-plus-icon").each( function(index,plus) {
+      $(plus).click(function(){
+        $(this).hide()
+        $(this).next(".subm-minus-icon").show()
+        var id = $(plus).parents(".task-name").siblings("#submilestone-id").text()
+        var subm_id = ".subm-" + id
+        $(subm_id).show()
+   
+        $(document).off('keydown');
+        $(document).on('keydown', function(event) {
+          if (event.which === 27) {
+            $(plus).next(".subm-minus-icon").trigger("click")
+          }
+        });
+      });
+    });
+    $(".subm-minus-icon").each( function(index,minus) {
+      $(minus).click(function(){
+        $(this).hide()
+        $(this).prev(".subm-plus-icon").show()
+        var id = $(minus).parents(".task-name").siblings("#submilestone-id").text()
+        var subm_id = ".subm-" + id
+        var create_sub2m_id = ".create-sub2m-" + id
+        $(subm_id).hide()
+        $(create_sub2m_id).hide()
+        $(".update-sub2milestone").hide()
+        $(".update-sub2milestone").insertAfter($(".update-submilestone"))
+      });
+    });
+
+  // Message Section
+  $(".message-bg").css("display", "none")
+  $(".message-con").css("display", "none")
+
+  $(".m-message").each(function(index,message){
+    $(message).click(function(){
+      $(".messages-container").empty()
+      $(".message-con").show()
+      $(".message-bg").show()
+
+      console.log($(this).parents(".notif-con").siblings("#rock-id").text())
+
+      let current_user = $(this).parents(".notif-con").siblings(".m-current-user").text()
+      let message_id = JSON.parse($(this).parents(".notif-con").siblings(".message-id").text())
+      let rock_id = $(this).parents(".notif-con").siblings("#rock-id").text()
+      let milestone_id = $(this).parents(".notif-con").siblings("#milestone-id").text()
+      let message_firstname = JSON.parse($(this).parents(".notif-con").siblings(".message-firstname").text())
+      let message_lastname = JSON.parse($(this).parents(".notif-con").siblings(".message-lastname").text())
+      let message_time = JSON.parse($(this).parents(".notif-con").siblings(".message-time").text())
+      let message_array = JSON.parse($(this).parents(".notif-con").siblings(".milestone-messages").text())
+      message_array.forEach( (message,index) => {
+        $(".messages-container").append(
+          `<div class="d-flex mt-3">
+            <div class="circle">
+              <span class="circle-inner">${message_firstname[index].charAt(0)}${message_lastname[index].charAt(0)}</span>
+            </div>
+            <div style="margin-left: 10px;">
+              <b class="message-names">${message_firstname[index]} ${message_lastname[index]}</b>
+              <div style="white-space:pre-wrap">${message.replace( /\n/g, '<br>' )}</div>
+              <div class="mt-2 message-sub">${message_time[index]}</div>
+              <div id="del-edit-${index}" class="message-sub">
+                <a href="#message-input" id="edit-message">edit</a>
+                <%= link_to delete_message_path(1,1,1,1),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'},id:"delete-message" do %>
+                  <span class="mx-2">delete</span>
+                <% end %>
+              </div>
+            </div>
+          </div>`
+        );
+        // Hide edit and delete
+        $(`#del-edit-${index}`).hide()
+      })
+    })
+  })
+  // disable write message div
+  $("#write-message").css("pointer-events", "none")
+
+  $(".message-bg").click(function(){
+      $(this).hide()
+      $(".message-con").hide()
+  })
+
+  // Function to add data to Excel file
+  function addDataToExcel() {
+    var data = []
+    $(".export-tr").each( function(index_tr,tr) {
+      let td_array = []
+      $(tr).find(".export-td").each( function(index_td,td) {
+        let trim_text = $(td).text().trimLeft()
+        if ($(tr).attr('id') == "rock-tr"){
+          if ($(td).attr('class').includes("task-name")){
+            td_array.push(" * " + trim_text)
+          }else{
+            td_array.push(trim_text)
+          }
+        }else if ($(tr).attr('id') == "milestone-tr"){
+          if ($(td).attr('class').includes("task-name")){
+            td_array.push("     -  " + trim_text)
+          }else{
+          td_array.push(trim_text)
+          }
+        }else if($(tr).attr('id') == "subm-tr"){
+          if ($(td).attr('class').includes("task-name")){
+            td_array.push("        -  " + trim_text)
+          }else{
+          td_array.push(trim_text)
+          }
+        }else if($(tr).attr('id') == "sub2m-tr"){
+          if ($(td).attr('class').includes("task-name")){
+            td_array.push("               " + trim_text)
+          }else{
+          td_array.push(trim_text)
+          }            
+        }else{
+          td_array.push(trim_text)
+        }
+      })
+      if ($(tr).attr('id') === "rock-tr" && index_tr !== 1 ){
+        data.push([])
+      }
+      data.push(td_array )
+    })
+    var ws = XLSX.utils.aoa_to_sheet(data);
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
+
+    var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'binary' });
+
+    function s2ab(s) {
+      var buf = new ArrayBuffer(s.length);
+      var view = new Uint8Array(buf);
+      for (var i = 0; i < s.length; i++) {
+        view[i] = s.charCodeAt(i) & 0xFF;
+      }
+      return buf;
+    }
+
+    var blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
+
+    if (navigator.msSaveBlob) { // IE 10+
+      navigator.msSaveBlob(blob, 'data.xlsx');
+    } else {
+      var link = document.createElement('a');
+      if (link.download !== undefined) {
+        var url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'data.xlsx');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+  }
+  // Bind the click event to the addDataBtn button
+  $('#addDataBtn').on('click', function() {
+    addDataToExcel();
+  });
+
+// url params plus icon
+  var r_id = $(".rock-params").text()
+
+// Trigger plus icon from rocks link
+  var rockplus = "#rockplus-" + r_id 
+  var mileplus = ".mplus-" + r_id
+  var submplus = ".smplus-" + r_id
+  $(rockplus).find(".plus-icon").trigger("click")
+  $(mileplus).find(".m-plus-icon").trigger("click")
+  $(submplus).find(".subm-plus-icon").trigger("click")
+// Trigger target Rock
+  $("#target-rock").click(function(event) {
+      var currentURL = window.location.href;
+      var newURL = currentURL + rockplus;
+      window.location.href = newURL;
+    });
+  $("#target-rock").trigger("click")
+});
+
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>

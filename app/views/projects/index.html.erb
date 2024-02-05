@@ -16,6 +16,7 @@
         <th scope="col" class="export-td">Output</th>
         <th scope="col" class="export-td">Remarks</th>
         <th scope="col" style="min-width:100px;" class="export-td">Reviewed By</th>
+        <th scope="col" style="min-width:100px;" class="export-td">Archived</th>
         <th scope="col" style="min-width:100px;" class="export-td">Actions</th>
       </tr>
     </thead>
@@ -140,6 +141,10 @@
               <% end %>
             </div>
           </td>
+          <td>
+            <% if current_user.id == rock.user_id %>
+              <%= button_to "move", send_archived_path({archived_id:rock.id}),method: :patch,class:"btn btn-danger" %></td>
+            <% end %>
           <td class="notif-con export-td" role="button">
             <div class="notif">
               <% if rock.rockmessages.empty? %>
@@ -247,6 +252,7 @@
               </td>
               <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= milestone.output %></div></td>
               <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= milestone.remarks %></div></td>
+              <td></td>
               <td></td>
               <td class="notif-con export-td" role="button" >
                 <div class="notif" style="margin-right: 15px;">
@@ -357,6 +363,7 @@
                   <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= submilestone.output %></div></td>
                   <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= submilestone.remarks %></div></td>
                   <td></td>
+                  <td></td>
                   <td class="notif-con export-td" role="button" >
                     <div class="notif" style="margin-right: 30px;">
                       <% if submilestone.submessages.empty? %>
@@ -450,6 +457,7 @@
                       </td>
                       <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= sub2milestone.output %></div></td>
                       <td class="export-td"><div style="min-height:min-content; max-height:100px; width:200px; white-space:pre-line; overflow:auto;"><%= sub2milestone.remarks %></div></td>
+                      <td></td>
                       <td></td>
                       <td class="notif-con export-td" role="button" >
                         <div class="notif" style="margin-right: 30px;">

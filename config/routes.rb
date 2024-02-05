@@ -71,6 +71,9 @@ Rails.application.routes.draw do
   get 'projects/dashboard' => 'projects#dashboard', as: 'projects_dashboard'
   get 'yourprojects/:pw_id/:rocks_owner' => 'projects#index', as: 'view_projects'
   get 'allprojects/:pw_id/:rocks_owner' => 'projects#allprojects', as: 'view_allprojects'
+  get 'archivedprojects/:pw_id/:rocks_owner' => 'projects#archived', as: 'view_archived'
+  patch 'sendarchivedprojects/:pw_id/:rocks_owner' => 'projects#send_archived', as: 'send_archived'
+  patch 'returnarchivedprojects/:pw_id/:rocks_owner' => 'projects#return_archived', as: 'return_archived'
 
   # Workspace
   post 'create/workspace' => 'project_workspaces#create_workspace', as: 'create_workspace'

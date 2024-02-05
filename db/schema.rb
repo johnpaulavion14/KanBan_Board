@@ -167,6 +167,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_05_023004) do
     t.datetime "updated_at", null: false
     t.integer "complete"
     t.string "reviewed_by", default: ""
+    t.boolean "archived", default: false
   end
 
   create_table "sub2messages", force: :cascade do |t|

@@ -16,7 +16,7 @@ class ProjectsController < ApplicationController
     @rocks = []
     @pw_emails = []
     @ids_array = []
-    rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc)
+    rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc).where(archived:false)
     rocks.all.each do |rock|
       if rock.assigned.include? current_user.email
         @rocks.push(rock)
@@ -35,7 +35,7 @@ class ProjectsController < ApplicationController
     @ids_array.each do |id|
       if params_gsub == id.to_s
         @rocks = []
-        user_rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc).where(user_id: id)
+        user_rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc).where(user_id: id).where(archived:false)
         user_rocks.each do |rock| 
           if rock.assigned.include? current_user.email
             @rocks.push(rock)
@@ -81,6 +81,25 @@ class ProjectsController < ApplicationController
         @all_users = User.all
       end
     end
+  end
+
+  def archived
+      @rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc).where(archived:true)
+
+      @milestones = Milestone.all.order(start: :asc)
+      @submilestones = Submilestone.all.order(start: :asc)
+      @sub2milestones = Sub2milestone.all.order(start: :asc)
+      @all_users = User.all
+  end
+
+  def send_archived
+    Rock.find(params[:archived_id]).update(archived:true)
+    redirect_to view_projects_path
+  end
+
+  def return_archived
+    Rock.find(params[:archived_id]).update(archived:false)
+    redirect_to view_archived_path
   end
 
   # Rock

@@ -10,6 +10,9 @@
   <% elsif current_user.first_name == @scribe %>
     <%= link_to "All Projects",view_allprojects_path({rocks_owner:"all_rocks"}), class:" #{'nav-active' if request.original_url.include? "allprojects"} p-1" %>
   <% end %>
+
+  <%= link_to "Archived",view_archived_path({rocks_owner:current_user.id}), class:" #{'nav-active' if request.original_url.include? "archived"} p-1"  %>
+
   <button id="addDataBtn">Export to Excel</button>
 
   <!-- Select Rock Owner -->
