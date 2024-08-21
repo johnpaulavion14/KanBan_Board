@@ -304,6 +304,20 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def sync_rock
+    if !Rock.find_by(task_name:params[:task_name]).nil?
+       Rock.find_by(task_name:params[:task_name]).update(complete:params[:complete])
+    elsif !Milestone.find_by(task_name:params[:task_name]).nil?
+      Milestone.find_by(task_name:params[:task_name]).update(complete:params[:complete])
+    elsif !Submilestone.find_by(task_name:params[:task_name]).nil?
+      Submilestone.find_by(task_name:params[:task_name]).update(complete:params[:complete])
+    elsif !Sub2milestone.find_by(task_name:params[:task_name]).nil?
+      Sub2milestone.find_by(task_name:params[:task_name]).update(complete:params[:complete])  
+    else
+    end
+    redirect_to view_projects_path
+  end
+
   private
 
   def rock_params

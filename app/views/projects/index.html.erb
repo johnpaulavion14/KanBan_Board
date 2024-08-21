@@ -23,7 +23,7 @@
     <tbody>
       <% @rocks.each do |rock| %>
         <!-- All Rocks -->
-        <tr  class="all-rocks thisrock-<%= rock.id %> export-tr" style="background-color: rgb(215, 215, 215); font-weight: bold; vertical-align: middle;" role="button" id="rock-tr">
+        <tr  class="updateElement all-rocks thisrock-<%= rock.id %> export-tr" style="background-color: rgb(215, 215, 215); font-weight: bold; vertical-align: middle;" role="button" id="rock-tr">
           <!-- display none -->
           <td style="display: none;" id="isrock">rock</td>
           <td style="display: none;" id="rock-user-id"><%= rock.user_id %></td>
@@ -31,7 +31,8 @@
           <td style="display: none;" id="pw-id"><%= rock.project_workspace.id %></td>
           <td style="display: none;" id="start-<%= rock.id %>" class="start"><%= rock.start %></td>
           <td style="display: none;" id="finish-<%= rock.id %>" class="finish"><%= rock.finish %></td>
-          <td style="display: none;" id="rock-assigned"><%= rock.assigned %></td>
+          <td style="display: none;" id="rock-assigned"><%= rock.assigned %>
+          </td>
           <td style="display: none;" id="percent-sum"><%= rock.milestones.pluck(:complete).reduce(:+) %></td>
           <td style="display: none;" id="m-count"><%= rock.milestones.count %></td>
           <td style="display: none;" class="output" ><%= rock.output %></td>
@@ -60,7 +61,8 @@
               <%= image_tag ("plus_black.png"),role:"button",style:"margin-left:1rem",class:"plus-icon" %>
               <%= image_tag ("minus_black.png"),role:"button",style:"margin-left:1rem",class:"minus-icon" %>
             <% end %>
-            <span><%= rock.task_name %></span>
+            <span class="t_name"><%= rock.task_name %></span>
+            <span class="append_sync_task"></span>
           </td>
           <td class="export-td dayordays">
             <%= (rock.start.to_date..rock.finish.to_date).count do |date|
@@ -163,7 +165,7 @@
         <!-- All Milestones -->
         <% @milestones.each do |milestone| %> 
           <% if rock.id == milestone.rock_id %>
-            <tr class="all-milestones rock-<%= rock.id %> milestone-<%= milestone.id %> <%= milestone.assigned.include?(current_user.email) ? 'm-dblclick' : 'bg-light' %> export-tr" style="vertical-align: middle;" id="milestone-tr">
+            <tr class="updateElement all-milestones rock-<%= rock.id %> milestone-<%= milestone.id %> <%= milestone.assigned.include?(current_user.email) ? 'm-dblclick' : 'bg-light' %> export-tr" style="vertical-align: middle;" id="milestone-tr">
               <!-- display none -->
               <td style="display: none;" id="rock-id"><%= rock.id %></td>
               <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
@@ -196,7 +198,8 @@
                   <%= image_tag ("plus_blue.png"),role:"button",class:"m-plus-icon" %>
                   <%= image_tag ("minus_blue.png"),role:"button",class:"m-minus-icon" %>
                 <% end %>
-                <%= milestone.task_name %>
+                <span class="t_name"><%= milestone.task_name %></span>
+                <span class="append_sync_task"></span>
               </td>
               <td class="export-td dayordays">
                 <%= (milestone.start.to_date..milestone.finish.to_date).count do |date|
@@ -272,7 +275,7 @@
             <!-- All Submilestones -->
             <% @submilestones.each do |submilestone| %> 
               <% if milestone.id == submilestone.milestone_id %>
-                <tr class="all-submilestones mile-<%= milestone.id %> submilestone-<%= submilestone.id %> <%= submilestone.assigned.include?(current_user.email) ? 'subm-dblclick' : 'bg-light' %> export-tr" style="vertical-align: middle;" id="subm-tr">      
+                <tr class="updateElement all-submilestones mile-<%= milestone.id %> submilestone-<%= submilestone.id %> <%= submilestone.assigned.include?(current_user.email) ? 'subm-dblclick' : 'bg-light' %> export-tr" style="vertical-align: middle;" id="subm-tr">      
                   <td style="display: none;" id="is_subm">submilestone</td>
                   <td style="display: none;" id="rock-id"><%= rock.id %></td>
                   <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
@@ -306,7 +309,8 @@
                       <%= image_tag ("plus_purple.png"),role:"button",class:"subm-plus-icon" %>
                       <%= image_tag ("minus_purple.png"),role:"button",class:"subm-minus-icon" %>
                     <% end %>
-                    <%= submilestone.task_name %>
+                    <span class="t_name"><%= submilestone.task_name %></span>
+                    <span class="append_sync_task"></span>
                   </td>
                   <td class="export-td dayordays">
                     <%= (submilestone.start.to_date..submilestone.finish.to_date).count do |date|
@@ -382,7 +386,7 @@
                 <!-- All Sub2milestones -->
                 <% @sub2milestones.each do |sub2milestone| %> 
                   <% if submilestone.id == sub2milestone.submilestone.id %>
-                    <tr class="all-sub2milestones subm-<%= submilestone.id %> <%= sub2milestone.assigned.include?(current_user.email) ? 'sub2m-dblclick' : 'bg-light' %> export-tr" style="vertical-align: middle;" id="sub2m-tr">      
+                    <tr class="updateElement all-sub2milestones subm-<%= submilestone.id %> <%= sub2milestone.assigned.include?(current_user.email) ? 'sub2m-dblclick' : 'bg-light' %> export-tr" style="vertical-align: middle;" id="sub2m-tr">      
                       <td style="display: none;" id="is_subm">submilestone</td>
                       <td style="display: none;" id="rock-id"><%= rock.id %></td>
                       <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
@@ -402,7 +406,8 @@
                       <td style="display: none;" class="message-lastname"><%= submilestone.submessages.order(created_at: :asc).pluck(:last_name) %></td>
                       <td style="display: none;" class="message-time"><%= submilestone.submessages.order(created_at: :asc).pluck(:time) %></td>
                       <!-- display none -->
-                      <td class="task-name export-td" style="text-align: left; min-width: 100px; padding-left:8rem"><%= sub2milestone.task_name %></td>
+                      <td class="t_name task-name export-td" style="text-align: left; min-width: 100px; padding-left:8rem"><%= sub2milestone.task_name %></td>
+                      <span class="append_sync_task"></span>
                       <td class="export-td dayordays">
                         <%= (sub2milestone.start.to_date..sub2milestone.finish.to_date).count do |date|
                           date.workday?
@@ -736,18 +741,40 @@
       </tr>      
     </tbody>
   </table>
+
   <div role="button" class="new-project mx-4 mb-3">
     Add new project here !
   </div>
   <%= render 'projects/messages' %>
 
+  <tr class="d-none">
+    <%= form_with url:sync_rock_path({task_name:"Study scoring process              ", complete:20}), method: :post, local: true do |f| %>
+      <td>
+        <span><%= f.submit "Save" ,id:"sync_task_save" %></span>
+      </td>
+    <% end %>
+  </tr>
+  <button id="SyncTask" class="btn btn-success">Sync Task</button>
+
   <!-- <button id="rock-tasknamee">Click Me</button> -->
 
 </div>
-
+<%# ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- %>
 <script>
-
   $(document).ready(function(){
+    $('.updateElement').on('contextmenu', function(e) {
+        e.preventDefault(); 
+        if ($(this).find('.updateButton').length === 0) {
+            $(this).find('.append_sync_task').append($('#SyncTask'));
+            var asdf =  $(this).find('.t_name').text();
+            var zxcv =  $(this).find('.complete').text();
+            alert(zxcv );
+        }
+        return false; 
+    });
+    $("#SyncTask").click(function(){
+      $("#sync_task_save").trigger("click")
+    });
     // -----Rock Section------
     // Create New Rock
     $(".new-rock").css("display", "none")

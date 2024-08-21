@@ -74,6 +74,8 @@ Rails.application.routes.draw do
   get 'archivedprojects/:pw_id/:rocks_owner' => 'projects#archived', as: 'view_archived'
   patch 'sendarchivedprojects/:pw_id/:rocks_owner' => 'projects#send_archived', as: 'send_archived'
   patch 'returnarchivedprojects/:pw_id/:rocks_owner' => 'projects#return_archived', as: 'return_archived'
+  post 'sync_rock/:pw_id/:rocks_owner/:task_name/:complete' => 'projects#sync_rock', as: 'sync_rock'
+
 
   # Workspace
   post 'create/workspace' => 'project_workspaces#create_workspace', as: 'create_workspace'
