@@ -1,5 +1,11 @@
 <%= render 'projects/projects_navbar' %>
 <%= render 'projects/projects_header' %>
+<% if params[:Sync_Tasks_Completed] == "true" %>
+  <p class="btn btn-success" id="sync-tasks">Sync Tasks Completed</p>
+<% elsif params[:Sync_Tasks_Completed] == "false" %>
+  <p class="btn btn-danger" id="sync-tasks">No Duplicate Tasks</p>
+<% end %>
+
 <div style="height: 90vh;width: 100vw; overflow:scroll; " class="yourproject-con">
   <table class="table table-hover text-center" style="width:max-content; min-width: 100%;" id="exportTable">
     <thead>
@@ -406,8 +412,10 @@
                       <td style="display: none;" class="message-lastname"><%= submilestone.submessages.order(created_at: :asc).pluck(:last_name) %></td>
                       <td style="display: none;" class="message-time"><%= submilestone.submessages.order(created_at: :asc).pluck(:time) %></td>
                       <!-- display none -->
-                      <td class="t_name task-name export-td" style="text-align: left; min-width: 100px; padding-left:8rem"><%= sub2milestone.task_name %></td>
+                      <td class="task-name export-td" style="text-align: left; min-width: 100px; padding-left:8rem">
+                      <span class="t_name"><%= sub2milestone.task_name %></span>
                       <span class="append_sync_task"></span>
+                      </td>
                       <td class="export-td dayordays">
                         <%= (sub2milestone.start.to_date..sub2milestone.finish.to_date).count do |date|
                           date.workday?
@@ -745,32 +753,48 @@
   <div role="button" class="new-project mx-4 mb-3">
     Add new project here !
   </div>
+
   <%= render 'projects/messages' %>
 
-  <tr class="d-none">
-    <%= form_with url:sync_rock_path({task_name:"Study scoring process              ", complete:20}), method: :post, local: true do |f| %>
-      <td>
-        <span><%= f.submit "Save" ,id:"sync_task_save" %></span>
-      </td>
-    <% end %>
-  </tr>
-  <button id="SyncTask" class="btn btn-success">Sync Task</button>
+  <%= form_with url:sync_rock_path, method: :post, local: true, class:'d-none' do |f| %>
+  <%= f.hidden_field :task_name, id: 'task_name_field', value: 'Study scoring process' %>
+    <%= f.hidden_field :complete, id: 'complete_field', value: 20 %>
+    <td>
+      <span><%= f.submit "Save", id: "sync_task_save" %></span>
+    </td>
+  <% end %>
 
-  <!-- <button id="rock-tasknamee">Click Me</button> -->
+  <button id="SyncTask" class="btn btn-success">Sync Task</button>
 
 </div>
 <%# ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- %>
 <script>
   $(document).ready(function(){
+    setTimeout(function() {
+      $('#sync-tasks').hide()
+    }, 3000);
+    $('#SyncTask').hide()
     $('.updateElement').on('contextmenu', function(e) {
         e.preventDefault(); 
         if ($(this).find('.updateButton').length === 0) {
+            $('#SyncTask').show()
             $(this).find('.append_sync_task').append($('#SyncTask'));
-            var asdf =  $(this).find('.t_name').text();
-            var zxcv =  $(this).find('.complete').text();
-            alert(zxcv );
+            var task_name =  $(this).find('.t_name').text();
+            var complete = Number($(this).find('.complete').text());
+            $('#task_name_field').val(task_name);
+            $('#complete_field').val(complete);
         }
         return false; 
+    });
+    $(document).click(function(event) {
+      // Check if the click is outside the target element
+      if (!$(event.target).closest('#SyncTask').length) {
+          $('#SyncTask').hide(); // Hide the element
+      }
+    });
+    // Prevent hiding when clicking inside the element
+    $('#SyncTask').click(function(event) {
+        event.stopPropagation(); // Prevent the click event from propagating to the document
     });
     $("#SyncTask").click(function(){
       $("#sync_task_save").trigger("click")
@@ -818,7 +842,7 @@
       $(value).dblclick(function(){
         $(".all-rocks").show();
         // rock variables
-        var task_name =  $(this).children(".task-name").text().trimLeft();
+        var task_name =  $(this).children(".task-name").text().trim();
         var start =  $(this).children(".start").text()
         var finish =  $(this).children(".finish").text()
         var assigned =  $(this).children("#rock-assigned").text()
@@ -962,7 +986,7 @@
       $(value).attr("role", "button");
       $(value).dblclick(function(){
         // milestone variables
-        var task_name =  $(this).children(".task-name").text().trimLeft();
+        var task_name =  $(this).children(".task-name").text().trim();
         var start =  $(this).children(".start").text()
         var finish =  $(this).children(".finish").text()
         var assigned =  $(this).children("#milestone-assigned").text()
@@ -1114,7 +1138,7 @@
       $(value).attr("role", "button");
       $(value).dblclick(function(){
         // milestone variables
-        var task_name =  $(this).children(".task-name").text().trimLeft();
+        var task_name =  $(this).children(".task-name").text().trim();
         var start =  $(this).children(".start").text()
         var finish =  $(this).children(".finish").text()
         var assigned =  $(this).children("#submilestone-assigned").text()
@@ -1253,7 +1277,7 @@
       $(value).attr("role", "button");
       $(value).dblclick(function(){
         // milestone variables
-        var task_name =  $(this).children(".task-name").text().trimLeft();
+        var task_name =  $(this).children(".task-name").text().trim();
         var start =  $(this).children(".start").text()
         var finish =  $(this).children(".finish").text()
         var assigned =  $(this).children("#sub2milestone-assigned").text()
