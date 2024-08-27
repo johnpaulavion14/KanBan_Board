@@ -306,21 +306,29 @@ class ProjectsController < ApplicationController
 
   def sync_rock
     @sync_ok = false
-    if Rock.where(task_name: params[:task_name]).count > 1
+    if Rock.where(task_name: params[:task_name]).count > 0
        Rock.where(task_name:params[:task_name]).update_all(complete:params[:complete])
-       @sync_ok = true
+      if Rock.where(task_name: params[:task_name]).count > 1
+        @sync_ok = true
+      end
     end
-    if Milestone.where(task_name:params[:task_name]).count > 1
+    if Milestone.where(task_name:params[:task_name]).count > 0
       Milestone.where(task_name:params[:task_name]).update_all(complete:params[:complete])
-      @sync_ok = true
+      if Milestone.where(task_name:params[:task_name]).count > 1
+        @sync_ok = true
+      end
     end
-    if Submilestone.where(task_name:params[:task_name]).count > 1
+    if Submilestone.where(task_name:params[:task_name]).count > 0
       Submilestone.where(task_name:params[:task_name]).update_all(complete:params[:complete])
-      @sync_ok = true
+      if Submilestone.where(task_name:params[:task_name]).count > 1
+        @sync_ok = true
+      end
     end
-    if Sub2milestone.where(task_name:params[:task_name]).count > 1
+    if Sub2milestone.where(task_name:params[:task_name]).count > 0
       Sub2milestone.where(task_name:params[:task_name]).update_all(complete:params[:complete])  
-      @sync_ok = true
+      if Sub2milestone.where(task_name:params[:task_name]).count > 1
+        @sync_ok = true
+      end
     end
     if @sync_ok
       redirect_to view_projects_path({"Sync_Tasks_Completed":true})
