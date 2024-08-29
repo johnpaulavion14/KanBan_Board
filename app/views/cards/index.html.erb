@@ -8,7 +8,7 @@
     </span>
     <b style="margin-left:1rem">Scribe:</b>
     <span>
-    | <span class="scribe"><%= @scribe %></span> |
+    | <span class="scribe"><%= @scribe %></span><%= @scribe == current_user.first_name ? '<span class="btn btn-success mx-2"><b>Start</b></span>'.html_safe  : "<span></span>".html_safe %> |
     </span>
   </div>
   <!-- Page scroll -->
