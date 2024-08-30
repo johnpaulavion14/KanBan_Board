@@ -8,9 +8,10 @@
     </span>
     <b style="margin-left:1rem">Scribe:</b>
     <span>
-    | <span class="scribe"><%= @scribe %></span><%= @scribe == current_user.first_name ? '<span class="btn btn-success mx-2"><b>Start</b></span>'.html_safe  : "<span></span>".html_safe %> |
+    | <span class="scribe"><%= @scribe %></span><%= @scribe == current_user.first_name ? '<span class="btn btn-success mx-2"><b id="start-scribe">Start</b></span>'.html_safe  : "<span></span>".html_safe %> |
     </span>
   </div>
+  <%= render "start_scribe" %>
   <!-- Page scroll -->
   <div class="d-none page-scroll"><%= params[:page_scroll] %></div>
   <!-- Card  Section -->
@@ -138,6 +139,79 @@
 
 <script>
   $(document).ready(function(){
+    let timer;
+    let startTime;
+    let running = false;
+    // Function to get time elapsed since startTime
+    function getElapsedTime() {
+      return Math.floor((new Date().getTime() - startTime) / 1000);
+    }
+    // Function to format time in hh:mm:ss
+    function formatTime(seconds) {
+      let hours = Math.floor(seconds / 3600);
+      let mins = Math.floor((seconds % 3600) / 60);
+      let secs = seconds % 60;
+      return (hours < 10 ? '0' : '') + hours + ':' +
+            (mins < 10 ? '0' : '') + mins + ':' +
+            (secs < 10 ? '0' : '') + secs;
+    }
+    // Function to update timer display
+    function updateTimer() {
+      let elapsed = getElapsedTime();
+      $('#timer').text(formatTime(elapsed));
+      localStorage.setItem('elapsedTime', elapsed);
+    }
+    // Check if there is an existing timer state in localStorage
+    if (localStorage.getItem('startTime')) {
+      startTime = parseInt(localStorage.getItem('startTime'), 10);
+      running = localStorage.getItem('running') === 'true';
+      if (running) {
+          updateTimer();
+          timer = setInterval(updateTimer, 1000);
+      } else {
+          let elapsed = parseInt(localStorage.getItem('elapsedTime'), 10);
+          $('#timer').text(formatTime(elapsed));
+      }
+    } else {
+      startTime = new Date().getTime();
+      localStorage.setItem('startTime', startTime);
+    }
+    // Start button click handler
+    $('#start').click(function() {
+      if (!running) {
+          running = true;
+          startTime = new Date().getTime() - parseInt(localStorage.getItem('elapsedTime'), 10) * 1000;
+          localStorage.setItem('startTime', startTime);
+          localStorage.setItem('running', true);
+          timer = setInterval(updateTimer, 1000);
+      }
+    });
+    // Pause button click handler
+    $('#pause').click(function() {
+      if (running) {
+          clearInterval(timer);
+          running = false;
+          localStorage.setItem('running', false);
+      }
+    });
+    // Reset button click handler
+    $('#reset').click(function() {
+      clearInterval(timer);
+      running = false;
+      startTime = new Date().getTime();
+      localStorage.setItem('startTime', startTime);
+      localStorage.setItem('elapsedTime', 0);
+      localStorage.setItem('running', false);
+      $('#timer').text(formatTime(0));
+    });
+    //Start Scribe
+    $(".fullscreen-overlay").hide();
+    $("#start-scribe").click(function(){
+      $(".fullscreen-overlay").show();
+    });
+    $("#end-scribe").click(function(){
+      $(".fullscreen-overlay").hide();
+    });
     // Addlist feature
     $(".clickAddList").click(function(){
       $(".toggleAddCard").show();
