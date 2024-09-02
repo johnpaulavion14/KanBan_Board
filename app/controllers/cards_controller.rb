@@ -10,6 +10,9 @@ class CardsController < ApplicationController
     @board = CreateBoard.find(params[:cb_id])
     @host = HostScribe.where('date <= ?',Date.today) == [] ? "" : HostScribe.where('date <= ?',Date.today).order("date asc").last.host
     @scribe = HostScribe.where('date <= ?',Date.today) == [] ? "" : HostScribe.where('date <= ?',Date.today).order("date asc").last.scribe
+
+    @attendance_view = CreateBoard.find(params[:cb_id]).cards.where(card_title:"Attendance").last.addcards.last.desc.to_s.gsub(/\n/, '<br/>').html_safe
+    
   end
 
   # GET /cards/1 or /cards/1.json

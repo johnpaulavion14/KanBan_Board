@@ -140,70 +140,97 @@
 <script>
   $(document).ready(function(){
     let timer;
-    let startTime;
+    let remainingTime = 10 * 60; // 10 minutes in seconds
     let running = false;
-    // Function to get time elapsed since startTime
-    function getElapsedTime() {
-      return Math.floor((new Date().getTime() - startTime) / 1000);
-    }
-    // Function to format time in hh:mm:ss
+    let alertTriggered = false; // Flag to ensure alert is only triggered once
+    // Function to format time in -hh:mm:ss
     function formatTime(seconds) {
-      let hours = Math.floor(seconds / 3600);
-      let mins = Math.floor((seconds % 3600) / 60);
-      let secs = seconds % 60;
-      return (hours < 10 ? '0' : '') + hours + ':' +
-            (mins < 10 ? '0' : '') + mins + ':' +
-            (secs < 10 ? '0' : '') + secs;
+        let isNegative = seconds < 0;
+        let absSeconds = Math.abs(seconds);
+        let hours = Math.floor(absSeconds / 3600);
+        let mins = Math.floor((absSeconds % 3600) / 60);
+        let secs = absSeconds % 60;
+        return (isNegative ? '-' : '') +
+                (hours < 10 ? '0' : '') + hours + ':' +
+                (mins < 10 ? '0' : '') + mins + ':' +
+                (secs < 10 ? '0' : '') + secs;
     }
     // Function to update timer display
     function updateTimer() {
-      let elapsed = getElapsedTime();
-      $('#timer').text(formatTime(elapsed));
-      localStorage.setItem('elapsedTime', elapsed);
+        if (remainingTime <= 0 && !alertTriggered) {
+            $('#timer').text(formatTime(remainingTime));
+            alert('Time is up!');
+            alertTriggered = true; // Ensure the alert only triggers once
+        } else {
+            $('#timer').text(formatTime(remainingTime));
+            localStorage.setItem('remainingTime', remainingTime);
+        }
+        remainingTime--;
     }
     // Check if there is an existing timer state in localStorage
-    if (localStorage.getItem('startTime')) {
-      startTime = parseInt(localStorage.getItem('startTime'), 10);
-      running = localStorage.getItem('running') === 'true';
-      if (running) {
-          updateTimer();
-          timer = setInterval(updateTimer, 1000);
-      } else {
-          let elapsed = parseInt(localStorage.getItem('elapsedTime'), 10);
-          $('#timer').text(formatTime(elapsed));
-      }
+    if (localStorage.getItem('remainingTime')) {
+        remainingTime = parseInt(localStorage.getItem('remainingTime'), 10);
+        running = localStorage.getItem('running') === 'true';
+        if (running) {
+            updateTimer();
+            timer = setInterval(updateTimer, 1000);
+        } else {
+            $('#timer').text(formatTime(remainingTime));
+        }
     } else {
-      startTime = new Date().getTime();
-      localStorage.setItem('startTime', startTime);
+        $('#timer').text(formatTime(remainingTime));
+        localStorage.setItem('remainingTime', remainingTime);
     }
     // Start button click handler
     $('#start').click(function() {
-      if (!running) {
-          running = true;
-          startTime = new Date().getTime() - parseInt(localStorage.getItem('elapsedTime'), 10) * 1000;
-          localStorage.setItem('startTime', startTime);
-          localStorage.setItem('running', true);
-          timer = setInterval(updateTimer, 1000);
-      }
+        if (!running) {
+            running = true;
+            localStorage.setItem('running', true);
+            timer = setInterval(updateTimer, 1000);
+        }
     });
     // Pause button click handler
     $('#pause').click(function() {
-      if (running) {
-          clearInterval(timer);
-          running = false;
-          localStorage.setItem('running', false);
-      }
+        if (running) {
+            clearInterval(timer);
+            running = false;
+            localStorage.setItem('running', false);
+        }
     });
     // Reset button click handler
     $('#reset').click(function() {
-      clearInterval(timer);
-      running = false;
-      startTime = new Date().getTime();
-      localStorage.setItem('startTime', startTime);
-      localStorage.setItem('elapsedTime', 0);
-      localStorage.setItem('running', false);
-      $('#timer').text(formatTime(0));
+        clearInterval(timer);
+        running = false;
+        remainingTime = 10 * 60; // Reset to 10 minutes
+        localStorage.setItem('remainingTime', remainingTime);
+        localStorage.setItem('running', false);
+        $('#timer').text(formatTime(remainingTime));
+        alertTriggered = false; // Reset the alert trigger flag
     });
+    attendance_time = '300'
+    segue_time = '600'
+    rocks_time = '900'
+    headline_time = '600'
+    todo_time = '300'
+    ids_time = '2400'
+    conclusion_time = '300'
+    localStorage.setItem('remainingTime','300');
+
+
+ 
+    // scribe_sections = [attendance,segue,rocks,headline,todo,ids,conclusion]
+    // current_section = attendance
+    // Left and Right Arrow
+    // $("#left-arrow").click(function(){
+
+    //   alert("left")
+    //   localStorage.setItem('remainingTime','300');
+    // });
+    // $("#right-arrow").click(function(){
+    //   alert("right")
+    //   localStorage.setItem('remainingTime','600');
+    // });
+
     //Start Scribe
     $(".fullscreen-overlay").hide();
     $("#start-scribe").click(function(){
@@ -212,6 +239,12 @@
     $("#end-scribe").click(function(){
       $(".fullscreen-overlay").hide();
     });
+    // Trigger Scribe view if scribe_section_view params is not null
+    var scribeSectionView = new URLSearchParams(window.location.search).get('scribe_section_view');
+    if ( scribeSectionView ){
+      $("#start-scribe").trigger("click")
+    }
+
     // Addlist feature
     $(".clickAddList").click(function(){
       $(".toggleAddCard").show();
