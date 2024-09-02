@@ -139,11 +139,45 @@
 
 <script>
   $(document).ready(function(){
+    let remainingTime = 5 * 60; // 10 minutes in seconds
     let timer;
-    let remainingTime = 10 * 60; // 10 minutes in seconds
+    let set_time;
     let running = false;
     let alertTriggered = false; // Flag to ensure alert is only triggered once
     // Function to format time in -hh:mm:ss
+    let scribeSectionView = new URLSearchParams(window.location.search).get('scribe_section_view');
+    if ( scribeSectionView == "attendance" ){
+          set_time = 300;
+          localStorage.setItem('remainingTime', 300);
+          localStorage.setItem('running', true);
+        } else if( scribeSectionView == "segue" ){
+          set_time = 600;
+          localStorage.setItem('remainingTime', 600);
+          localStorage.setItem('running', true);
+        } else if( scribeSectionView == "rocks" ){
+          set_time = 900;
+          localStorage.setItem('remainingTime', 900);
+          localStorage.setItem('running', true);
+        } else if( scribeSectionView == "headline" ){
+          set_time = 600;
+          localStorage.setItem('remainingTime', 600);
+          localStorage.setItem('running', true);
+        } else if( scribeSectionView == "todo" ){
+          set_time = 300;
+          localStorage.setItem('remainingTime', 300);
+          localStorage.setItem('running', true);
+        } else if( scribeSectionView == "ids" ){
+          set_time = 2400;
+          localStorage.setItem('remainingTime', 2400);
+          localStorage.setItem('running', true);
+        } else if( scribeSectionView == "conclusion" ){
+          set_time = 300;
+          localStorage.setItem('remainingTime', 300);
+          localStorage.setItem('running', true);
+        } else {
+          set_time = 300;
+          localStorage.setItem('remainingTime', 10);
+        }
     function formatTime(seconds) {
         let isNegative = seconds < 0;
         let absSeconds = Math.abs(seconds);
@@ -201,23 +235,24 @@
     $('#reset').click(function() {
         clearInterval(timer);
         running = false;
-        remainingTime = 10 * 60; // Reset to 10 minutes
-        localStorage.setItem('remainingTime', remainingTime);
+        remainingTime  = set_time;
+        localStorage.setItem('remainingTime',set_time);
         localStorage.setItem('running', false);
-        $('#timer').text(formatTime(remainingTime));
+        $('#timer').text(formatTime(set_time));
         alertTriggered = false; // Reset the alert trigger flag
     });
-    attendance_time = '300'
-    segue_time = '600'
-    rocks_time = '900'
-    headline_time = '600'
-    todo_time = '300'
-    ids_time = '2400'
-    conclusion_time = '300'
-    localStorage.setItem('remainingTime','300');
+    $('.left-arrow').click(function() {
+        $("#pause").trigger("click")
+    });
+    $('.right-arrow').click(function() {
+        $("#pause").trigger("click")
+    });
+    $('#end-scribe').click(function() {
+        $("#pause").trigger("click")
+    });
+   
+    // localStorage.setItem('remainingTime','300');
 
-
- 
     // scribe_sections = [attendance,segue,rocks,headline,todo,ids,conclusion]
     // current_section = attendance
     // Left and Right Arrow
@@ -240,10 +275,11 @@
       $(".fullscreen-overlay").hide();
     });
     // Trigger Scribe view if scribe_section_view params is not null
-    var scribeSectionView = new URLSearchParams(window.location.search).get('scribe_section_view');
     if ( scribeSectionView ){
       $("#start-scribe").trigger("click")
     }
+ 
+
 
     // Addlist feature
     $(".clickAddList").click(function(){
