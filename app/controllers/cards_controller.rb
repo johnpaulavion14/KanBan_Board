@@ -11,8 +11,13 @@ class CardsController < ApplicationController
     @host = HostScribe.where('date <= ?',Date.today) == [] ? "" : HostScribe.where('date <= ?',Date.today).order("date asc").last.host
     @scribe = HostScribe.where('date <= ?',Date.today) == [] ? "" : HostScribe.where('date <= ?',Date.today).order("date asc").last.scribe
 
+    # Attendance
     @attendance_view = @cards.where(card_title:"Attendance").last.addcards.last.desc.to_s.gsub(/\n/, '<br/>').html_safe
-    
+    # Segue
+    @segue_view = @cards.where("card_title ILIKE ?", "%segue%").last.addcards.last.desc.to_s.gsub(/\n/, '<br/>').html_safe
+    # Headlines
+    @headlines_view = @cards.where("card_title ILIKE ?", "%headlines%").last.addcards.last.desc.to_s.gsub(/\n/, '<br/>').html_safe
+
 
     # Todo
     @todo_addcard = @cards.where("card_title ILIKE ?", "todo's").last.addcards.last
