@@ -11,8 +11,12 @@ class CardsController < ApplicationController
     @host = HostScribe.where('date <= ?',Date.today) == [] ? "" : HostScribe.where('date <= ?',Date.today).order("date asc").last.host
     @scribe = HostScribe.where('date <= ?',Date.today) == [] ? "" : HostScribe.where('date <= ?',Date.today).order("date asc").last.scribe
 
-    @attendance_view = CreateBoard.find(params[:cb_id]).cards.where(card_title:"Attendance").last.addcards.last.desc.to_s.gsub(/\n/, '<br/>').html_safe
+    @attendance_view = @cards.where(card_title:"Attendance").last.addcards.last.desc.to_s.gsub(/\n/, '<br/>').html_safe
     
+
+    # Todo
+    @todo_addcard = @cards.where("card_title ILIKE ?", "todo's").last.addcards.last
+    @todo_list = @todo_addcard.todos.order("created_at asc")
   end
 
   # GET /cards/1 or /cards/1.json

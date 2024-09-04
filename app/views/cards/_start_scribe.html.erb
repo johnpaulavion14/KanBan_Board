@@ -39,15 +39,45 @@
         <% elsif params[:scribe_section_view] == "headline"%>
           <div>Headline</div>
         <% elsif params[:scribe_section_view] == "todo"%>
-          <div>Todo's</div>
+          <div><i><%= Date.current.strftime("%B %d, %Y (%A)") %></i></div>
+          <div class="px-5">
+            <div class="h3 fw-bolder text-center">Todo's</div>
+            <div class="rounded-2 bg-light p-2">
+              <% User.all.each do |user| %>
+                <p class="m-0"><b>- <%= user.first_name %></b></p>
+                <% @todo_list.each do |list| %>
+                  <% if user.id == list.user_id  %>
+                    <div class="d-flex justify-content-between align-items-center task-date">
+                      <div class="task-section d-flex justify-content-between w-100">
+                        <div class="d-flex align-items-start">
+                          <input disabled type="checkbox" id="myCheckbox<%= list.id %>" class="check-boxes <%= list.id %> mx-2" style="margin-top:6px;" role="button" <%= list.done ? 'checked':'' %>>
+                          <label class="<%= list.done ? 'text-decoration-line-through' : '' %> task-text" ><%= list.task %></label> 
+                        </div>
+                        <div style="font-size:10px;" class="d-flex align-items-center">
+                          <span style="width:120px;">start:<b><%= list.created_at.strftime("%m/%d") %></b> - finish:<b><%= list.done_date == nil ? "" : list.done_date.strftime("%m/%d") %></b></span>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                <% end %>
+                <div class="my-4"></div>
+              <% end %>
+            </div>
+          </div>
         <% elsif params[:scribe_section_view] == "ids"%>
           <div>IDS</div>
         <% elsif params[:scribe_section_view] == "conclusion"%>
           <div>Conclusion</div>
         <% else %>
-          <div>Attendance</div>
-          <div><b><%= Date.current.strftime("%B %d, %Y") %></b></div>
-          <p><%= @attendance_view %></p>
+        <div><i><%= Date.current.strftime("%B %d, %Y (%A)") %></i></div>
+        <div class="d-flex justify-content-center">
+          <div class="mt-5 w-50 text-center">
+            <div class="h3 fw-bolder">Attendance</div>
+            <div class="rounded-2 bg-light p-2">
+              <p><%= @attendance_view %></p>
+            </div>
+          </div>
+        </div>
         <% end %>
       </div>
       <!-- Right arrow -->
