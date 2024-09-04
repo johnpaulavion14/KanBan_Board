@@ -278,7 +278,13 @@
     if ( scribeSectionView ){
       $("#start-scribe").trigger("click")
     }
- 
+    // toggle solution of IDS
+    $(".solution-text").each( function(index,text) {
+      $(text).click(function(){
+        $(this).closest(".ids-list").next("#solution-textarea").toggleClass("d-none");
+      })
+    })
+
 
 
     // Addlist feature

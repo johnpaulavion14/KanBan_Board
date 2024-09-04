@@ -33,30 +33,36 @@
       <!-- Scribe Section Contents -->
       <div class="scribe-m-container-box"> 
         <div><i><%= Date.current.strftime("%B %d, %Y (%A)") %></i></div>
+        <!-- Segue -->
         <% if params[:scribe_section_view] == "segue" %>
           <div class="d-flex justify-content-center">
             <div class="mt-5" style="max-width: 70%;min-width: 50%;">
-              <div class="h3 fw-bolder text-center">Intro/Segue</div>
+              <div class="h3 fw-bolder text-center text-decoration-underline mb-3">Intro/Segue</div>
               <div class="rounded-2 bg-light py-3 px-5">
                 <div><%= raw(@segue_view.gsub('<br/>', '<br/><br/>'))%></div>
               </div>
             </div>
           </div>
+        <!-- Rocks -->
         <% elsif params[:scribe_section_view] == "rocks" %>
-          <div>Rocks</div>
+          <div class="px-5 mt-2">
+            <div class="h3 fw-bolder text-center text-decoration-underline mb-3">Rocks</div>
+          </div>
+        <!-- Headlines -->
         <% elsif params[:scribe_section_view] == "headline"%>
           <div class="d-flex justify-content-center">
-            <div class="mt-5" style="max-width: 70%;min-width: 50%;">
-              <div class="h3 fw-bolder text-center">People Headlines</div>
+            <div class="mt-2" style="max-width: 70%;min-width: 50%;">
+              <div class="h3 fw-bolder text-center text-decoration-underline mb-3">People Headlines</div>
               <div class="rounded-2 bg-light py-3 px-5">
                 <div><%= raw(@headlines_view.gsub('<br/>', '<br/><br/>'))%></div>
               </div>
             </div>
           </div>
+        <!-- Todo -->
         <% elsif params[:scribe_section_view] == "todo"%>
-          <div class="px-5">
-            <div class="h3 fw-bolder text-center">Todo's</div>
-            <div class="rounded-2 bg-light p-2">
+          <div class="px-5 mt-2">
+            <div class="h3 fw-bolder text-center text-decoration-underline mb-3">Todo's</div>
+            <div class="rounded-2 bg-light p-3">
               <% User.all.each do |user| %>
                 <p class="m-0"><b>- <%= user.first_name %></b></p>
                 <% @todo_list.each do |list| %>
@@ -65,7 +71,7 @@
                       <div class="task-section d-flex justify-content-between w-100">
                         <div class="d-flex align-items-start">
                           <input disabled type="checkbox" id="myCheckbox<%= list.id %>" class="check-boxes <%= list.id %> mx-2" style="margin-top:6px;" role="button" <%= list.done ? 'checked':'' %>>
-                          <label class="<%= list.done ? 'text-decoration-line-through' : '' %> task-text" ><%= list.task %></label> 
+                          <label class="<%= list.done ? 'text-decoration-line-through' : '' %> task-text" role="button"><%= list.task %></label> 
                         </div>
                         <div style="font-size:10px;" class="d-flex align-items-center">
                           <span style="width:120px;">start:<b><%= list.created_at.strftime("%m/%d") %></b> - finish:<b><%= list.done_date == nil ? "" : list.done_date.strftime("%m/%d") %></b></span>
@@ -78,14 +84,41 @@
               <% end %>
             </div>
           </div>
+        <!-- IDS -->
         <% elsif params[:scribe_section_view] == "ids"%>
-          <div>IDS</div>
+          <div class="px-5">
+            <div class="h3 fw-bolder text-center text-decoration-underline mb-3">IDS</div>
+            <div class="rounded-2 bg-light p-3">
+              <% User.all.each do |user| %>
+                <p class="m-0"><b>- <%= user.first_name %></b></p>
+                <% @ids_list.each do |list| %>
+                  <% if user.id == list.user_id  %>
+                    <div class="d-flex justify-content-between ids-list">
+                      <div class="task-section d-flex justify-content-between w-100">
+                        <div class="d-flex align-items-start">
+                          <input type="checkbox" class="identify-check-boxes <%= list.id %> mx-2" style="margin-top:6px;" role="button" <%= current_user.id == list.user_id ? '':'disabled' %> <%= list.done ? 'checked':'' %>>
+                          <label class="<%= list.done ? 'text-decoration-line-through' : '' %> solution-text" role="button"><%= list.task %></label> 
+                        </div>
+                        <div style="font-size:10px;" class="d-flex align-items-center">
+                          <span style="width:120px;">start:<b><%= list.created_at.strftime("%m/%d") %></b> - finish:<b><%= list.done_date == nil ? "" : list.done_date.strftime("%m/%d") %></b></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="py-2 px-3 d-none" id="solution-textarea" style="background-color: antiquewhite;"><%= list.solution.gsub("\n", "<br/>").html_safe %></div>
+                  <% end %>
+                <% end %>
+                <div class="my-4"></div>
+              <% end %>
+            </div>
+          </div>
+        <!-- Conclusion -->
         <% elsif params[:scribe_section_view] == "conclusion"%>
           <div>Conclusion</div>
+        <!-- Attendance -->
         <% else %>
         <div class="d-flex justify-content-center">
           <div class="mt-5 w-50 text-center">
-            <div class="h3 fw-bolder">Attendance</div>
+            <div class="h3 fw-bolder text-decoration-underline mb-3">Attendance</div>
             <div class="rounded-2 bg-light py-4">
               <div><%= raw(@attendance_view.gsub('<br/>', '<br/><br/>'))%></div>
             </div>

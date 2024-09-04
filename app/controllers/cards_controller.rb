@@ -18,10 +18,12 @@ class CardsController < ApplicationController
     # Headlines
     @headlines_view = @cards.where("card_title ILIKE ?", "%headlines%").last.addcards.last.desc.to_s.gsub(/\n/, '<br/>').html_safe
 
-
     # Todo
     @todo_addcard = @cards.where("card_title ILIKE ?", "todo's").last.addcards.last
     @todo_list = @todo_addcard.todos.order("created_at asc")
+    # IDS
+    @ids_addcard = @cards.where("card_title ILIKE ?", "ids").last.addcards.last
+    @ids_list = @ids_addcard.identifies.order("created_at asc")
   end
 
   # GET /cards/1 or /cards/1.json

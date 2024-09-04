@@ -50,9 +50,6 @@
   min-width: 200px;
 }
 
-.task-date {
-  cursor: pointer;
-}
 .task-date:hover {
   background-color: antiquewhite;
 }
