@@ -53,3 +53,9 @@
 .task-date:hover {
   background-color: antiquewhite;
 }
+
+.rock-content {
+  max-height: 650px;
+  overflow-y: auto;
+
+}

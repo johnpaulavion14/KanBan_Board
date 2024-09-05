@@ -18,6 +18,7 @@
   <div id="cards" class="card_container">
     <% @cards.each do |card| %>
       <div class="card_bg">
+        <!-- Rocks -->
         <% if card.card_title.downcase == "rocks" %>
           <div class="card-con">
             <b class="card_title">
@@ -33,12 +34,13 @@
           <div class="d-flex flex-column addcard-outercon">
             <% ProjectWorkspace.order("created_at asc").all.each do |workspace| %>
               <div class="addcard-con d-flex">
-                <%= link_to view_addcards_path(params[:cb_id],card.id,card.addcards.first.id,workspace.id), class:"addcard-name" do %>
+                <%= link_to view_addcards_path(params[:cb_id],card.id,card.addcards.first.id,ws_id:workspace.id), class:"addcard-name" do %>
                   <div><%= workspace.folder_name %></div>
                 <% end %>
               </div>
             <% end %>
           </div>
+        <!-- Scorecard -->
         <% elsif card.card_title.downcase.include?("scorecard")%>
          <div class="card-con">
             <b class="card_title">
@@ -250,21 +252,22 @@
     $('#end-scribe').click(function() {
         $("#pause").trigger("click")
     });
-   
-    // localStorage.setItem('remainingTime','300');
+    // Rocks Navbar Scribe View
+    $(".rocks-navbar").each( function(index,element) {
+      let rock_content = ".rocks-content-" + index
+      $(element).click(function(){
+        $(".rock-content").addClass("d-none")
+        $(rock_content).removeClass("d-none");
 
-    // scribe_sections = [attendance,segue,rocks,headline,todo,ids,conclusion]
-    // current_section = attendance
-    // Left and Right Arrow
-    // $("#left-arrow").click(function(){
-
-    //   alert("left")
-    //   localStorage.setItem('remainingTime','300');
-    // });
-    // $("#right-arrow").click(function(){
-    //   alert("right")
-    //   localStorage.setItem('remainingTime','600');
-    // });
+        $(".rocks-navbar").removeClass("btn-outline-info btn-info")
+        $(".rocks-navbar").addClass("btn-outline-info")
+        $(this).removeClass("btn-outline-info")
+        $(this).addClass("btn-info")
+      })
+    })
+    $('.rocks-navbar').last().removeClass("btn-outline-info")
+    $('.rocks-navbar').last().addClass("btn-info")
+    $('.rock-content').last().removeClass("d-none")
 
     //Start Scribe
     $(".fullscreen-overlay").hide();
@@ -284,8 +287,6 @@
         $(this).closest(".ids-list").next("#solution-textarea").toggleClass("d-none");
       })
     })
-
-
 
     // Addlist feature
     $(".clickAddList").click(function(){

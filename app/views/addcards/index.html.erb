@@ -18,7 +18,7 @@
         <span><%= image_tag ("title.png"),style:"width:30px; height:25px;" %></span>
         <% if @card_name.card_title.downcase == "rocks" %>
           <div class="mx-3" style="margin-top:-8px;">
-            <div class="card-heading"><%= ProjectWorkspace.find(params[:format]).folder_name %></div>
+            <div class="card-heading"><%= ProjectWorkspace.find(params[:ws_id]).folder_name %></div>
             <p>in list <u><%= @card_name.card_title %></u></p>
           </div>
         <% else %>
@@ -63,12 +63,12 @@
               <% @workspace_head.each do |email| %>
                 <% if email == "lvcagadas@cem-inc.org.ph" %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
-                  <% ProjectWorkspace.find(params[:format]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
+                  <% ProjectWorkspace.find(params[:ws_id]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
                     <div class="d-flex">
                       <div style="width: 50%;">
                         <span><%= index + 1 %>. </span>
                         <% if current_user.admin == true || current_user.first_name == @scribe || current_user.email == "jpbocatija@cem-inc.org.ph" %>
-                          <span><%= link_to rock.task_name, view_allprojects_path(params[:format],User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
+                          <span><%= link_to rock.task_name, view_allprojects_path(params[:ws_id],User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
                         <% else %>
                           <span><%= rock.task_name %></span>
                         <% end %>
@@ -101,7 +101,7 @@
                       </div>
                     </div>
                   <% end %>
-                  <% if ProjectWorkspace.find(params[:format]).rocks.where(user_id:User.find_by(email:email).id).empty? %>
+                  <% if ProjectWorkspace.find(params[:ws_id]).rocks.where(user_id:User.find_by(email:email).id).empty? %>
                     <div> - - </div>
                   <% end %>                  
                 <% end %>
@@ -113,12 +113,12 @@
               <% @workspace_isu.each do |email| %>
                 <% if ["jpbocatija@cem-inc.org.ph","rmina@cem-inc.org.ph","rcjamilano@cem-inc.org.ph"].include?(email) %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
-                  <% ProjectWorkspace.find(params[:format]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
+                  <% ProjectWorkspace.find(params[:ws_id]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
                     <div class="d-flex">
                       <div style="width: 50%;">
                         <span><%= index + 1 %>. </span>
                         <% if current_user.admin == true || current_user.host == true || current_user.email == "jpbocatija@cem-inc.org.ph" %>
-                          <span><%= link_to rock.task_name, view_allprojects_path(params[:format],User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
+                          <span><%= link_to rock.task_name, view_allprojects_path(params[:ws_id],User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
                         <% else %>
                           <span><%= rock.task_name %></span>
                         <% end %>                        
@@ -151,7 +151,7 @@
                       </div>
                     </div>                    
                   <% end %>
-                  <% if ProjectWorkspace.find(params[:format]).rocks.where(user_id:User.find_by(email:email).id).empty? %>
+                  <% if ProjectWorkspace.find(params[:ws_id]).rocks.where(user_id:User.find_by(email:email).id).empty? %>
                     <div> - - </div>
                   <% end %>
                 <% end %>
@@ -163,12 +163,12 @@
               <% @workspace_nssu.each do |email| %>
                 <% if ["gsibayan@cem-inc.org.ph","fviceral@cem-inc.org.ph","jcaniedo@cem-inc.org.ph"].include?(email) %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
-                  <% ProjectWorkspace.find(params[:format]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
+                  <% ProjectWorkspace.find(params[:ws_id]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
                     <div class="d-flex">
                       <div style="width: 50%;">
                         <span><%= index + 1 %>. </span>
                         <% if current_user.admin == true || current_user.host == true || current_user.email == "jpbocatija@cem-inc.org.ph" %>
-                          <span><%= link_to rock.task_name, view_allprojects_path(params[:format],User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
+                          <span><%= link_to rock.task_name, view_allprojects_path(params[:ws_id],User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
                         <% else %>
                           <span><%= rock.task_name %></span>
                         <% end %>
@@ -201,22 +201,22 @@
                       </div>
                     </div>                    
                   <% end %>
-                  <% if ProjectWorkspace.find(params[:format]).rocks.where(user_id:User.find_by(email:email).id).where(archived:false).empty? %>
+                  <% if ProjectWorkspace.find(params[:ws_id]).rocks.where(user_id:User.find_by(email:email).id).where(archived:false).empty? %>
                     <div> - - </div>
                   <% end %>
                 <% end %>
               <% end %>  
               <hr style="margin: 2px 0;"> 
               <!-- Other Members -->
-              <% ProjectWorkspace.find(params[:format]).assigned.each do |email| %>
+              <% ProjectWorkspace.find(params[:ws_id]).assigned.each do |email| %>
                 <% if !["gsibayan@cem-inc.org.ph","fviceral@cem-inc.org.ph","jpbocatija@cem-inc.org.ph","rmina@cem-inc.org.ph","rcjamilano@cem-inc.org.ph","lvcagadas@cem-inc.org.ph","jcaniedo@cem-inc.org.ph"].include?(email) %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
-                  <% ProjectWorkspace.find(params[:format]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
+                  <% ProjectWorkspace.find(params[:ws_id]).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
                     <div class="d-flex">
                       <div style="width: 50%;">
                         <span><%= index + 1 %>. </span>
                         <% if current_user.admin == true || current_user.host == true || current_user.email == "jpbocatija@cem-inc.org.ph" %>
-                          <span><%= link_to rock.task_name, view_allprojects_path(params[:format],User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
+                          <span><%= link_to rock.task_name, view_allprojects_path(params[:ws_id],User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
                         <% else %>
                           <span><%= rock.task_name %></span>
                         <% end %>                        
@@ -249,7 +249,7 @@
                       </div>
                     </div>                    
                   <% end %>
-                  <% if ProjectWorkspace.find(params[:format]).rocks.where(user_id:User.find_by(email:email).id).where(archived:false).empty? %>
+                  <% if ProjectWorkspace.find(params[:ws_id]).rocks.where(user_id:User.find_by(email:email).id).where(archived:false).empty? %>
                     <div> - - </div>
                   <% end %>
                 <% end %>

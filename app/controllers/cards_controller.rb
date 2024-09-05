@@ -15,6 +15,21 @@ class CardsController < ApplicationController
     @attendance_view = @cards.where(card_title:"Attendance").last.addcards.last.desc.to_s.gsub(/\n/, '<br/>').html_safe
     # Segue
     @segue_view = @cards.where("card_title ILIKE ?", "%segue%").last.addcards.last.desc.to_s.gsub(/\n/, '<br/>').html_safe
+    #Rocks
+    @workspace_head = ["lvcagadas@cem-inc.org.ph"]
+    @workspace_isu = ["rcjamilano@cem-inc.org.ph", "rmina@cem-inc.org.ph", "jpbocatija@cem-inc.org.ph"]
+    @workspace_nssu = ["gsibayan@cem-inc.org.ph", "fviceral@cem-inc.org.ph","jcaniedo@cem-inc.org.ph"]
+    if params[:ws_id]
+      ProjectWorkspace.find(params[:ws_id]).assigned.each do |user|
+        if !@workspace_isu.include?(user)
+          @workspace_isu.push(user)
+        end
+        if !@workspace_nssu.include?(user)
+          @workspace_nssu.push(user)
+        end
+      end
+    end
+    @scribe = HostScribe.where('date <= ?',Date.today) == [] ? "" : HostScribe.where('date <= ?',Date.today).order("date asc").last.scribe
     # Headlines
     @headlines_view = @cards.where("card_title ILIKE ?", "%headlines%").last.addcards.last.desc.to_s.gsub(/\n/, '<br/>').html_safe
 
