@@ -1,21 +1,5 @@
 <%= render 'projects/projects_navbar' %>
-<div class="mx-2 mb-2 ">
-  <div class="d-none" id="owner-param"><%= params[:rocks_owner] %></div>
-  <h3 class="text-center">- - <%= ProjectWorkspace.find(params[:pw_id]).folder_name %> - -</h3>
-  <%= link_to "Your Projects",view_projects_path({rocks_owner:current_user.id}), class:" #{'nav-active' if request.original_url.include? "yourprojects"} p-1"  %>
-
-  <% if current_user.email == "jpbocatija@cem-inc.org.ph" %>
-    <%= link_to "All Projects",view_allprojects_path({rocks_owner:"all_rocks"}), class:" #{'nav-active' if request.original_url.include? "allprojects"} p-1" %>
-  <% elsif current_user.admin == true %>
-    <%= link_to "All Projects",view_allprojects_path({rocks_owner:"all_rocks"}), class:" #{'nav-active' if request.original_url.include? "allprojects"} p-1" %>
-  <% elsif current_user.first_name == @scribe %>
-    <%= link_to "All Projects",view_allprojects_path({rocks_owner:"all_rocks"}), class:" #{'nav-active' if request.original_url.include? "allprojects"} p-1" %>
-  <% end %>
-
-  <%= link_to "Archived",view_archived_path({rocks_owner:current_user.id}), class:" #{'nav-active' if request.original_url.include? "archived"} p-1"  %>
-
-  <button id="addDataBtn">Export to Excel</button>
-</div>
+<%= render 'projects/projects_header' %>
 
 <div style="height: 90vh;width: 100vw; overflow:scroll;">
   <table class="table table-hover text-center" style="width:max-content; min-width: 100%;" id="exportTable">

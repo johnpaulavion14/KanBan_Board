@@ -1,6 +1,6 @@
 <%= render 'projects/projects_navbar' %>
 <div class="px-2" style="height: 90vh;width: 100vw; overflow:scroll;">
-  <h4>Projects Workspace</h4>
+  <h4>Rocks Workspace</h4>
   <table class="table table-hover">
     <thead class="table-dark">
       <tr>
@@ -15,8 +15,17 @@
       <tr role="button" class="all-workspace">
         <td style="display: none;" id="workspace-id"><%= folder.id %></td>
         <th scope="row"><%= index + 1%></th>
-        <td class="folder-name"><%= link_to folder.folder_name, view_projects_path(folder.id,{rocks_owner:current_user.id}) %></td>
-        <td class="assigned"><%= folder.assigned %></td>
+        <td class="folder-name"><%= link_to folder.folder_name, view_projects_path(folder.id,{rocks_owner:current_user.id}),class:"btn btn-outline-info" %></td>
+        <td class="assigned d-none"><%= folder.assigned %></td>
+        <td>
+          <% folder.assigned.each do |email| %>
+            <% if !User.find_by(email:email).profilepics.blank? %>
+              <span><%= image_tag User.find_by(email:email).profilepics.last.pic, class:"assigned-pics", title:email %></span>
+            <% else %>
+              <span><%= image_tag ("profile-pic.png"), class:"assigned-pics", title:email %></span>
+            <% end %>
+          <% end %>
+        </td>
         <td >
           <% if folder.user == current_user %>
             <%= link_to delete_workspace_path(folder.id),data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} do %>
