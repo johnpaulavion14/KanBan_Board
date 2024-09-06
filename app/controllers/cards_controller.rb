@@ -39,6 +39,12 @@ class CardsController < ApplicationController
     # IDS
     @ids_addcard = @cards.where("card_title ILIKE ?", "ids").last.addcards.last
     @ids_list = @ids_addcard.identifies.order("created_at asc")
+
+    #Conclusion
+    #names must not have spaces
+    @conclusion_lists = ["Larry","Ralph","JohnPaul","George","Jess","Reyn","Vice"].shuffle()
+    @conclusion_card_id = @cards.where("card_title ILIKE ?", "conclusion").last.id
+    @conclusion_addcard_id = @cards.where("card_title ILIKE ?", "conclusion").last.addcards.last.id
   end
 
   # GET /cards/1 or /cards/1.json

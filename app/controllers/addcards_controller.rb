@@ -230,8 +230,15 @@ class AddcardsController < ApplicationController
     @addcard = @card.addcards.find(params[:id])
     respond_to do |format|
       if @addcard.update(desc: desc + average_score)
-        format.html { redirect_to view_addcards_path, notice: "Addcard was successfully updated." }
-        format.json { render :show, status: :ok, location: @addcard }
+        if params[:from] == "scribe_view"
+          @mom_card_id = CreateBoard.find(params[:cb_id]).cards.order("created_at asc").where("card_title ILIKE ?", "mom").last.id
+          @mom_addcard_id = CreateBoard.find(params[:cb_id]).cards.order("created_at asc").where("card_title ILIKE ?", "mom").last.addcards.last.id
+          format.html { redirect_to view_addcards_path(params[:cb_id].to_i,@mom_card_id,@mom_addcard_id), notice: "Addcard was successfully updated." }
+          format.json { render :show, status: :ok, location: @addcard }
+        else
+          format.html { redirect_to view_addcards_path, notice: "Addcard was successfully updated." }
+          format.json { render :show, status: :ok, location: @addcard }
+        end
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @addcard.errors, status: :unprocessable_entity }

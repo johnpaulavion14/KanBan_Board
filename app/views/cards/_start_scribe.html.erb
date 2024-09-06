@@ -319,7 +319,31 @@
           </div>
         <!-- Conclusion -->
         <% elsif params[:scribe_section_view] == "conclusion"%>
-          <div>Conclusion</div>
+          <div class="px-5">
+            <div class="h3 fw-bolder text-center text-decoration-underline mb-3">Conclusion</div>
+            <div class="rounded-2 bg-light p-3">
+              <%= form_with scope: :addcard, url:update_conclusion_path(card_id:@conclusion_card_id,id:@conclusion_addcard_id,from:"scribe_view"), method: :patch, local:true do |form| %>
+                <%= form.hidden_field :conclusion_lists, value: @conclusion_lists %>
+                <div style="border:1px solid black; width:80%; padding:1rem; padding-left:3.5rem" class="m-auto">
+                  <% @conclusion_lists.each do |user| %>
+                    <div class="mb-2 d-flex">
+                      <div style="width:80px"><b><%= user %>:</b></div>
+                      <div>
+                        <%= form.text_field user + " 0",style:"text-align:center", size: "10x10" %>
+                        <%= form.text_field user + " 1",style:"text-align:center", size: "10x10" %>
+                        <%= form.text_field user + " 2",style:"text-align:center", size: "10x10" %> =
+                        <%= form.number_field user + " 3", style:"width: 50px", min:1, max:10 %>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+                <div style="margin-left: 6rem; margin-top:10px">
+                  <%= form.submit "Save" , class:"save-desc" %>
+                  <span class="cancel-desc">Cancel</span>
+                </div>
+              <% end %>
+            </div>
+          </div>
         <!-- Attendance -->
         <% else %>
         <div class="d-flex justify-content-center">

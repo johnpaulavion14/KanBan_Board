@@ -435,7 +435,7 @@
             <%= form_with scope: :addcard, url:generate_mom_path, method: :post, local:true do |form| %>
               <%= form.hidden_field :scribe_name, value: @scribe %>
               <div>
-                <%= form.submit "Generate MoM" , class:"btn btn-success" %>
+                <%= form.submit "Generate MoM" , class:"btn btn-success generate-mom" %>
               </div>
             <% end %>
           <% end %>
