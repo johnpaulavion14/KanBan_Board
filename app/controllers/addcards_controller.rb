@@ -182,7 +182,11 @@ class AddcardsController < ApplicationController
   def update_identify
     identify_id = params[:identify][:identify_id].to_i
     Identify.find(identify_id).update(identify_params)
-    redirect_to view_addcards_path
+    if params[:from] == "scribe_view"
+      redirect_to view_cards_path({scribe_section_view:"ids"})
+    else
+      redirect_to view_addcards_path
+    end
   end
   def update_identify_checkbox
     if params[:identify][:checkbox_done] == "true"

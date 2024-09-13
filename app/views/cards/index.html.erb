@@ -149,36 +149,55 @@
     // Function to format time in -hh:mm:ss
     let scribeSectionView = new URLSearchParams(window.location.search).get('scribe_section_view');
     if ( scribeSectionView == "attendance" ){
-          set_time = 300;
-          localStorage.setItem('remainingTime', 300);
-          localStorage.setItem('running', true);
+          if (localStorage.getItem('scribe_view') != scribeSectionView){
+            set_time = 300;
+            localStorage.setItem('remainingTime', 300);
+          }
+          localStorage.setItem('scribe_view','attendance')
+          localStorage.setItem('running', false);
         } else if( scribeSectionView == "segue" ){
-          set_time = 600;
-          localStorage.setItem('remainingTime', 600);
-          localStorage.setItem('running', true);
+          if (localStorage.getItem('scribe_view') != scribeSectionView){
+            set_time = 600;
+            localStorage.setItem('remainingTime', 600);
+          }
+          localStorage.setItem('scribe_view','segue')
+          localStorage.setItem('running', false);
         } else if( scribeSectionView == "rocks" ){
-          set_time = 900;
-          localStorage.setItem('remainingTime', 900);
-          localStorage.setItem('running', true);
+          if (localStorage.getItem('scribe_view') != scribeSectionView){
+            set_time = 900;
+            localStorage.setItem('remainingTime', 900);
+          }
+          localStorage.setItem('scribe_view','rocks')          
+          localStorage.setItem('running', false);
         } else if( scribeSectionView == "headline" ){
-          set_time = 600;
-          localStorage.setItem('remainingTime', 600);
-          localStorage.setItem('running', true);
+          if (localStorage.getItem('scribe_view') != scribeSectionView){
+            set_time = 600;
+            localStorage.setItem('remainingTime', 600);
+          }
+          localStorage.setItem('scribe_view','headline')          
+          localStorage.setItem('running', false);
         } else if( scribeSectionView == "todo" ){
-          set_time = 300;
-          localStorage.setItem('remainingTime', 300);
-          localStorage.setItem('running', true);
+          if (localStorage.getItem('scribe_view') != scribeSectionView){
+            set_time = 300;
+            localStorage.setItem('remainingTime', 300);
+          }
+          localStorage.setItem('scribe_view','todo')          
+          localStorage.setItem('running', false);
         } else if( scribeSectionView == "ids" ){
-          set_time = 2400;
-          localStorage.setItem('remainingTime', 2400);
-          localStorage.setItem('running', true);
+          if (localStorage.getItem('scribe_view') != scribeSectionView){
+            set_time = 2400;
+            localStorage.setItem('remainingTime', 2400);
+          }
+          localStorage.setItem('scribe_view','ids')          
+          localStorage.setItem('running', false);
         } else if( scribeSectionView == "conclusion" ){
-          set_time = 300;
-          localStorage.setItem('remainingTime', 300);
-          localStorage.setItem('running', true);
+          if (localStorage.getItem('scribe_view') != scribeSectionView){
+            set_time = 300;
+            localStorage.setItem('remainingTime', 300);
+          }
+          localStorage.setItem('scribe_view','conclusion')          
+          localStorage.setItem('running', false);
         } else {
-          set_time = 300;
-          localStorage.setItem('remainingTime', 10);
         }
     function formatTime(seconds) {
         let isNegative = seconds < 0;

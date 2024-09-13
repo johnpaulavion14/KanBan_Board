@@ -39,6 +39,9 @@ class CardsController < ApplicationController
     # IDS
     @ids_addcard = @cards.where("card_title ILIKE ?", "ids").last.addcards.last
     @ids_list = @ids_addcard.identifies.order("created_at asc")
+    @ids_card_id = @cards.where("card_title ILIKE ?", "ids").last.id
+    @ids_addcard_id = @cards.where("card_title ILIKE ?", "ids").last.addcards.last.id
+
 
     #Conclusion
     #names must not have spaces

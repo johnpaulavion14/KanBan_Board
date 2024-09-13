@@ -310,7 +310,20 @@
                         </div>
                       </div>
                     </div>
-                    <div class="py-2 px-3 d-none" id="solution-textarea" style="background-color: antiquewhite;"><%= list.solution.gsub("\n", "<br/>").html_safe %></div>
+                    <div id="solution-textarea" class="d-none">
+                      <%= form_with scope: :identify, url:update_identify_path({card_id:@ids_card_id, id:@ids_addcard_id,from:"scribe_view"}), method: :patch, local:true do |form| %>
+                        <%= form.hidden_field :identify_id, value:list.id %>
+                        <div class="d-flex">
+                          <div class="pb-1">
+                            <%= form.text_area :solution,value:list.solution, size: "75x3", style:"padding:5px 10px; background-color:#FFFFE0;"%>
+                          </div>
+                          <div class="mx-2">
+                            <div><%= form.submit "Save" , class:"save-desc" %></div>
+                            <div class="btn btn-danger mt-2 hide-solution">hide</div>
+                          </div>
+                        </div>
+                      <% end %>
+                    </div>
                   <% end %>
                 <% end %>
                 <div class="my-4"></div>
