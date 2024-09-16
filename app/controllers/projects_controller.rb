@@ -310,28 +310,36 @@ class ProjectsController < ApplicationController
     @submilestone = 0
     @sub2milestone = 0
     if !Rock.find_by(task_name:params[:task_name]).nil?
-       Rock.where(task_name:params[:task_name]).update_all(complete:params[:complete])
-       @rock = 1
+      Rock.where(task_name:params[:task_name]).each do |record|
+        record.update(complete:params[:complete])
+      end
+      @rock = 1
       if Rock.where(task_name: params[:task_name]).count > 1
         @rock = 2
       end
     end
     if !Milestone.find_by(task_name:params[:task_name]).nil?
-      Milestone.where(task_name:params[:task_name]).update_all(complete:params[:complete])
+      Milestone.where(task_name:params[:task_name]).each do |record|
+        record.update(complete:params[:complete])
+      end
       @milestone = 1
       if Milestone.where(task_name:params[:task_name]).count > 1
         @milestone = 2
       end
     end
     if !Submilestone.find_by(task_name:params[:task_name]).nil?
-      Submilestone.where(task_name:params[:task_name]).update_all(complete:params[:complete])
+      Submilestone.where(task_name:params[:task_name]).each do |record|
+        record.update(complete:params[:complete])
+      end
       @submilestone = 1
       if Submilestone.where(task_name:params[:task_name]).count > 1
         @submilestone = 2
       end
     end
     if !Sub2milestone.find_by(task_name:params[:task_name]).nil?
-      Sub2milestone.where(task_name:params[:task_name]).update_all(complete:params[:complete])  
+      Sub2milestone.where(task_name:params[:task_name]).each do |record|
+        record.update(complete:params[:complete])
+      end
       @sub2milestone = 1
       if Sub2milestone.where(task_name:params[:task_name]).count > 1
         @sub2milestone = 2

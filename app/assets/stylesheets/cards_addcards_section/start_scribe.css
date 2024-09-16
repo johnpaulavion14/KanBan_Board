@@ -40,7 +40,7 @@
   z-index: 9999;          
 }
 
-#start,#pause,#reset{
+#start-time,#pause-time,#reset-time{
   font-size: 10px;
 }
 #timer {
