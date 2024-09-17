@@ -1,6 +1,6 @@
 class AddcardsController < ApplicationController
   before_action :authenticate_user!
-  before_action :get_card, only: %i[ index edit edit_desc create update destroy attendance update_conclusion]
+  before_action :get_card, only: %i[ index edit edit_desc create update destroy attendance update_conclusion generate_mom]
   # before_action :set_addcard, only: %i[ show edit update destroy ]
 
   # GET /addcards or /addcards.json
@@ -251,7 +251,7 @@ class AddcardsController < ApplicationController
   end
 
   def generate_mom
-    current_date = Date.current.strftime("%B %d, %Y").to_s
+    current_date = CreateBoard.find(params[:cb_id]).cards.where("card_title ILIKE ?", "conclusion").last.addcards.last.updated_at.strftime("%B %d, %Y").to_s 
     mom_summary = "<b><u> #{current_date} </u></b>" + ""
     first_name = User.find_by(first_name:params[:addcard]["scribe_name"]).first_name
     last_name = User.find_by(first_name:params[:addcard]["scribe_name"]).last_name
