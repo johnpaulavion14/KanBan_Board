@@ -115,7 +115,7 @@
                     <div class="d-flex">
                       <div style="width: 50%;">
                         <span><%= index + 1 %>. </span>
-                        <% if current_user.admin == true || current_user.host == true || current_user.email == "jpbocatija@cem-inc.org.ph" %>
+                        <% if current_user.admin == true || current_user.first_name == @scribe || current_user.email == "jpbocatija@cem-inc.org.ph" %>
                           <span><%= link_to rock.task_name, view_allprojects_path(workspace.id,User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
                         <% else %>
                           <span><%= rock.task_name %></span>
@@ -165,7 +165,7 @@
                     <div class="d-flex">
                       <div style="width: 50%;">
                         <span><%= index + 1 %>. </span>
-                        <% if current_user.admin == true || current_user.host == true || current_user.email == "jpbocatija@cem-inc.org.ph" %>
+                        <% if current_user.admin == true || current_user.first_name == @scribe || current_user.email == "jpbocatija@cem-inc.org.ph" %>
                           <span><%= link_to rock.task_name, view_allprojects_path(workspace.id,User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
                         <% else %>
                           <span><%= rock.task_name %></span>
@@ -213,7 +213,7 @@
                     <div class="d-flex">
                       <div style="width: 50%;">
                         <span><%= index + 1 %>. </span>
-                        <% if current_user.admin == true || current_user.host == true || current_user.email == "jpbocatija@cem-inc.org.ph" %>
+                        <% if current_user.admin == true || current_user.first_name == @scribe || current_user.email == "jpbocatija@cem-inc.org.ph" %>
                           <span><%= link_to rock.task_name, view_allprojects_path(workspace.id,User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
                         <% else %>
                           <span><%= rock.task_name %></span>
