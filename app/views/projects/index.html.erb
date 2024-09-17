@@ -47,7 +47,7 @@
             <% if rock.milestones.blank? %>
               <%= rock.start %>
             <% else %>
-              <%= rock.milestones.order(start: :asc).last.finish + 1 %>
+              <%= rock.milestones.order(start: :asc, created_at: :asc).last.finish + 1 %>
             <% end %>
           </td>
             <!-- messages -->
@@ -185,7 +185,7 @@
                 <% if milestone.submilestones.blank? %>
                   <%= milestone.start %>
                 <% else %>
-                  <%= milestone.submilestones.order(start: :asc).last.finish + 1 %>
+                  <%= milestone.submilestones.order(start: :asc, created_at: :asc).last.finish + 1 %>
                 <% end %>
               </td>
                 <!-- messages -->
@@ -296,7 +296,7 @@
                     <% if submilestone.sub2milestones.blank? %>
                       <%= submilestone.start %>
                     <% else %>
-                      <%= submilestone.sub2milestones.order(start: :asc).last.finish + 1 %>
+                      <%= submilestone.sub2milestones.order(start: :asc, created_at: :asc).last.finish + 1 %>
                     <% end %>
                   </td>                  
                     <!-- messages -->

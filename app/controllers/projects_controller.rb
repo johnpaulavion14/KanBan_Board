@@ -16,7 +16,7 @@ class ProjectsController < ApplicationController
     @rocks = []
     @pw_emails = []
     @ids_array = []
-    rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc).where(archived:false)
+    rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc, created_at: :asc).where(archived:false)
     rocks.all.each do |rock|
       if rock.assigned.include? current_user.email
         @rocks.push(rock)
@@ -35,7 +35,7 @@ class ProjectsController < ApplicationController
     @ids_array.each do |id|
       if params_gsub == id.to_s
         @rocks = []
-        user_rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc).where(user_id: id).where(archived:false)
+        user_rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc, created_at: :asc).where(user_id: id).where(archived:false)
         user_rocks.each do |rock| 
           if rock.assigned.include? current_user.email
             @rocks.push(rock)
@@ -44,9 +44,9 @@ class ProjectsController < ApplicationController
       end
     end
    
-    @milestones = Milestone.all.order(start: :asc)
-    @submilestones = Submilestone.all.order(start: :asc)
-    @sub2milestones = Sub2milestone.all.order(start: :asc)
+    @milestones = Milestone.all.order(start: :asc, created_at: :asc)
+    @submilestones = Submilestone.all.order(start: :asc, created_at: :asc)
+    @sub2milestones = Sub2milestone.all.order(start: :asc, created_at: :asc)
     @users = ProjectWorkspace.find(params[:pw_id]).assigned
     @all_users = User.all
     @scribe = HostScribe.where('date <= ?',Date.today) == [] ? "" : HostScribe.where('date <= ?',Date.today).order("date asc").last.scribe
@@ -56,7 +56,7 @@ class ProjectsController < ApplicationController
   def allprojects
     User.all.each do |user|
       if user.admin == true || user.host == true || current_user.email == "jpbocatija@cem-inc.org.ph"
-        @rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc)
+        @rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc, created_at: :asc)
         @pw_emails = []
         @ids_array = []
         assigned_array = ProjectWorkspace.find(params[:pw_id]).assigned
@@ -71,24 +71,24 @@ class ProjectsController < ApplicationController
 
         @ids_array.each do |id|
           if params[:rocks_owner] == id.to_s
-            @rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc).where(user_id: id)
+            @rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc, created_at: :asc).where(user_id: id)
           end
         end
 
-        @milestones = Milestone.all.order(start: :asc)
-        @submilestones = Submilestone.all.order(start: :asc)
-        @sub2milestones = Sub2milestone.all.order(start: :asc)
+        @milestones = Milestone.all.order(start: :asc, created_at: :asc)
+        @submilestones = Submilestone.all.order(start: :asc, created_at: :asc)
+        @sub2milestones = Sub2milestone.all.order(start: :asc, created_at: :asc)
         @all_users = User.all
       end
     end
   end
 
   def archived
-      @rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc).where(archived:true)
+      @rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc, created_at: :asc).where(archived:true)
 
-      @milestones = Milestone.all.order(start: :asc)
-      @submilestones = Submilestone.all.order(start: :asc)
-      @sub2milestones = Sub2milestone.all.order(start: :asc)
+      @milestones = Milestone.all.order(start: :asc, created_at: :asc)
+      @submilestones = Submilestone.all.order(start: :asc, created_at: :asc)
+      @sub2milestones = Sub2milestone.all.order(start: :asc, created_at: :asc)
       @all_users = User.all
   end
 

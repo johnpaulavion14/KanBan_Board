@@ -61,7 +61,7 @@
               <% @workspace_head.each do |email| %>
                 <% if email == "lvcagadas@cem-inc.org.ph" %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
-                  <% ProjectWorkspace.find(workspace.id).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
+                  <% ProjectWorkspace.find(workspace.id).rocks.order(finish: :asc, created_at: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
                     <div class="d-flex">
                       <div style="width: 50%;">
                         <span><%= index + 1 %>. </span>
@@ -111,7 +111,7 @@
               <% @workspace_isu.each do |email| %>
                 <% if ["jpbocatija@cem-inc.org.ph","rmina@cem-inc.org.ph","rcjamilano@cem-inc.org.ph"].include?(email) %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
-                  <% ProjectWorkspace.find(workspace.id).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
+                  <% ProjectWorkspace.find(workspace.id).rocks.order(finish: :asc, created_at: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
                     <div class="d-flex">
                       <div style="width: 50%;">
                         <span><%= index + 1 %>. </span>
@@ -161,7 +161,7 @@
               <% @workspace_nssu.each do |email| %>
                 <% if ["gsibayan@cem-inc.org.ph","fviceral@cem-inc.org.ph","jcaniedo@cem-inc.org.ph"].include?(email) %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
-                  <% ProjectWorkspace.find(workspace.id).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
+                  <% ProjectWorkspace.find(workspace.id).rocks.order(finish: :asc, created_at: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
                     <div class="d-flex">
                       <div style="width: 50%;">
                         <span><%= index + 1 %>. </span>
@@ -209,7 +209,7 @@
               <% ProjectWorkspace.find(workspace.id).assigned.each do |email| %>
                 <% if !["gsibayan@cem-inc.org.ph","fviceral@cem-inc.org.ph","jpbocatija@cem-inc.org.ph","rmina@cem-inc.org.ph","rcjamilano@cem-inc.org.ph","lvcagadas@cem-inc.org.ph","jcaniedo@cem-inc.org.ph"].include?(email) %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
-                  <% ProjectWorkspace.find(workspace.id).rocks.order(finish: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
+                  <% ProjectWorkspace.find(workspace.id).rocks.order(finish: :asc, created_at: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
                     <div class="d-flex">
                       <div style="width: 50%;">
                         <span><%= index + 1 %>. </span>

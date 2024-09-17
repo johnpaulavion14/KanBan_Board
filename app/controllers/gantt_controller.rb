@@ -32,16 +32,16 @@ class GanttController < ApplicationController
   
   def update_gantt
     Task.all.destroy_all
-    Rock.all.order(finish: :asc).each do |rock|
+    Rock.all.order(finish: :asc, created_at: :asc).each do |rock|
       Task.create(text:rock.task_name, start_date:rock.start, duration:rock.finish-rock.start+1,parent:0,sortorder:0, progress:rock.complete/100.to_f)
       r_last_id = Task.last.id
-      rock.milestones.order(start: :asc).each do |milestone|
+      rock.milestones.order(start: :asc, created_at: :asc).each do |milestone|
         Task.create(text:milestone.task_name, start_date:milestone.start, duration:milestone.finish-milestone.start+1,parent:r_last_id,sortorder:0, progress:milestone.complete/100.to_f)
         m_last_id = Task.last.id
-        milestone.submilestones.order(start: :asc).each do |submilestone|
+        milestone.submilestones.order(start: :asc, created_at: :asc).each do |submilestone|
           Task.create(text:submilestone.task_name, start_date:submilestone.start, duration:submilestone.finish-submilestone.start+1,parent:m_last_id,sortorder:0, progress:submilestone.complete/100.to_f)
           subm_last_id = Task.last.id
-          submilestone.sub2milestones.order(start: :asc).each do |sub2milestone|
+          submilestone.sub2milestones.order(start: :asc, created_at: :asc).each do |sub2milestone|
             Task.create(text:sub2milestone.task_name, start_date:sub2milestone.start, duration:sub2milestone.finish-sub2milestone.start+1,parent:subm_last_id,sortorder:0, progress:sub2milestone.complete/100.to_f)
           end
         end
