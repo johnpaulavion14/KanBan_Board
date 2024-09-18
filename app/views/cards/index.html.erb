@@ -7,9 +7,13 @@
     | <span class="host"><%= @host %></span> |
     </span>
     <b style="margin-left:1rem">Scribe:</b>
-    <span>
-    | <span class="scribe"><%= @scribe %></span><%= @scribe == current_user.first_name ? '<span class="btn btn-success mx-2"><b id="start-scribe">Start</b></span>'.html_safe  : "<span></span>".html_safe %> |
-    </span>
+    | <span class="scribe"><%= @scribe %></span>
+    <% if @scribe == current_user.first_name %>
+      <%= link_to "Start", view_cards_path, class: "btn btn-success mx-2", id: "start-scribe" %>
+    <% else %>
+      <span></span>
+    <% end %> |
+
   </div>
   <%= render "start_scribe" %>
   <!-- Page scroll -->
@@ -154,49 +158,49 @@
             localStorage.setItem('remainingTime', 300);
           }
           localStorage.setItem('scribe_view','attendance')
-          localStorage.setItem('running', false);
+          localStorage.setItem('running', true);
         } else if( scribeSectionView == "segue" ){
           if (localStorage.getItem('scribe_view') != scribeSectionView){
             set_time = 600;
             localStorage.setItem('remainingTime', 600);
           }
           localStorage.setItem('scribe_view','segue')
-          localStorage.setItem('running', false);
+          localStorage.setItem('running', true);
         } else if( scribeSectionView == "rocks" ){
           if (localStorage.getItem('scribe_view') != scribeSectionView){
             set_time = 900;
             localStorage.setItem('remainingTime', 900);
           }
           localStorage.setItem('scribe_view','rocks')          
-          localStorage.setItem('running', false);
+          localStorage.setItem('running', true);
         } else if( scribeSectionView == "headline" ){
           if (localStorage.getItem('scribe_view') != scribeSectionView){
             set_time = 600;
             localStorage.setItem('remainingTime', 600);
           }
           localStorage.setItem('scribe_view','headline')          
-          localStorage.setItem('running', false);
+          localStorage.setItem('running', true);
         } else if( scribeSectionView == "todo" ){
           if (localStorage.getItem('scribe_view') != scribeSectionView){
             set_time = 300;
             localStorage.setItem('remainingTime', 300);
           }
           localStorage.setItem('scribe_view','todo')          
-          localStorage.setItem('running', false);
+          localStorage.setItem('running', true);
         } else if( scribeSectionView == "ids" ){
           if (localStorage.getItem('scribe_view') != scribeSectionView){
             set_time = 2400;
             localStorage.setItem('remainingTime', 2400);
           }
           localStorage.setItem('scribe_view','ids')          
-          localStorage.setItem('running', false);
+          localStorage.setItem('running', true);
         } else if( scribeSectionView == "conclusion" ){
           if (localStorage.getItem('scribe_view') != scribeSectionView){
             set_time = 300;
             localStorage.setItem('remainingTime', 300);
           }
           localStorage.setItem('scribe_view','conclusion')          
-          localStorage.setItem('running', false);
+          localStorage.setItem('running', true);
         } else {
         }
     function formatTime(seconds) {
@@ -237,7 +241,7 @@
         localStorage.setItem('remainingTime', remainingTime);
     }
     // Start button click handler
-    $('#start').click(function() {
+    $('#start-time').click(function() {
         if (!running) {
             running = true;
             localStorage.setItem('running', true);
@@ -245,7 +249,7 @@
         }
     });
     // Pause button click handler
-    $('#pause').click(function() {
+    $('#pause-time').click(function() {
         if (running) {
             clearInterval(timer);
             running = false;
@@ -253,23 +257,23 @@
         }
     });
     // Reset button click handler
-    $('#reset').click(function() {
+    $('#reset-time').click(function() {
         clearInterval(timer);
         running = false;
-        remainingTime  = set_time;
+        remainingTime = set_time;
         localStorage.setItem('remainingTime',set_time);
         localStorage.setItem('running', false);
         $('#timer').text(formatTime(set_time));
         alertTriggered = false; // Reset the alert trigger flag
     });
     $('.left-arrow').click(function() {
-        $("#pause").trigger("click")
+        $("#pause-time").trigger("click")
     });
     $('.right-arrow').click(function() {
-        $("#pause").trigger("click")
+        $("#pause-time").trigger("click")
     });
     $('#end-scribe').click(function() {
-        $("#pause").trigger("click")
+        $("#pause-time").trigger("click")
     });
     // Rocks Navbar Scribe View
     $(".rocks-navbar").each( function(index,element) {
@@ -288,13 +292,20 @@
     $('.rocks-navbar').last().addClass("btn-info")
     $('.rock-content').last().removeClass("d-none")
 
-    //Start Scribe
-    $(".fullscreen-overlay").hide();
+    //Start and End Scribe
+    $(".scribe-fullscreen-overlay").hide();
     $("#start-scribe").click(function(){
-      $(".fullscreen-overlay").show();
+      $(".scribe-fullscreen-overlay").show();
     });
+    let scribeView = localStorage.getItem('scribe_view');
+    if (scribeView) {
+      let currentHref = $('#start-scribe').attr('href'); // Get the current href
+      let newHref = currentHref + '?scribe_section_view=' + encodeURIComponent(scribeView); // Append the parameter
+      $('#start-scribe').attr('href', newHref); // Set the new href
+    }
+
     $("#end-scribe").click(function(){
-      $(".fullscreen-overlay").hide();
+      $(".scribe-fullscreen-overlay").hide();
     });
     // Trigger Scribe view if scribe_section_view params is not null
     if ( scribeSectionView ){
@@ -306,7 +317,20 @@
         $(this).closest(".ids-list").next("#solution-textarea").toggleClass("d-none");
       })
     })
-
+    // Submit Scribe Conclusion
+    $(".submit-scribe-conclusion").click(function(){
+      clearInterval(timer);
+      localStorage.setItem('running', false);
+      set_time = 300;
+      localStorage.setItem('remainingTime', 300);
+      localStorage.setItem('scribe_view','attendance')
+    });
+    $(".conclusion-scribe-form").on('keydown', function(event) {
+      if (event.keyCode === 13) {
+        event.preventDefault(); // Prevent form submission
+      }    
+    });
+ 
     // Addlist feature
     $(".clickAddList").click(function(){
       $(".toggleAddCard").show();

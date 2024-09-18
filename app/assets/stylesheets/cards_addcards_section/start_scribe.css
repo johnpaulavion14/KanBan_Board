@@ -1,3 +1,6 @@
+#start-scribe {
+  font-weight: bold;
+}
 .scribe-m-container-outer {
   position: fixed;  
   top: 50%;         
@@ -30,7 +33,7 @@
   border-radius: 10px;
 }
 
-.fullscreen-overlay {
+.scribe-fullscreen-overlay {
   position: fixed;       
   top: 0;                
   left: 0;               
