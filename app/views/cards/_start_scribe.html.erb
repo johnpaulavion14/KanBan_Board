@@ -38,7 +38,7 @@
           <div class="d-flex justify-content-center">
             <div class="mt-5" style="max-width: 70%;min-width: 50%;">
               <div class="h3 fw-bolder text-center text-decoration-underline mb-3">Intro/Segue</div>
-              <div class="rounded-2 bg-light py-3 px-5">
+              <div class="rounded-2 bg-light py-3 px-5" style="height: 600px; overflow-y: auto;">
                 <div><%= raw(@segue_view.gsub('<br/>', '<br/><br/>'))%></div>
               </div>
             </div>
@@ -259,7 +259,7 @@
           <div class="d-flex justify-content-center">
             <div class="mt-2" style="max-width: 70%;min-width: 50%;">
               <div class="h3 fw-bolder text-center text-decoration-underline mb-3">People Headlines</div>
-              <div class="rounded-2 bg-light py-3 px-5">
+              <div class="rounded-2 bg-light py-3 px-5" style="height: 650px; overflow-y: auto;">
                 <div><%= raw(@headlines_view.gsub('<br/>', '<br/><br/>'))%></div>
               </div>
             </div>
@@ -268,7 +268,7 @@
         <% elsif params[:scribe_section_view] == "todo"%>
           <div class="px-5 mt-2">
             <div class="h3 fw-bolder text-center text-decoration-underline mb-3">Todo's</div>
-            <div class="rounded-2 bg-light p-3">
+            <div class="rounded-2 bg-light p-3" style="height: 650px; overflow-y: auto;">
               <% User.all.each do |user| %>
                 <p class="m-0"><b>- <%= user.first_name %></b></p>
                 <% @todo_list.each do |list| %>
@@ -294,7 +294,7 @@
         <% elsif params[:scribe_section_view] == "ids"%>
           <div class="px-5">
             <div class="h3 fw-bolder text-center text-decoration-underline mb-3">IDS</div>
-            <div class="rounded-2 bg-light p-3">
+            <div class="rounded-2 bg-light p-3" style="height: 650px; overflow-y: auto;">
               <% User.all.each do |user| %>
                 <p class="m-0"><b>- <%= user.first_name %></b></p>
                 <% @ids_list.each do |list| %>
