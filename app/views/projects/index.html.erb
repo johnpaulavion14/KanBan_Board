@@ -10,20 +10,20 @@
   <table class="table table-hover text-center" style="width:max-content; min-width: 100%;" id="exportTable">
     <thead>
       <tr style="color: #0067a3; border-bottom: 3px solid #0067a3;border-top: 3px solid #0067a3; height: 50px; vertical-align: middle;" class="export-tr" id="t-head">
-        <th scope="col" style="min-width: 200px;" class="export-td">Task Name</th>
-        <th scope="col" class="export-td">Duration</th>
-        <th scope="col" style="width: 130px;" class="export-td">Start</th>
-        <th scope="col" ></th>
-        <th scope="col" style="width: 130px;" class="export-td">Finish</th>
-        <th scope="col" class="export-td">Assigned To</th>
-        <th scope="col" style="min-width: 150px;" class="export-td">% Complete</th>
-        <th scope="col" style="min-width: 100px;" class="export-td">Date Completed</th>
-        <th scope="col" style="min-width: 200px;" class="export-td">Status</th>
-        <th scope="col" class="export-td">Output</th>
-        <th scope="col" class="export-td">Remarks</th>
-        <th scope="col" style="min-width:100px;" class="export-td">Reviewed By</th>
-        <th scope="col" style="min-width:100px;" class="export-td">Archived</th>
-        <th scope="col" style="min-width:100px;" class="export-td">Actions</th>
+        <th scope="col" style="min-width: 200px;" class="export-td table-td1">Task Name</th>
+        <th scope="col" class="export-td table-td2">Duration</th>
+        <th scope="col" style="width: 130px;" class="export-td table-td3">Start</th>
+        <th scope="col" class="table-td4"></th>
+        <th scope="col" style="width: 130px;" class="export-td table-td5">Finish</th>
+        <th scope="col" class="export-td table-td6" style="width: 210px;">Assigned To</th>
+        <th scope="col" style="min-width: 150px;" class="export-td table-td7">% Complete</th>
+        <th scope="col" style="min-width: 100px;" class="export-td table-td8">Date Completed</th>
+        <th scope="col" style="min-width: 200px;" class="export-td table-td9">Status</th>
+        <th scope="col" class="export-td table-td10">Output</th>
+        <th scope="col" class="export-td table-td11">Remarks</th>
+        <th scope="col" style="min-width:100px;" class="export-td table-td12">Reviewed By</th>
+        <th scope="col" style="min-width:100px;" class="export-td table-td13">Archived</th>
+        <th scope="col" style="min-width:100px;" class="export-td table-td14">Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -506,25 +506,30 @@
                 </tr>
                 <!-- Sub2milestone create form-->
                 <tr class="new-sub2milestone create-sub2m-<%= submilestone.id %>">
-                  <%= form_with url:create_sub2milestones_path(params[:pw_id],rock.id,milestone.id,submilestone.id), method: :post, local: true do |f| %>
-                    <td class="d-none"><%= f.hidden_field :user_id, value:current_user.id, class:"px-2" %></td>
-                    <td><%= f.text_field :task_name, required:true, class:"px-2 float-start", style:"margin-left: 7.5rem;"%></td>
-                    <td></td>
-                    <td><%= f.date_field :start, required:true, class:"px-2",id:"start", min: milestone.start, max: milestone.finish %></td>
-                    <td>>></td>
-                    <td><%= f.date_field :finish, required:true, class:"px-2",id:"finish", min: milestone.start, max: milestone.finish %></td>
-                    <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
-                    <td><%= f.number_field :complete, required:true, class:"px-2", style:"width: 65px; text-align:center", min:0, max:100, value:0 %> %</td>
-                    <td></td>
-                    <td></td>
-                    <td><%= f.text_area :output, class:"px-2", style:"height:100px; width:200px;" %></td>
-                    <td><%= f.text_area :remarks, class:"px-2", style:"height:100px; width:200px;" %></td>
-                    <td></td>
-                    <td>
-                      <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-sub2m-submit" %></span>
-                      <span class="x-new-sub2milestone mx-2 btn btn-danger mt-1">Cancel</span>
-                    </td>
-                  <% end %>
+                  <td colspan="14">
+                    <%= form_with url:create_sub2milestones_path(params[:pw_id],rock.id,milestone.id,submilestone.id), method: :post, local: true do |f| %>
+                      <table>
+                        <td class="d-none"><%= f.hidden_field :user_id, value:current_user.id, class:"px-2" %></td>
+                        <td class="form-td1"><%= f.text_field :task_name, required:true, class:"px-2 float-start", style:"margin-left: 7.5rem;"%></td>
+                        <td class="form-td2"></td>
+                        <td class="form-td3"><%= f.date_field :start, required:true, class:"px-2",id:"start", min: milestone.start, max: milestone.finish %></td>
+                        <td class="form-td4">>></td>
+                        <td class="form-td5"><%= f.date_field :finish, required:true, class:"px-2",id:"finish", min: milestone.start, max: milestone.finish %></td>
+                        <td class="form-td6"><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
+                        <td class="form-td7"><%= f.number_field :complete, required:true, class:"px-2", style:"width: 65px; text-align:center", min:0, max:100, value:0 %> %</td>
+                        <td class="form-td8"></td>
+                        <td class="form-td9"></td>
+                        <td class="form-td10"><%= f.text_area :output, class:"px-2", style:"height:100px; width:200px;" %></td>
+                        <td class="form-td11"><%= f.text_area :remarks, class:"px-2", style:"height:100px; width:200px;" %></td>
+                        <td class="form-td12"></td>
+                        <td class="form-td13">
+                          <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-sub2m-submit" %></span>
+                          <span class="x-new-sub2milestone mx-2 btn btn-danger mt-1">Cancel</span>
+                        </td>
+                        <td class="form-td14"></td>
+                      </table>
+                    <% end %>
+                  </td>
                 </tr>
               <% end %> 
             <% end %> <!--submilestone end -->
@@ -545,25 +550,30 @@
             </tr>
              <!-- Sub Milestone create form-->
             <tr class="new-submilestone create-subm-<%= milestone.id %>">
-              <%= form_with url:create_submilestones_path(params[:pw_id],rock.id,milestone.id), method: :post, local: true do |f| %>
-                <td class="d-none"><%= f.hidden_field :user_id, value:current_user.id, class:"px-2" %></td>
-                <td><%= f.text_field :task_name, required:true, class:"px-2 float-start", style:"margin-left: 5.5rem;"%></td>
-                <td></td>
-                <td><%= f.date_field :start, required:true, class:"px-2",id:"start", min: milestone.start, max: milestone.finish %></td>
-                <td>>></td>
-                <td><%= f.date_field :finish, required:true, class:"px-2",id:"finish", min: milestone.start, max: milestone.finish %></td>
-                <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
-                <td><%= f.number_field :complete, required:true, class:"px-2", style:"width: 65px; text-align:center", min:0, max:100, value:0 %> %</td>
-                <td></td>
-                <td></td>
-                <td><%= f.text_area :output, class:"px-2", style:"height:100px; width:200px;" %></td>
-                <td><%= f.text_area :remarks, class:"px-2", style:"height:100px; width:200px;" %></td>
-                <td></td>
-                <td>
-                  <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-subm-submit" %></span>
-                  <span class="x-new-submilestone mx-2 btn btn-danger mt-1">Cancel</span>
-                </td>
-              <% end %>
+              <td colspan="14">
+                <%= form_with url:create_submilestones_path(params[:pw_id],rock.id,milestone.id), method: :post, local: true do |f| %>
+                  <table>
+                    <td class="d-none"><%= f.hidden_field :user_id, value:current_user.id, class:"px-2" %></td>
+                    <td class="form-td1"><%= f.text_field :task_name, required:true, class:"px-2 float-start", style:"margin-left: 5.5rem;"%></td>
+                    <td class="form-td2"></td>
+                    <td class="form-td3"><%= f.date_field :start, required:true, class:"px-2",id:"start", min: milestone.start, max: milestone.finish %></td>
+                    <td class="form-td4">>></td>
+                    <td class="form-td5"><%= f.date_field :finish, required:true, class:"px-2",id:"finish", min: milestone.start, max: milestone.finish %></td>
+                    <td class="form-td6"><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
+                    <td class="form-td7"><%= f.number_field :complete, required:true, class:"px-2", style:"width: 65px; text-align:center", min:0, max:100, value:0 %> %</td>
+                    <td class="form-td8"></td>
+                    <td class="form-td9"></td>
+                    <td class="form-td10"><%= f.text_area :output, class:"px-2", style:"height:100px; width:200px;" %></td>
+                    <td class="form-td11"><%= f.text_area :remarks, class:"px-2", style:"height:100px; width:200px;" %></td>
+                    <td class="form-td12"></td>
+                    <td class="form-td13">
+                      <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-subm-submit" %></span>
+                      <span class="x-new-submilestone mx-2 btn btn-danger mt-1">Cancel</span>
+                    </td>
+                    <td class="form-td14"></td>
+                  </table>
+                <% end %>
+              </td>
             </tr>
           <% end %>
         <% end %><!--Milestone end -->
@@ -584,25 +594,30 @@
         </tr>
         <!-- Milestone create form-->
         <tr class="new-milestone create-m-<%= rock.id %>">
-          <%= form_with url:create_milestones_path(params[:pw_id],rock.id), method: :post, local: true do |f| %>
-            <td class="d-none"><%= f.hidden_field :user_id, value:current_user.id, class:"px-2" %></td>
-            <td><%= f.text_field :task_name, required:true, class:"px-2 float-start", style:"margin-left: 3.5rem;"%></td>
-            <td></td>
-            <td><%= f.date_field :start, required:true, class:"px-2",id:"start", min: rock.start, max: rock.finish %></td>
-            <td>>></td>
-            <td><%= f.date_field :finish, required:true, class:"px-2",id:"finish", min: rock.start, max: rock.finish %></td>
-            <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
-            <td><%= f.number_field :complete, required:true, class:"px-2", style:"width: 65px; text-align:center", min:0, max:100, value:0 %> %</td>
-            <td></td>
-            <td></td>
-            <td><%= f.text_area :output, class:"px-2", style:"height:100px; width:200px;" %></td>
-            <td><%= f.text_area :remarks, class:"px-2", style:"height:100px; width:200px;" %></td>
-            <td></td>
-            <td>
-              <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-m-submit" %></span>
-              <span class="x-new-milestone mx-2 btn btn-danger mt-1">Cancel</span>
-            </td>
-          <% end %>
+          <td colspan="14">
+            <%= form_with url:create_milestones_path(params[:pw_id],rock.id), method: :post, local: true do |f| %>
+              <table>
+                <td class="d-none"><%= f.hidden_field :user_id, value:current_user.id, class:"px-2" %></td>
+                <td class="form-td1"><%= f.text_field :task_name, required:true, class:"px-2 float-start", style:"margin-left: 3.5rem;"%></td>
+                <td class="form-td2"></td>
+                <td class="form-td3"><%= f.date_field :start, required:true, class:"px-2",id:"start", min: rock.start, max: rock.finish %></td>
+                <td class="form-td4">>></td>
+                <td class="form-td5"><%= f.date_field :finish, required:true, class:"px-2",id:"finish", min: rock.start, max: rock.finish %></td>
+                <td class="form-td6"><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
+                <td class="form-td7"><%= f.number_field :complete, required:true, class:"px-2", style:"width: 65px; text-align:center", min:0, max:100, value:0 %> %</td>
+                <td class="form-td8"></td>
+                <td class="form-td9"></td>
+                <td class="form-td10"><%= f.text_area :output, class:"px-2", style:"height:100px; width:200px;" %></td>
+                <td class="form-td11"><%= f.text_area :remarks, class:"px-2", style:"height:100px; width:200px;" %></td>
+                <td class="form-td12"></td>
+                <td class="form-td13">
+                  <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-m-submit" %></span>
+                  <span class="x-new-milestone mx-2 btn btn-danger mt-1">Cancel</span>
+                </td>
+                <td class="form-td14"></td>
+              </table>
+            <% end %>
+          </td>
         </tr>
         <tr>
           <td></td>
@@ -623,120 +638,145 @@
       <!-- Rocks Create and Update -->
       <div id="current-user-email" class="d-none"><%= current_user.email %></div>
       <tr class="new-rock">
-        <%= form_with url:create_rocks_path, method: :post, local: true do |f| %>
-          <td style="display: none;"><%= f.number_field :user_id,value:current_user.id, required:true %></td>
-          <td><%= f.text_field :task_name, required:true, class:"px-2 float-start mx-3" %></td>
-          <td></td>
-          <td><%= f.date_field :start, required:true, class:"px-2" %></td>
-          <td>>></td>
-          <td><%= f.date_field :finish, required:true, class:"px-2" %></td>
-          <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5}) %></td>
-          <td><%= f.number_field :complete, required:true, class:"px-2",style:"width: 65px; text-align:center",id:"complete", min:0, max:100, value:0 %> %</td>
-          <td></td>
-          <td></td>
-          <td><%= f.text_area :output, class:"px-2", style:"height:100px; width:200px;" %></td>
-          <td><%= f.text_area :remarks, class:"px-2", style:"height:100px; width:200px;" %></td>
-          <td></td>
-          <td>
-            <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-rock-submit" %></span>
-            <span class="x-create mx-2 btn btn-danger mt-1">Cancel</span>
-          </td>
-        <% end %>
+        <td colspan="14">
+          <%= form_with url:create_rocks_path, method: :post, local: true do |f| %>
+            <table>
+              <td style="display: none;"><%= f.number_field :user_id,value:current_user.id, required:true %></td>
+              <td style="width: 280px; padding-left: 20px;"><%= f.text_field :task_name, required:true, class:"px-2 float-start" %></td>
+              <td class="form-td2"></td>
+              <td class="form-td3"><%= f.date_field :start, required:true, class:"px-2" %></td>
+              <td class="form-td4">>></td>
+              <td class="form-td5"><%= f.date_field :finish, required:true, class:"px-2" %></td>
+              <td class="form-td6"><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5}) %></td>
+              <td class="form-td7"><%= f.number_field :complete, required:true, class:"px-2",style:"width: 65px; text-align:center",id:"complete", min:0, max:100, value:0 %> %</td>
+              <td class="form-td8"></td>
+              <td class="form-td9"></td>
+              <td class="form-td10"><%= f.text_area :output, class:"px-2", style:"height:100px; width:200px;" %></td>
+              <td class="form-td11"><%= f.text_area :remarks, class:"px-2", style:"height:100px; width:200px;" %></td>
+              <td class="form-td12"></td>
+              <td class="form-td13">
+                <span><%= f.submit "Save" ,class:"btn btn-success mt-1 new-rock-submit" %></span>
+                <span class="x-create mx-2 btn btn-danger mt-1">Cancel</span>
+              </td>
+              <td class="form-td14"></td>
+            </table>
+          <% end %>
+        </td>
       </tr>
       <tr class="update-rock">
-        <%= form_with url:update_rocks_path, method: :patch, local: true do |f| %>
-          <td style="display: none;"><%= f.number_field :user_id, required:true, id:"rock-user-id"%></td>
-          <td style="display: none;"><%= f.number_field :id, required:true,id:"rock-id" %></td>
-          <td style="display: none;"><%= f.number_field :pw_id, required:true,id:"pw-id" %></td>
-          <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start mx-3" %></td>
-          <td></td>
-          <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
-          <td>>></td>
-          <td><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
-          <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5}) %></td>
-          <td><%= f.number_field :complete, required:true, class:"px-2",style:"width: 65px; text-align:center",id:"complete", min:0, max:100 %> %</td>
-          <td></td>
-          <td></td>
-          <td><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px; width:200px;" %></td>
-          <td><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px; width:200px;" %></td>
-          <td></td>
-          <td>
-            <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-r-submit" %></span>
-            <span class="x-update mx-2 btn btn-danger mt-1">Cancel</span>
-          </td>
-        <% end %>
+        <td colspan="14">
+          <%= form_with url:update_rocks_path, method: :patch, local: true do |f| %>
+            <table>
+              <td style="display: none;"><%= f.number_field :user_id, required:true, id:"rock-user-id"%></td>
+              <td style="display: none;"><%= f.number_field :id, required:true,id:"rock-id" %></td>
+              <td style="display: none;"><%= f.number_field :pw_id, required:true,id:"pw-id" %></td>
+              <td style="width: 280px; padding-left: 20px;"><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start" %></td>
+              <td class="form-td2"></td>
+              <td class="form-td3"><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
+              <td class="form-td4">>></td>
+              <td class="form-td5"><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
+              <td class="form-td6"><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5}) %></td>
+              <td class="form-td7"><%= f.number_field :complete, required:true, class:"px-2",style:"width: 65px; text-align:center",id:"complete", min:0, max:100 %> %</td>
+              <td class="form-td8"></td>
+              <td class="form-td9"></td>
+              <td class="form-td10"><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px; width:200px;" %></td>
+              <td class="form-td11"><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px; width:200px;" %></td>
+              <td class="form-td12"></td>
+              <td class="form-td13">
+                <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-r-submit" %></span>
+                <span class="x-update mx-2 btn btn-danger mt-1">Cancel</span>
+              </td>
+              <td class="form-td14"></td>
+            </table>
+          <% end %>
+        </td>
       </tr>
       <!-- Milstones Update -->
       <tr class="update-milestone">
-        <%= form_with url:update_milestones_path(), method: :patch, local: true do |f| %>
-          <td style="display: none;"><%= f.number_field :rock_id, required:true,id:"rock-id" %></td>
-          <td style="display: none;"><%= f.number_field :id, required:true,id:"milestone-id" %></td>
-          <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start", style:"margin-left: 3.5rem;" %></td>
-          <td></td>
-          <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
-          <td>>></td>
-          <td><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
-          <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
-          <td><%= f.number_field :complete, required:true, class:"px-2",style:"width: 65px; text-align:center",id:"complete", min:0, max:100 %> %</td>
-          <td></td>
-          <td></td>
-          <td><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px; width:200px;" %></td>
-          <td><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px ;width:200px;" %></td>
-          <td></td>
-          <td>
-            <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-m-submit" %></span>
-            <span class="x-update-milestone mx-2 btn btn-danger mt-1">Cancel</span>
-          </td>
-        <% end %>
+        <td colspan="14">
+          <%= form_with url:update_milestones_path(), method: :patch, local: true do |f| %>
+            <table>
+              <td style="display: none;"><%= f.number_field :rock_id, required:true,id:"rock-id" %></td>
+              <td style="display: none;"><%= f.number_field :id, required:true,id:"milestone-id" %></td>
+              <td class="form-td1"><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start", style:"margin-left: 3.5rem;" %></td>
+              <td class="form-td2"></td>
+              <td class="form-td3"><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
+              <td class="form-td4">>></td>
+              <td class="form-td5"><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
+              <td class="form-td6"><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
+              <td class="form-td7"><%= f.number_field :complete, required:true, class:"px-2",style:"width: 65px; text-align:center",id:"complete", min:0, max:100 %> %</td>
+              <td class="form-td8"></td>
+              <td class="form-td9"></td>
+              <td class="form-td10"><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px; width:200px;" %></td>
+              <td class="form-td11"><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px ;width:200px;" %></td>
+              <td class="form-td12"></td>
+              <td class="form-td13">
+                <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-m-submit" %></span>
+                <span class="x-update-milestone mx-2 btn btn-danger mt-1">Cancel</span>
+              </td>
+              <td class="form-td14"></td>
+            </table>
+          <% end %>
+        </td>
       </tr>
       <!--Sub Milestones Update -->
       <tr class="update-submilestone">
-        <%= form_with url:update_submilestones_path(), method: :patch, local: true do |f| %>
-          <td style="display: none;"><%= f.number_field :rock_id, required:true,id:"rock-id" %></td>
-          <td style="display: none;"><%= f.number_field :milestone_id, required:true,id:"milestone-id" %></td>
-          <td style="display: none;"><%= f.number_field :id, required:true,id:"submilestone-id" %></td>
-          <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start",style:"margin-left:5.5rem" %></td>
-          <td></td>
-          <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
-          <td>>></td>
-          <td><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
-          <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
-          <td><%= f.number_field :complete, required:true, class:"px-2",style:"width: 65px; text-align:center",id:"complete", min:0, max:100 %> %</td>
-          <td></td>
-          <td></td>
-          <td><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px; width:200px;" %></td>
-          <td><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px ;width:200px;" %></td>
-          <td></td>
-          <td>
-            <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-subm-submit" %></span>
-            <span class="x-update-submilestone mx-2 btn btn-danger mt-1">Cancel</span>
-          </td>
-        <% end %>
+        <td colspan="14">
+          <%= form_with url:update_submilestones_path(), method: :patch, local: true do |f| %>
+            <table>
+              <td style="display: none;"><%= f.number_field :rock_id, required:true,id:"rock-id" %></td>
+              <td style="display: none;"><%= f.number_field :milestone_id, required:true,id:"milestone-id" %></td>
+              <td style="display: none;"><%= f.number_field :id, required:true,id:"submilestone-id" %></td>
+              <td class="form-td1"><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start",style:"margin-left:5.5rem" %></td>
+              <td class="form-td2"></td>
+              <td class="form-td3"><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
+              <td class="form-td4">>></td>
+              <td class="form-td5"><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
+              <td class="form-td6"><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
+              <td class="form-td7"><%= f.number_field :complete, required:true, class:"px-2",style:"width: 65px; text-align:center",id:"complete", min:0, max:100 %> %</td>
+              <td class="form-td8"></td>
+              <td class="form-td9"></td>
+              <td class="form-td10"><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px; width:200px;" %></td>
+              <td class="form-td11"><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px ;width:200px;" %></td>
+              <td class="form-td12"></td>
+              <td class="form-td13">
+                <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-subm-submit" %></span>
+                <span class="x-update-submilestone mx-2 btn btn-danger mt-1">Cancel</span>
+              </td>
+              <td class="form-td14"></td>
+            </table>
+          <% end %>
+        </td>
       </tr>
       <!--Sub2milstones Update -->
       <tr class="update-sub2milestone">
-        <%= form_with url:update_sub2milestones_path(), method: :patch, local: true do |f| %>
-          <td style="display: none;"><%= f.number_field :rock_id, required:true,id:"rock-id" %></td>
-          <td style="display: none;"><%= f.number_field :milestone_id, required:true,id:"milestone-id" %></td>
-          <td style="display: none;"><%= f.number_field :submilestone_id, required:true,id:"submilestone-id" %></td>
-          <td style="display: none;"><%= f.number_field :id, required:true, id:"sub2milestone-id" %></td>
-          <td><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start",style:"margin-left:7.5rem" %></td>
-          <td></td>
-          <td><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
-          <td>>></td>
-          <td><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
-          <td><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
-          <td><%= f.number_field :complete, required:true, class:"px-2",style:"width: 65px; text-align:center",id:"complete", min:0, max:100 %> %</td>
-          <td></td>
-          <td></td>
-          <td><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px; width:200px;" %></td>
-          <td><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px ;width:200px;" %></td>
-          <td></td>
-          <td>
-            <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-sub2m-submit" %></span>
-            <span class="x-update-sub2milestone mx-2 btn btn-danger mt-1">Cancel</span>
-          </td>
-        <% end %>
+        <td colspan="14">
+          <%= form_with url:update_sub2milestones_path(), method: :patch, local: true do |f| %>
+            <table>
+              <td style="display: none;"><%= f.number_field :rock_id, required:true,id:"rock-id" %></td>
+              <td style="display: none;"><%= f.number_field :milestone_id, required:true,id:"milestone-id" %></td>
+              <td style="display: none;"><%= f.number_field :submilestone_id, required:true,id:"submilestone-id" %></td>
+              <td style="display: none;"><%= f.number_field :id, required:true, id:"sub2milestone-id" %></td>
+              <td class="form-td1"><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start",style:"margin-left:7.5rem" %></td>
+              <td class="form-td2"></td>
+              <td class="form-td3"><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
+              <td class="form-td4">>></td>
+              <td class="form-td5"><%= f.date_field :finish, required:true,id:"finish", class:"px-2" %></td>
+              <td class="form-td6"><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5 }) %></td>
+              <td class="form-td7"><%= f.number_field :complete, required:true, class:"px-2",style:"width: 65px; text-align:center",id:"complete", min:0, max:100 %> %</td>
+              <td class="form-td8"></td>
+              <td class="form-td9"></td>
+              <td class="form-td10"><%= f.text_area :output,id:"output", class:"px-2", style:"height:100px; width:200px;" %></td>
+              <td class="form-td11"><%= f.text_area :remarks,id:"remarks", class:"px-2", style:"height:100px ;width:200px;" %></td>
+              <td class="form-td12"></td>
+              <td class="form-td13">
+                <span><%= f.submit "Save" ,class:"btn btn-success mt-1 update-sub2m-submit" %></span>
+                <span class="x-update-sub2milestone mx-2 btn btn-danger mt-1">Cancel</span>
+              </td>
+              <td class="form-td14"></td>
+            </table>
+          <% end %>
+        </td>
         <!-- url params plus icon-->
         <div class="d-none rock-params"><%= params[:rock_id] %></div>
         <div class="d-none milestone-params"><%= params[:milestone_id] %></div>
@@ -1563,21 +1603,24 @@
       addDataToExcel();
     });
 
-    // alert($(".rocks-owner").text())
+    // Adjusting table td width
+    // --create section
+    $('.form-td1').outerWidth($('.table-td1').outerWidth());
+    $('.form-td2').outerWidth($('.table-td2').outerWidth());
+    $('.form-td3').outerWidth($('.table-td3').outerWidth());
+    $('.form-td4').outerWidth($('.table-td4').outerWidth());
+    $('.form-td5').outerWidth($('.table-td5').outerWidth());
+    $('.form-td6').outerWidth($('.table-td6').outerWidth());
+    $('.form-td7').outerWidth($('.table-td7').outerWidth());
+    $('.form-td8').outerWidth($('.table-td8').outerWidth());
+    $('.form-td9').outerWidth($('.table-td9').outerWidth());
+    $('.form-td10').outerWidth($('.table-td10').outerWidth());
+    $('.form-td11').outerWidth($('.table-td11').outerWidth());
+    $('.form-td12').outerWidth($('.table-td12').outerWidth());
+    $('.form-td13').outerWidth($('.table-td13').outerWidth());
+    $('.form-td14').outerWidth($('.table-td14').outerWidth());
 });
 
-
-// Reload Page Once
-var userAgent = navigator.userAgent.toLowerCase();
-if (userAgent.indexOf('firefox') > -1) {
-} else {
-  function reloadIt() {
-    if (window.location.href.substr(-2) !== ".1") {
-        window.location = window.location.href + ".1";
-    }
-  }
-  setTimeout('reloadIt()', 1000);
-}
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
