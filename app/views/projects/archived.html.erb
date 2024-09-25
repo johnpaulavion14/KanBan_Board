@@ -26,7 +26,7 @@
         <!-- All Rocks -->
         <tr class="all-rocks export-tr" style="background-color:#cccdd4; font-weight: bold; vertical-align: middle;" id="rock-tr"> 
           <td style="display: none;" id="rock-id"><%= rock.id %></td>
-          <td class="task-name export-td" id="rockplus-<%= rock.id %>" style="text-align: left; min-width: 100px;">
+          <td class="task-name export-td" id="rockplus-<%= rock.id %>" style="text-align: left; max-width: 800px;">
             <% if rock.milestones.blank? %>
               <%= image_tag ("plus.png"),role:"button",style:"margin-left:1rem",class:"plus-icon" %>
               <%= image_tag ("minus.png"),role:"button", style:"margin-left:1rem",class:"minus-icon" %>
@@ -135,7 +135,7 @@
               <td style="display: none;" class="message-firstname"><%= milestone.messages.order(created_at: :asc).pluck(:first_name) %></td>
               <td style="display: none;" class="message-lastname"><%= milestone.messages.order(created_at: :asc).pluck(:last_name) %></td>
               <td style="display: none;" class="message-time"><%= milestone.messages.order(created_at: :asc).pluck(:time) %></td>
-              <td class="task-name export-td mplus-<%= rock.id %>" id="mileplus-<%= milestone.id %>" style="text-align: left; min-width: 100px; padding-left:4rem">
+              <td class="task-name export-td mplus-<%= rock.id %>" id="mileplus-<%= milestone.id %>" style="text-align: left; max-width: 800px; padding-left:4rem">
                 <% if milestone.submilestones.blank? %>
                   <%= image_tag ("plus_blue_blank.png"),role:"button",class:"m-plus-icon" %>
                   <%= image_tag ("minus_blue_blank.png"),role:"button",class:"m-minus-icon" %>
@@ -213,7 +213,7 @@
                 <tr class="all-submilestones mile-<%= milestone.id %> <%= submilestone.assigned.include?(current_user.email) ? '' : 'bg-light' %> export-tr" style="vertical-align: middle;" id="subm-tr">
                   <td style="display: none;" id="milestone-id"><%= milestone.id %></td>
                   <td style="display: none;" id="submilestone-id"><%= submilestone.id %></td>
-                  <td class="task-name export-td smplus-<%= rock.id %>" id="submplus-<%= submilestone.id %>" style="text-align: left; min-width: 100px; padding-left:6rem">
+                  <td class="task-name export-td smplus-<%= rock.id %>" id="submplus-<%= submilestone.id %>" style="text-align: left; max-width: 800px; padding-left:6rem">
                     <% if submilestone.sub2milestones.blank? %>
                       <%= image_tag ("plus_purple_blank.png"),role:"button",class:"subm-plus-icon" %>
                       <%= image_tag ("minus_purple_blank.png"),role:"button",class:"subm-minus-icon" %>
@@ -289,7 +289,7 @@
                  <% @sub2milestones.each do |sub2milestone| %> 
                   <% if submilestone.id == sub2milestone.submilestone.id %>
                     <tr class="all-sub2milestones subm-<%= submilestone.id %> <%= sub2milestone.assigned.include?(current_user.email) ? 'sub2m-dblclick' : 'bg-light' %> export-tr" style="vertical-align: middle;" id="sub2m-tr">      
-                      <td class="task-name export-td" style="text-align: left; min-width: 100px; padding-left:8rem"><%= sub2milestone.task_name %></td>
+                      <td class="task-name export-td" style="text-align: left; max-width: 800px; padding-left:8rem"><%= sub2milestone.task_name %></td>
                       <td class="export-td dayordays">
                         <%= (sub2milestone.start.to_date..sub2milestone.finish.to_date).count do |date|
                           date.workday?

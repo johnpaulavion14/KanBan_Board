@@ -59,7 +59,7 @@
           <td style="display: none;" class="message-time"><%= rock.rockmessages.order(created_at: :asc).pluck(:time) %></td>
 
           <!-- display none -->
-          <td class="task-name export-td" id="rockplus-<%= rock.id %>" style="text-align: left; min-width: 100px;">
+          <td class="task-name export-td" id="rockplus-<%= rock.id %>" style="text-align: left; max-width: 800px;">
             <% if rock.milestones.blank? %>
               <%= image_tag ("plus.png"),role:"button",style:"margin-left:1rem",class:"plus-icon" %>
               <%= image_tag ("minus.png"),role:"button", style:"margin-left:1rem",class:"minus-icon" %>
@@ -196,7 +196,7 @@
               <td style="display: none;" class="message-lastname"><%= milestone.messages.order(created_at: :asc).pluck(:last_name) %></td>
               <td style="display: none;" class="message-time"><%= milestone.messages.order(created_at: :asc).pluck(:time) %></td>
               <!-- display none -->
-              <td class="task-name export-td" id="mileplus-<%= milestone.id %>" style="text-align: left; min-width: 100px; padding-left:3.5rem">
+              <td class="task-name export-td" id="mileplus-<%= milestone.id %>" style="text-align: left; max-width: 800px; padding-left:3.5rem">
                 <% if milestone.submilestones.blank? %>
                   <%= image_tag ("plus_blue_blank.png"),role:"button",class:"m-plus-icon" %>
                   <%= image_tag ("minus_blue_blank.png"),role:"button",class:"m-minus-icon" %>
@@ -307,7 +307,7 @@
                   <td style="display: none;" class="message-lastname"><%= submilestone.submessages.order(created_at: :asc).pluck(:last_name) %></td>
                   <td style="display: none;" class="message-time"><%= submilestone.submessages.order(created_at: :asc).pluck(:time) %></td>
                   <!-- display none -->
-                  <td class="task-name export-td" id="submplus-<%= submilestone.id %>" style="text-align: left; min-width: 100px; padding-left:6rem">
+                  <td class="task-name export-td" id="submplus-<%= submilestone.id %>" style="text-align: left; max-width: 800px; padding-left:6rem">
                     <% if submilestone.sub2milestones.blank? %>
                       <%= image_tag ("plus_purple_blank.png"),role:"button",class:"subm-plus-icon" %>
                       <%= image_tag ("minus_purple_blank.png"),role:"button",class:"subm-minus-icon" %>
@@ -412,7 +412,7 @@
                       <td style="display: none;" class="message-lastname"><%= submilestone.submessages.order(created_at: :asc).pluck(:last_name) %></td>
                       <td style="display: none;" class="message-time"><%= submilestone.submessages.order(created_at: :asc).pluck(:time) %></td>
                       <!-- display none -->
-                      <td class="task-name export-td" style="text-align: left; min-width: 100px; padding-left:8rem">
+                      <td class="task-name export-td" style="text-align: left; max-width: 800px; padding-left:8rem">
                       <span class="t_name"><%= sub2milestone.task_name %></span>
                       <span class="append_sync_task"></span>
                       </td>
