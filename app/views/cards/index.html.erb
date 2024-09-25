@@ -153,56 +153,56 @@
     // Function to format time in -hh:mm:ss
     let scribeSectionView = new URLSearchParams(window.location.search).get('scribe_section_view');
     if ( scribeSectionView == "attendance" ){
-          if (localStorage.getItem('scribe_view') != scribeSectionView){
-            set_time = 300;
-            localStorage.setItem('remainingTime', 300);
-          }
-          localStorage.setItem('scribe_view','attendance')
-          localStorage.setItem('running', true);
-        } else if( scribeSectionView == "segue" ){
-          if (localStorage.getItem('scribe_view') != scribeSectionView){
-            set_time = 600;
-            localStorage.setItem('remainingTime', 600);
-          }
-          localStorage.setItem('scribe_view','segue')
-          localStorage.setItem('running', true);
-        } else if( scribeSectionView == "rocks" ){
-          if (localStorage.getItem('scribe_view') != scribeSectionView){
-            set_time = 900;
-            localStorage.setItem('remainingTime', 900);
-          }
-          localStorage.setItem('scribe_view','rocks')          
-          localStorage.setItem('running', true);
-        } else if( scribeSectionView == "headline" ){
-          if (localStorage.getItem('scribe_view') != scribeSectionView){
-            set_time = 600;
-            localStorage.setItem('remainingTime', 600);
-          }
-          localStorage.setItem('scribe_view','headline')          
-          localStorage.setItem('running', true);
-        } else if( scribeSectionView == "todo" ){
-          if (localStorage.getItem('scribe_view') != scribeSectionView){
-            set_time = 300;
-            localStorage.setItem('remainingTime', 300);
-          }
-          localStorage.setItem('scribe_view','todo')          
-          localStorage.setItem('running', true);
-        } else if( scribeSectionView == "ids" ){
-          if (localStorage.getItem('scribe_view') != scribeSectionView){
-            set_time = 2400;
-            localStorage.setItem('remainingTime', 2400);
-          }
-          localStorage.setItem('scribe_view','ids')          
-          localStorage.setItem('running', true);
-        } else if( scribeSectionView == "conclusion" ){
-          if (localStorage.getItem('scribe_view') != scribeSectionView){
-            set_time = 300;
-            localStorage.setItem('remainingTime', 300);
-          }
-          localStorage.setItem('scribe_view','conclusion')          
-          localStorage.setItem('running', true);
-        } else {
+        if (localStorage.getItem('scribe_view') != scribeSectionView || localStorage.getItem('remainingTime') == 'NaN'|| localStorage.getItem('remainingTime') == 'undefined'){
+          set_time = 300;
+          localStorage.setItem('remainingTime', 300);
         }
+        localStorage.setItem('scribe_view','attendance')
+        localStorage.setItem('running', true);
+    } else if( scribeSectionView == "segue" ){
+        if (localStorage.getItem('scribe_view') != scribeSectionView || localStorage.getItem('remainingTime') == 'NaN'|| localStorage.getItem('remainingTime') == 'undefined'){
+          set_time = 600;
+          localStorage.setItem('remainingTime', 600);
+        }
+        localStorage.setItem('scribe_view','segue')
+        localStorage.setItem('running', true);
+    } else if( scribeSectionView == "rocks" ){
+        if (localStorage.getItem('scribe_view') != scribeSectionView || localStorage.getItem('remainingTime') == 'NaN'|| localStorage.getItem('remainingTime') == 'undefined'){
+          set_time = 900;
+          localStorage.setItem('remainingTime', 900);
+        }
+        localStorage.setItem('scribe_view','rocks')          
+        localStorage.setItem('running', true);
+    } else if( scribeSectionView == "headline" ){
+        if (localStorage.getItem('scribe_view') != scribeSectionView || localStorage.getItem('remainingTime') == 'NaN'|| localStorage.getItem('remainingTime') == 'undefined'){
+          set_time = 600;
+          localStorage.setItem('remainingTime', 600);
+        }
+        localStorage.setItem('scribe_view','headline')          
+        localStorage.setItem('running', true);
+    } else if( scribeSectionView == "todo" ){
+        if (localStorage.getItem('scribe_view') != scribeSectionView || localStorage.getItem('remainingTime') == 'NaN'|| localStorage.getItem('remainingTime') == 'undefined'){
+          set_time = 300;
+          localStorage.setItem('remainingTime', 300);
+        }
+        localStorage.setItem('scribe_view','todo')          
+        localStorage.setItem('running', true);
+    } else if( scribeSectionView == "ids" ){
+        if (localStorage.getItem('scribe_view') != scribeSectionView || localStorage.getItem('remainingTime') == 'NaN'|| localStorage.getItem('remainingTime') == 'undefined'){
+          set_time = 2400;
+          localStorage.setItem('remainingTime', 2400);
+        }
+        localStorage.setItem('scribe_view','ids')          
+        localStorage.setItem('running', true);
+    } else if( scribeSectionView == "conclusion" ){
+        if (localStorage.getItem('scribe_view') != scribeSectionView || localStorage.getItem('remainingTime') == 'NaN'|| localStorage.getItem('remainingTime') == 'undefined'){
+          set_time = 300;
+          localStorage.setItem('remainingTime', 300);
+        }
+        localStorage.setItem('scribe_view','conclusion')          
+        localStorage.setItem('running', true);
+    } else {
+    }
     function formatTime(seconds) {
         let isNegative = seconds < 0;
         let absSeconds = Math.abs(seconds);
@@ -330,6 +330,12 @@
         event.preventDefault(); // Prevent form submission
       }    
     });
+    // Initializescribe_view,and running
+    if (!(localStorage.getItem('scribe_view') && localStorage.getItem('running'))){
+      localStorage.setItem('scribe_view', 'attendance');
+      localStorage.setItem('running', false);
+    }
+    
  
     // Addlist feature
     $(".clickAddList").click(function(){
