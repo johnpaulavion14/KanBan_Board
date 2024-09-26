@@ -335,7 +335,34 @@
       localStorage.setItem('scribe_view', 'attendance');
       localStorage.setItem('running', false);
     }
-    
+    //----------------- Scribe Todo Section -------------------
+     // Scribe Create Todo
+    $("#scribe-todo-form-div").hide()
+    $(".scribe-todo-username-parent").each( function(index,username) {
+      $(username).click(function(){
+        let todo_id = $(this).children(".scribe-todo-username-id").text()
+        $("#scribe-todo-userid").val(todo_id)
+        $(this).next().next().append($("#scribe-todo-form-div"))
+        $("#scribe-todo-form-div").show()
+        
+      });
+    }); 
+    // Scribe Edit Todo
+    $(".scribe-task-text").each( function(index,task) {
+      $(task).dblclick(function(){
+        let todo_id = $(this).next().text()
+        $("#scribe-todo-userid").val(todo_id)
+        let task_text = $(this).text()
+        $(this).after($("#scribe-todo-form-div"))
+        $(".scribe-task-text").show()
+        $(this).hide()
+        $("#scribe-todo-form-div").show()
+        $("#scribe-input-todo").val(task_text)
+        $('#scribe-todo-form').attr('method', 'patch');
+        let newAction = $('#scribe-todo-form').attr('action').replace('todo', 'updatetodo');
+        $('#scribe-todo-form').attr('action', newAction);
+      });
+    }); 
  
     // Addlist feature
     $(".clickAddList").click(function(){

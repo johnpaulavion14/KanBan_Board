@@ -127,27 +127,41 @@ class AddcardsController < ApplicationController
 
   # Todo Section
   def create_todo
-    @todo = current_user.todos.new(todo_params)
-    respond_to do |format|
-      if @todo.save
-        format.html { redirect_to view_addcards_path, notice: "Todo was successfully created." }
-        format.json { render :show, status: :created, location: @addcard }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @addcard.errors, status: :unprocessable_entity }
-      end
-    end  
+    if params[:todo][:from] == "scribe_view"
+      @todo = User.find(params[:todo][:todo_userid]).todos.create(todo_params)
+      redirect_to view_cards_path({scribe_section_view:"todo"})
+    else
+      @todo = current_user.todos.new(todo_params)
+      respond_to do |format|
+        if @todo.save
+          format.html { redirect_to view_addcards_path, notice: "Todo was successfully created." }
+          format.json { render :show, status: :created, location: @addcard }
+        else
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @addcard.errors, status: :unprocessable_entity }
+        end
+      end  
+    end
   end
 
   def delete_todo
     Todo.find(params[:todo_id]).destroy
+    if params[:from] == "scribe_view"
+    redirect_to view_cards_path({scribe_section_view:"todo"})
+    else
     redirect_to view_addcards_path
+    end
   end
 
   def update_todo
-    todo_id = params[:todo][:todo_id].to_i
-    Todo.find(todo_id).update(todo_params)
-    redirect_to view_addcards_path
+    if params[:todo][:from] == "scribe_view"
+      Todo.find(params[:todo][:todo_userid]).update(todo_params)
+      redirect_to view_cards_path({scribe_section_view:"todo"})
+    else
+      todo_id = params[:todo][:todo_id].to_i
+      Todo.find(todo_id).update(todo_params)
+      redirect_to view_addcards_path
+    end
   end
   def update_checkbox
     if params[:todo][:checkbox_done] == "true"

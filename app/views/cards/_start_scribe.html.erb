@@ -266,26 +266,53 @@
           </div>
         <!-- Todo -->
         <% elsif params[:scribe_section_view] == "todo"%>
+        <div style="margin-bottom: 25px;" id="scribe-todo-form-div">
+          <%= form_with scope: :todo, url:create_todo_path({card_id:Card.first.id, id:Addcard.first.id}),id:"scribe-todo-form", method: :post, local: true do |form| %>
+            <%= form.hidden_field :from, value: "scribe_view" %>
+            <%= form.hidden_field :todo_userid, id:"scribe-todo-userid" %>
+            <%= form.hidden_field :addcard_id, value:@todo_addcard.id %>
+            <div class="comment-header">
+              <span>
+                <%= form.text_field :task,required: true,placeholder: "Write your task here...",class:"comment-field", id:"scribe-input-todo" %>
+              </span>
+              <span class="mx-2 d-none">
+                <%= form.submit "Save" , class:"btn btn-primary" %>
+              </span>
+            </div>
+          <% end %>
+        </div>
           <div class="px-5 mt-2">
             <div class="h3 fw-bolder text-center text-decoration-underline mb-3">Todo's</div>
             <div class="rounded-2 bg-light p-3" style="height: 650px; overflow-y: auto;">
               <% User.all.each do |user| %>
-                <p class="m-0"><b>- <%= user.first_name %></b></p>
-                <% @todo_list.each do |list| %>
-                  <% if user.id == list.user_id  %>
-                    <div class="d-flex justify-content-between align-items-center task-date">
-                      <div class="task-section d-flex justify-content-between w-100">
-                        <div class="d-flex align-items-start">
-                          <input disabled type="checkbox" id="myCheckbox<%= list.id %>" class="check-boxes <%= list.id %> mx-2" style="margin-top:6px;" role="button" <%= list.done ? 'checked':'' %>>
-                          <label class="<%= list.done ? 'text-decoration-line-through' : '' %> task-text" role="button"><%= list.task %></label> 
+                <div class="m-0 scribe-todo-username-parent" role="button">
+                  <b class="scribe-todo-username">- <%= user.first_name %></b>
+                  <b class="d-none scribe-todo-username-id"><%= user.id %></b>
+                </div>
+                <div>
+                  <% @todo_list.each do |list| %>
+                    <% if user.id == list.user_id  %>
+                      <div class="d-flex justify-content-between align-items-center task-date">
+                        <div class="task-section d-flex justify-content-between w-100">
+                          <div class="d-flex align-items-start">
+                            <input disabled type="checkbox" id="myCheckbox<%= list.id %>" class="check-boxes <%= list.id %> mx-2" style="margin-top:6px;" role="button" <%= list.done ? 'checked':'' %>>
+                            <label class="<%= list.done ? 'text-decoration-line-through' : '' %> scribe-task-text" role="button"><%= list.task %></label> 
+                            <div class="d-none"><%= list.id %></div> 
+                          </div>
+                          <div style="font-size:10px;" class="d-flex align-items-center">
+                            <span style="width:120px;">start:<b><%= list.created_at.strftime("%m/%d") %></b> - finish:<b><%= list.done_date == nil ? "" : list.done_date.strftime("%m/%d") %></b></span>
+                          </div>
                         </div>
-                        <div style="font-size:10px;" class="d-flex align-items-center">
-                          <span style="width:120px;">start:<b><%= list.created_at.strftime("%m/%d") %></b> - finish:<b><%= list.done_date == nil ? "" : list.done_date.strftime("%m/%d") %></b></span>
+                        <div class="todo-action d-flex" style="margin-bottom:5px">
+                          <%= link_to delete_todo_path({todo_id:list.id ,card_id:Card.first.id, id:Addcard.first.id,from:"scribe_view"}), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'},class:"delete-todo" do %>
+                              <span><%= image_tag ("delete.png"),style:"width:15px" %></span>
+                          <% end %>
                         </div>
                       </div>
-                    </div>
+                    <% end %>
                   <% end %>
-                <% end %>
+                </div>
+                <div class="todo-input-field"></div>
                 <div class="my-4"></div>
               <% end %>
             </div>

@@ -685,6 +685,7 @@
     $(".delete-todo").mouseout(function(){
       $(this).parent(".todo-action").siblings(".task-section").find(".task-text").css("background-color", "transparent" );
     })
+    // ---------------TODO Section-------------------
     // Check todo  
     $(".check-boxes").each( function(index,checkbox) {
       $(checkbox).click(function(){
@@ -697,7 +698,8 @@
         $("#checkbox-id").val(checkbox_id)
         $("#checkbox-submit").trigger("click")
       });
-    });   
+    }); 
+
     // Edit identify
     $(".edit-identify").each( function(index,identify) {
       $(identify).click(function(){
