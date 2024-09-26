@@ -634,7 +634,7 @@
           <%= form_with url:create_rocks_path, method: :post, local: true do |f| %>
             <table>
               <td style="display: none;"><%= f.number_field :user_id,value:current_user.id, required:true %></td>
-              <td class="form-td1"style="padding-left: 20px;"><%= f.text_field :task_name, required:true, class:"px-2 float-start" %></td>
+              <td class="form-td1"style="padding-left: 20px;"><%= f.text_field :task_name, required:true, class:"px-2 float-start task-name-input" %></td>
               <td class="form-td2"></td>
               <td class="form-td3"><%= f.date_field :start, required:true, class:"px-2" %></td>
               <td class="form-td4">>></td>
@@ -662,7 +662,7 @@
               <td style="display: none;"><%= f.number_field :user_id, required:true, id:"rock-user-id"%></td>
               <td style="display: none;"><%= f.number_field :id, required:true,id:"rock-id" %></td>
               <td style="display: none;"><%= f.number_field :pw_id, required:true,id:"pw-id" %></td>
-              <td class="form-td1" style="padding-left: 20px;"><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start" %></td>
+              <td class="form-td1" style="padding-left: 20px;"><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start task-name-input" %></td>
               <td class="form-td2"></td>
               <td class="form-td3"><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
               <td class="form-td4">>></td>
@@ -690,7 +690,7 @@
             <table>
               <td style="display: none;"><%= f.number_field :rock_id, required:true,id:"rock-id" %></td>
               <td style="display: none;"><%= f.number_field :id, required:true,id:"milestone-id" %></td>
-              <td class="form-td1"><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start", style:"margin-left: 3.5rem;" %></td>
+              <td class="form-td1"><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start task-name-input", style:"margin-left: 3.5rem;" %></td>
               <td class="form-td2"></td>
               <td class="form-td3"><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
               <td class="form-td4">>></td>
@@ -719,7 +719,7 @@
               <td style="display: none;"><%= f.number_field :rock_id, required:true,id:"rock-id" %></td>
               <td style="display: none;"><%= f.number_field :milestone_id, required:true,id:"milestone-id" %></td>
               <td style="display: none;"><%= f.number_field :id, required:true,id:"submilestone-id" %></td>
-              <td class="form-td1"><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start",style:"margin-left:5.5rem" %></td>
+              <td class="form-td1"><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start task-name-input",style:"margin-left:5.5rem" %></td>
               <td class="form-td2"></td>
               <td class="form-td3"><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
               <td class="form-td4">>></td>
@@ -749,7 +749,7 @@
               <td style="display: none;"><%= f.number_field :milestone_id, required:true,id:"milestone-id" %></td>
               <td style="display: none;"><%= f.number_field :submilestone_id, required:true,id:"submilestone-id" %></td>
               <td style="display: none;"><%= f.number_field :id, required:true, id:"sub2milestone-id" %></td>
-              <td class="form-td1"><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start",style:"margin-left:7.5rem" %></td>
+              <td class="form-td1"><%= f.text_field :task_name, required:true,id:"task-name", class:"px-2 float-start task-name-input",style:"margin-left:7.5rem" %></td>
               <td class="form-td2"></td>
               <td class="form-td3"><%= f.date_field :start, required:true,id:"start", class:"px-2" %></td>
               <td class="form-td4">>></td>
@@ -796,7 +796,7 @@
     </td>
   <% end %>
 
-  <span id="SyncTask"><%= image_tag("sync_task.png", title:"sync task") %></span>
+  <span id="SyncTask"><%= image_tag("sync_task.png", title:"sync task",style:"margin-left:10px") %></span>
 
   <div class="horizontal-scrollbar"></div>
 

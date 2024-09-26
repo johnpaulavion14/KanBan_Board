@@ -43,7 +43,7 @@
               <tr>
                 <td class="create-form-td1"></td>
                 <td class="create-form-td2">
-                  <%= f.text_field :folder_name, required: true, class: "px-2" %>
+                  <%= f.text_field :folder_name, required: true, class: "px-2",style:"width:350px" %>
                 </td>
                 <td class="create-form-td3">
                   <%= f.select(:assigned, @users, { prompt: "Please select" }, { multiple: true, size: 5 }) %>
@@ -64,7 +64,7 @@
               <tr>
                 <td style="display: none;"><%= f.number_field :id, required:true,id:"workspace-id" %></td>
                 <td class="update-form-td1"></td>
-                <td class="update-form-td2"><%= f.text_field :folder_name, required:true, class:"px-2" %></td>
+                <td class="update-form-td2"><%= f.text_field :folder_name, required:true, class:"px-2",style:"width:350px" %></td>
                 <td class="update-form-td3"><%= f.select(:assigned,@users,{prompt:"Please select"},{multiple:true, size:5}) %></td>
                 <td class="update-form-td4">
                   <span><%= f.submit "Update" ,class:"btn btn-success mt-1" %></span>

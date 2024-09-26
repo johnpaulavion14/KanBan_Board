@@ -49,3 +49,7 @@
   color: white;
   font-family: 'Roboto', sans-serif;
 }
+
+.task-name-input {
+  width: 350px;
+}
