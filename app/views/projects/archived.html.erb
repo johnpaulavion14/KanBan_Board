@@ -58,21 +58,19 @@
           <td class="export-td"><%= rock.finish.strftime("%b %d, %Y") %> ]</td>
           <td class="export-td d-none"><%= rock.assigned %></td>
           <td class="assigned">
-            <% if !User.find(rock.user_id).profilepics.blank? %>
-              <%= image_tag User.find(rock.user_id).profilepics.last.pic, class:"assigned-pics", title:User.find(rock.user_id).email %>
-            <% else %>
-              <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:User.find(rock.user_id).email %>
-            <% end %>
-            <% @all_users.each do |user| %>
-              <% if rock.assigned.include? user.email %>
-                <% if user.id == User.find(rock.user_id).id %>
-                <% elsif !user.profilepics.blank?%>
-                  <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
-                <% else %>
-                  <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:user.email %>
+            <div class="d-flex align-items-center justify-content-center">
+              <div class="assigned-circle">
+                <span class="assigned-circle-inner" title="<%= rock.user.email %>"><%= rock.user.first_name.chr %><%= rock.user.last_name.chr %></span>
+              </div>
+              <% @all_users.each do |user| %>
+              <% if user.id == rock.user.id %>
+              <% elsif rock.assigned.include? user.email %>
+                <div class="assigned-circle"></span>
+                  <span class="assigned-circle-inner" title="<%= user.email %>"><%= user.first_name.chr %><%= user.last_name.chr %></span>
+                </div>
                 <% end %>
               <% end %>
-            <% end %>
+            </div>
           </td>
           <td class="export-td rock-complete"><span class="complete"><%= rock.complete %></span> %</td>
           <td class="date-completed export-td">
@@ -155,21 +153,19 @@
               <td class="export-td"><%= milestone.finish.strftime("%b %d, %Y") %> ]</td>
               <td class="export-td d-none"><%= milestone.assigned %></td>
               <td class="assigned">
-                <% if !milestone.user.profilepics.blank? %>
-                  <%= image_tag milestone.user.profilepics.last.pic, class:"assigned-pics", title:milestone.user.email %>
-                <% else %>
-                  <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:milestone.user.email %>
-                <% end %>
-                <% @all_users.each do |user| %>
+                <div class="d-flex align-items-center justify-content-center">
+                  <div class="assigned-circle">
+                    <span class="assigned-circle-inner" title="<%= milestone.user.email %>"><%= milestone.user.first_name.chr %><%= milestone.user.last_name.chr %></span>
+                  </div>
+                  <% @all_users.each do |user| %>
                   <% if user.id == milestone.user.id %>
                   <% elsif milestone.assigned.include? user.email %>
-                    <% if !user.profilepics.blank? %>
-                      <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
-                    <% else %>
-                      <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:user.email %>
+                    <div class="assigned-circle"></span>
+                      <span class="assigned-circle-inner" title="<%= user.email %>"><%= user.first_name.chr %><%= user.last_name.chr %></span>
+                    </div>
                     <% end %>
                   <% end %>
-                <% end %>
+                </div>
               </td>
               <td class="export-td"><span class="complete"><%= milestone.complete %></span> %</td>
               <td class="date-completed export-td">
@@ -233,21 +229,19 @@
                   <td class="export-td"><%= submilestone.finish.strftime("%b %d, %Y") %> ]</td>
                   <td class="export-td d-none"><%= submilestone.assigned %></td>
                   <td class="assigned">
-                    <% if !submilestone.user.profilepics.blank? %>
-                      <%= image_tag submilestone.user.profilepics.last.pic, class:"assigned-pics", title:submilestone.user.email %>
-                    <% else %>
-                      <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:submilestone.user.email %>
-                    <% end %>
-                    <% @all_users.each do |user| %>
+                    <div class="d-flex align-items-center justify-content-center">
+                      <div class="assigned-circle">
+                        <span class="assigned-circle-inner" title="<%= submilestone.user.email %>"><%= submilestone.user.first_name.chr %><%= submilestone.user.last_name.chr %></span>
+                      </div>
+                      <% @all_users.each do |user| %>
                       <% if user.id == submilestone.user.id %>
                       <% elsif submilestone.assigned.include? user.email %>
-                        <% if !user.profilepics.blank? %>
-                          <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
-                        <% else %>
-                          <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:user.email %>
+                        <div class="assigned-circle"></span>
+                          <span class="assigned-circle-inner" title="<%= user.email %>"><%= user.first_name.chr %><%= user.last_name.chr %></span>
+                        </div>
                         <% end %>
                       <% end %>
-                    <% end %>
+                    </div>
                   </td>
                   <td class="export-td"><span class="complete"><%= submilestone.complete %></span> %</td>
                   <td class="date-completed export-td">
@@ -300,21 +294,19 @@
                       <td class="export-td"><%= sub2milestone.finish.strftime("%b %d, %Y") %> ]</td>
                       <td class="export-td d-none"><%= sub2milestone.assigned %></td>
                       <td class="assigned">
-                        <% if !sub2milestone.user.profilepics.blank? %>
-                          <%= image_tag sub2milestone.user.profilepics.last.pic, class:"assigned-pics", title:sub2milestone.user.email %>
-                        <% else %>
-                          <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:sub2milestone.user.email %>
-                        <% end %>
-                        <% @all_users.each do |user| %>
+                        <div class="d-flex align-items-center justify-content-center">
+                          <div class="assigned-circle">
+                            <span class="assigned-circle-inner" title="<%= sub2milestone.user.email %>"><%= sub2milestone.user.first_name.chr %><%= sub2milestone.user.last_name.chr %></span>
+                          </div>
+                          <% @all_users.each do |user| %>
                           <% if user.id == sub2milestone.user.id %>
                           <% elsif sub2milestone.assigned.include? user.email %>
-                            <% if !user.profilepics.blank? %>
-                              <%= image_tag user.profilepics.last.pic, class:"assigned-pics", title:user.email %>
-                            <% else %>
-                              <%= image_tag ("profile-pic.png"), class:"assigned-pics", title:user.email %>
+                            <div class="assigned-circle"></span>
+                              <span class="assigned-circle-inner" title="<%= user.email %>"><%= user.first_name.chr %><%= user.last_name.chr %></span>
+                            </div>
                             <% end %>
                           <% end %>
-                        <% end %>
+                        </div>
                       </td>
                       <td class="export-td"><span class="complete"><%= sub2milestone.complete %></span> %</td>
                       <td class="date-completed export-td">
