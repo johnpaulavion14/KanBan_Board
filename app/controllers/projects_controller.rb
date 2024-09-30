@@ -55,8 +55,8 @@ class ProjectsController < ApplicationController
 
   def allprojects
     User.all.each do |user|
-      if user.admin == true || user.host == true || current_user.email == "jpbocatija@cem-inc.org.ph"
-        @rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc, created_at: :asc)
+      if user.admin == true || user.scribe == true || current_user.email == "jpbocatija@cem-inc.org.ph"
+        @rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc, created_at: :asc).where(archived:false)
         @pw_emails = []
         @ids_array = []
         assigned_array = ProjectWorkspace.find(params[:pw_id]).assigned
@@ -71,7 +71,7 @@ class ProjectsController < ApplicationController
 
         @ids_array.each do |id|
           if params[:rocks_owner] == id.to_s
-            @rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc, created_at: :asc).where(user_id: id)
+            @rocks = ProjectWorkspace.find(params[:pw_id]).rocks.order(finish: :asc, created_at: :asc).where(user_id: id, archived: false)
           end
         end
 
