@@ -171,3 +171,12 @@
   text-decoration: underline;
   color: blue;
 }
+
+.rock-task-name-bold {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.view-milestones:hover {
+  background-color: lightgray;
+}
