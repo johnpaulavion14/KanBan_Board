@@ -56,22 +56,25 @@
           <% ProjectWorkspace.order("created_at asc").all.each_with_index do |workspace,rock_index| %>
             <div style="margin-bottom: 5rem; width: 100%;" class="d-none rocks-content-<%= rock_index %> rock-content w3-animate-top">
               <!-- Head -->
-              <h5><b>* Head *</b></h5>
+              <div class="d-flex justify-content-between align-items-center">
+                <h5><b>* Head *</b></h5>
+                <div class="btn btn-success m-2 expand-rocks">view-milestones</div>
+              </div>
               <hr style="margin: 2px 0;">
               <% @workspace_head.each do |email| %>
                 <% if email == "lvcagadas@cem-inc.org.ph" %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
                   <% ProjectWorkspace.find(workspace.id).rocks.order(finish: :asc, created_at: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
-                    <div class="d-flex">
-                      <div style="width: 50%;">
-                        <span><%= index + 1 %>. </span>
+                    <div class="d-flex align-items-center">
+                      <div style="width: 50%;" class="d-flex">
+                        <div class="mx-1"><%= index + 1 %>. </div>
                         <% if current_user.admin == true || current_user.first_name == @scribe || current_user.email == "jpbocatija@cem-inc.org.ph" %>
-                          <span><%= link_to rock.task_name, view_allprojects_path(workspace.id,User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
+                          <span class="rock-task-name"><%= link_to rock.task_name, view_allprojects_path(workspace.id,User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
                         <% else %>
-                          <span><%= rock.task_name %></span>
+                          <span class="rock-task-name"><%= rock.task_name %></span>
                         <% end %>
                       </div>
-                      <div style="width: 50%;">
+                      <div style="width: 50%; padding-left:75px;">
                         <span style="font-size: 12px;">| <i><%= rock.start.strftime("%b %d,%Y") %> - <%= rock.finish.strftime("%b %d,%Y") %></i></span>
                         <span style="font-size: 12px; font-weight: bold;"> |
                         <%= (rock.start.to_date..rock.finish.to_date).count do |date|
@@ -98,6 +101,40 @@
                         </span>
                       </div>
                     </div>
+                    <% rock.milestones.order(finish: :asc, created_at: :asc).each_with_index do |milestone, index| %>
+                      <div class="view-milestones align-items-center">
+                        <div style="width: 50%;" class="d-flex">
+                          <div class="mx-2"> - </div>
+                          <div><%= milestone.task_name %></div>
+                        </div>
+                        <div style="width: 50%; padding-left:75px;">
+                          <span style="font-size: 12px;">| <i><%= milestone.start.strftime("%b %d,%Y") %> - <%= milestone.finish.strftime("%b %d,%Y") %></i></span>
+                          <span style="font-size: 12px; font-weight: bold;"> |
+                          <%= (milestone.start.to_date..milestone.finish.to_date).count do |date|
+                            date.workday?
+                          end %> <span>days</span>
+                          </span>
+                          <span>| <b style="color: goldenrod;"><%= milestone.complete %>%</b></span>
+                          <span style="font-size: 12px;">| 
+                            <% if milestone.complete == 0 %>
+                              <span style="background-color: silver; padding:0 5px; border-radius:3px;">not started</span>
+                            <% elsif milestone.complete == 100 %>
+                              <span style="background-color: green;padding:0 5px; border-radius:3px;">complete</span>
+                            <% else %>
+                              <span style="background-color: yellow;padding:0 5px; border-radius:3px;">in progress</span>
+                            <% end %>
+                            <% if milestone.complete != 100 %>
+                              <% if milestone.finish >= Date.today %>
+                                <span style="vertical-align: middle;" role="button" title="on track" class="track"><%= image_tag ("blue_circle.png"),style:"width: 15px; margin-bottom:5px"%></span>  
+                              <% else %>
+                                <span role="button" title="off track" class="track"><%= image_tag ("red_circle.png"),style:"width: 16px;margin-bottom:5px"%></span>  
+                              <% end %>                            
+                            <% else %>                            
+                            <% end %>                            
+                          </span>
+                        </div>
+                      </div>
+                    <% end %>
                   <% end %>
                   <% if ProjectWorkspace.find(workspace.id).rocks.where(user_id:User.find_by(email:email).id).empty? %>
                     <div> - - </div>
@@ -112,16 +149,16 @@
                 <% if ["jpbocatija@cem-inc.org.ph","rmina@cem-inc.org.ph","rcjamilano@cem-inc.org.ph"].include?(email) %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
                   <% ProjectWorkspace.find(workspace.id).rocks.order(finish: :asc, created_at: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
-                    <div class="d-flex">
-                      <div style="width: 50%;">
-                        <span><%= index + 1 %>. </span>
+                    <div class="d-flex align-items-center">
+                      <div style="width: 50%;" class="d-flex">
+                        <div class="mx-1"><%= index + 1 %>. </div>
                         <% if current_user.admin == true || current_user.first_name == @scribe || current_user.email == "jpbocatija@cem-inc.org.ph" %>
-                          <span><%= link_to rock.task_name, view_allprojects_path(workspace.id,User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
+                          <span class="rock-task-name"><%= link_to rock.task_name, view_allprojects_path(workspace.id,User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
                         <% else %>
-                          <span><%= rock.task_name %></span>
+                          <span class="rock-task-name"><%= rock.task_name %></span>
                         <% end %>                        
                       </div>
-                      <div style="width: 50%;">
+                      <div style="width: 50%;padding-left:75px;">
                         <span style="font-size: 12px;">| <i><%= rock.start.strftime("%b %d,%Y") %> - <%= rock.finish.strftime("%b %d,%Y") %></i></span>
                         <span style="font-size: 12px; font-weight: bold;"> |
                         <%= (rock.start.to_date..rock.finish.to_date).count do |date|
@@ -147,7 +184,41 @@
                           <% end %>                          
                         </span>
                       </div>
-                    </div>                    
+                    </div> 
+                    <% rock.milestones.order(finish: :asc, created_at: :asc).each_with_index do |milestone, index| %>
+                      <div class="view-milestones align-items-center">
+                        <div style="width: 50%;" class="d-flex">
+                          <div class="mx-2"> - </div>
+                          <div><%= milestone.task_name %></div>
+                        </div>
+                        <div style="width: 50%; padding-left:75px;">
+                          <span style="font-size: 12px;">| <i><%= milestone.start.strftime("%b %d,%Y") %> - <%= milestone.finish.strftime("%b %d,%Y") %></i></span>
+                          <span style="font-size: 12px; font-weight: bold;"> |
+                          <%= (milestone.start.to_date..milestone.finish.to_date).count do |date|
+                            date.workday?
+                          end %> <span>days</span>
+                          </span>
+                          <span>| <b style="color: goldenrod;"><%= milestone.complete %>%</b></span>
+                          <span style="font-size: 12px;">| 
+                            <% if milestone.complete == 0 %>
+                              <span style="background-color: silver; padding:0 5px; border-radius:3px;">not started</span>
+                            <% elsif milestone.complete == 100 %>
+                              <span style="background-color: green;padding:0 5px; border-radius:3px;">complete</span>
+                            <% else %>
+                              <span style="background-color: yellow;padding:0 5px; border-radius:3px;">in progress</span>
+                            <% end %>
+                            <% if milestone.complete != 100 %>
+                              <% if milestone.finish >= Date.today %>
+                                <span style="vertical-align: middle;" role="button" title="on track" class="track"><%= image_tag ("blue_circle.png"),style:"width: 15px; margin-bottom:5px"%></span>  
+                              <% else %>
+                                <span role="button" title="off track" class="track"><%= image_tag ("red_circle.png"),style:"width: 16px;margin-bottom:5px"%></span>  
+                              <% end %>                            
+                            <% else %>                            
+                            <% end %>                            
+                          </span>
+                        </div>
+                      </div>
+                    <% end %>                                       
                   <% end %>
                   <% if ProjectWorkspace.find(workspace.id).rocks.where(user_id:User.find_by(email:email).id).empty? %>
                     <div> - - </div>
@@ -162,16 +233,16 @@
                 <% if ["gsibayan@cem-inc.org.ph","fviceral@cem-inc.org.ph","jcaniedo@cem-inc.org.ph"].include?(email) %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
                   <% ProjectWorkspace.find(workspace.id).rocks.order(finish: :asc, created_at: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
-                    <div class="d-flex">
-                      <div style="width: 50%;">
-                        <span><%= index + 1 %>. </span>
+                    <div class="d-flex align-items-center">
+                      <div style="width: 50%;" class="d-flex">
+                        <div class="mx-1"><%= index + 1 %>. </div>
                         <% if current_user.admin == true || current_user.first_name == @scribe || current_user.email == "jpbocatija@cem-inc.org.ph" %>
-                          <span><%= link_to rock.task_name, view_allprojects_path(workspace.id,User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
+                          <span class="rock-task-name"><%= link_to rock.task_name, view_allprojects_path(workspace.id,User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
                         <% else %>
-                          <span><%= rock.task_name %></span>
+                          <span class="rock-task-name"><%= rock.task_name %></span>
                         <% end %>
                       </div>
-                      <div style="width: 50%;">
+                      <div style="width: 50%; padding-left:75px;">
                         <span style="font-size: 12px;">| <i><%= rock.start.strftime("%b %d,%Y") %> - <%= rock.finish.strftime("%b %d,%Y") %></i></span>
                         <span style="font-size: 12px; font-weight: bold;"> |
                         <%= (rock.start.to_date..rock.finish.to_date).count do |date|
@@ -197,7 +268,41 @@
                           <% end %>                            
                         </span>
                       </div>
-                    </div>                    
+                    </div> 
+                    <% rock.milestones.order(finish: :asc, created_at: :asc).each_with_index do |milestone, index| %>
+                      <div class="view-milestones align-items-center">
+                        <div style="width: 50%;" class="d-flex">
+                          <div class="mx-2"> - </div>
+                          <div><%= milestone.task_name %></div>
+                        </div>
+                        <div style="width: 50%; padding-left:75px;">
+                          <span style="font-size: 12px;">| <i><%= milestone.start.strftime("%b %d,%Y") %> - <%= milestone.finish.strftime("%b %d,%Y") %></i></span>
+                          <span style="font-size: 12px; font-weight: bold;"> |
+                          <%= (milestone.start.to_date..milestone.finish.to_date).count do |date|
+                            date.workday?
+                          end %> <span>days</span>
+                          </span>
+                          <span>| <b style="color: goldenrod;"><%= milestone.complete %>%</b></span>
+                          <span style="font-size: 12px;">| 
+                            <% if milestone.complete == 0 %>
+                              <span style="background-color: silver; padding:0 5px; border-radius:3px;">not started</span>
+                            <% elsif milestone.complete == 100 %>
+                              <span style="background-color: green;padding:0 5px; border-radius:3px;">complete</span>
+                            <% else %>
+                              <span style="background-color: yellow;padding:0 5px; border-radius:3px;">in progress</span>
+                            <% end %>
+                            <% if milestone.complete != 100 %>
+                              <% if milestone.finish >= Date.today %>
+                                <span style="vertical-align: middle;" role="button" title="on track" class="track"><%= image_tag ("blue_circle.png"),style:"width: 15px; margin-bottom:5px"%></span>  
+                              <% else %>
+                                <span role="button" title="off track" class="track"><%= image_tag ("red_circle.png"),style:"width: 16px;margin-bottom:5px"%></span>  
+                              <% end %>                            
+                            <% else %>                            
+                            <% end %>                            
+                          </span>
+                        </div>
+                      </div>
+                    <% end %>                                       
                   <% end %>
                   <% if ProjectWorkspace.find(workspace.id).rocks.where(user_id:User.find_by(email:email).id).where(archived:false).empty? %>
                     <div> - - </div>
@@ -210,16 +315,16 @@
                 <% if !["gsibayan@cem-inc.org.ph","fviceral@cem-inc.org.ph","jpbocatija@cem-inc.org.ph","rmina@cem-inc.org.ph","rcjamilano@cem-inc.org.ph","lvcagadas@cem-inc.org.ph","jcaniedo@cem-inc.org.ph"].include?(email) %>
                   <div><b><%= User.find_by(email:email).first_name %></b></div>
                   <% ProjectWorkspace.find(workspace.id).rocks.order(finish: :asc, created_at: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
-                    <div class="d-flex">
-                      <div style="width: 50%;">
-                        <span><%= index + 1 %>. </span>
+                    <div class="d-flex align-items-center">
+                      <div style="width: 50%;" class="d-flex">
+                        <div class="mx-1"><%= index + 1 %>. </div>
                         <% if current_user.admin == true || current_user.first_name == @scribe || current_user.email == "jpbocatija@cem-inc.org.ph" %>
-                          <span><%= link_to rock.task_name, view_allprojects_path(workspace.id,User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
+                          <span class="rock-task-name"><%= link_to rock.task_name, view_allprojects_path(workspace.id,User.find_by(email:email).id,{rock_id:rock.id}),target:"_blank",class:"rock-link" %></span>
                         <% else %>
-                          <span><%= rock.task_name %></span>
+                          <span class="rock-task-name"><%= rock.task_name %></span>
                         <% end %>                        
                       </div>
-                      <div style="width: 50%;">
+                      <div style="width: 50%; padding-left:75px;">
                         <span style="font-size: 12px;">| <i><%= rock.start.strftime("%b %d,%Y") %> - <%= rock.finish.strftime("%b %d,%Y") %></i></span>
                         <span style="font-size: 12px; font-weight: bold;"> |
                         <%= (rock.start.to_date..rock.finish.to_date).count do |date|
@@ -245,7 +350,41 @@
                           <% end %>                           
                         </span>
                       </div>
-                    </div>                    
+                    </div> 
+                    <% rock.milestones.order(finish: :asc, created_at: :asc).each_with_index do |milestone, index| %>
+                      <div class="view-milestones align-items-center">
+                        <div style="width: 50%;" class="d-flex">
+                          <div class="mx-2"> - </div>
+                          <div><%= milestone.task_name %></div>
+                        </div>
+                        <div style="width: 50%; padding-left:75px;">
+                          <span style="font-size: 12px;">| <i><%= milestone.start.strftime("%b %d,%Y") %> - <%= milestone.finish.strftime("%b %d,%Y") %></i></span>
+                          <span style="font-size: 12px; font-weight: bold;"> |
+                          <%= (milestone.start.to_date..milestone.finish.to_date).count do |date|
+                            date.workday?
+                          end %> <span>days</span>
+                          </span>
+                          <span>| <b style="color: goldenrod;"><%= milestone.complete %>%</b></span>
+                          <span style="font-size: 12px;">| 
+                            <% if milestone.complete == 0 %>
+                              <span style="background-color: silver; padding:0 5px; border-radius:3px;">not started</span>
+                            <% elsif milestone.complete == 100 %>
+                              <span style="background-color: green;padding:0 5px; border-radius:3px;">complete</span>
+                            <% else %>
+                              <span style="background-color: yellow;padding:0 5px; border-radius:3px;">in progress</span>
+                            <% end %>
+                            <% if milestone.complete != 100 %>
+                              <% if milestone.finish >= Date.today %>
+                                <span style="vertical-align: middle;" role="button" title="on track" class="track"><%= image_tag ("blue_circle.png"),style:"width: 15px; margin-bottom:5px"%></span>  
+                              <% else %>
+                                <span role="button" title="off track" class="track"><%= image_tag ("red_circle.png"),style:"width: 16px;margin-bottom:5px"%></span>  
+                              <% end %>                            
+                            <% else %>                            
+                            <% end %>                            
+                          </span>
+                        </div>
+                      </div>
+                    <% end %>                                       
                   <% end %>
                   <% if ProjectWorkspace.find(workspace.id).rocks.where(user_id:User.find_by(email:email).id).where(archived:false).empty? %>
                     <div> - - </div>

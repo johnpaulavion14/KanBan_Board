@@ -69,7 +69,7 @@
               <% if email == "lvcagadas@cem-inc.org.ph" %>
                 <div><b><%= User.find_by(email:email).first_name %></b></div>
                 <% ProjectWorkspace.find(params[:ws_id]).rocks.order(finish: :asc, created_at: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
-                  <div class="d-flex">
+                  <div class="d-flex align-items-center">
                     <div style="width: 50%;">
                       <span><%= index + 1 %>. </span>
                       <% if current_user.admin == true || current_user.first_name == @scribe || current_user.email == "jpbocatija@cem-inc.org.ph" %>
@@ -107,9 +107,10 @@
                   </div>
                   <!-- Milestones-->
                   <% rock.milestones.order(finish: :asc, created_at: :asc).each_with_index do |milestone, index| %>
-                    <div class="view-milestones">
-                      <div style="width: 50%;">
-                        <span> - <%= milestone.task_name %></span>
+                    <div class="view-milestones align-items-center">
+                      <div style="width: 50%;" class="d-flex">
+                        <div class="mx-2"> - </div>
+                        <div><%= milestone.task_name %></div>
                       </div>
                       <div style="width: 50%;">
                         <span style="font-size: 12px;">| <i><%= milestone.start.strftime("%b %d,%Y") %> - <%= milestone.finish.strftime("%b %d,%Y") %></i></span>
@@ -155,7 +156,7 @@
                 <div><b><%= User.find_by(email:email).first_name %></b></div>
                 <!-- Rocks-->
                 <% ProjectWorkspace.find(params[:ws_id]).rocks.order(finish: :asc, created_at: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
-                  <div class="d-flex">
+                  <div class="d-flex align-items-center">
                     <div style="width: 50%;">
                       <span><%= index + 1 %>. </span>
                       <% if current_user.admin == true || current_user.first_name == @scribe || current_user.email == "jpbocatija@cem-inc.org.ph" %>
@@ -193,9 +194,10 @@
                   </div> 
                   <!-- Milestones-->
                   <% rock.milestones.order(finish: :asc, created_at: :asc).each_with_index do |milestone, index| %>
-                    <div class="view-milestones">
-                      <div style="width: 50%;">
-                        <span> - <%= milestone.task_name %></span>
+                    <div class="view-milestones align-items-center">
+                      <div style="width: 50%;" class="d-flex">
+                        <div class="mx-2"> - </div>
+                        <div><%= milestone.task_name %></div>
                       </div>
                       <div style="width: 50%;">
                         <span style="font-size: 12px;">| <i><%= milestone.start.strftime("%b %d,%Y") %> - <%= milestone.finish.strftime("%b %d,%Y") %></i></span>
@@ -240,7 +242,7 @@
                 <div><b><%= User.find_by(email:email).first_name %></b></div>
                 <!-- Rocks-->
                 <% ProjectWorkspace.find(params[:ws_id]).rocks.order(finish: :asc, created_at: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
-                  <div class="d-flex">
+                  <div class="d-flex align-items-center">
                     <div style="width: 50%;">
                       <span><%= index + 1 %>. </span>
                       <% if current_user.admin == true || current_user.first_name == @scribe || current_user.email == "jpbocatija@cem-inc.org.ph" %>
@@ -278,9 +280,10 @@
                   </div> 
                     <!-- Milestones-->
                   <% rock.milestones.order(finish: :asc, created_at: :asc).each_with_index do |milestone, index| %>
-                    <div class="view-milestones">
-                      <div style="width: 50%;">
-                        <span> - <%= milestone.task_name %></span>
+                    <div class="view-milestones align-items-center">
+                      <div style="width: 50%;" class="d-flex">
+                        <div class="mx-2"> - </div>
+                        <div><%= milestone.task_name %></div>
                       </div>
                       <div style="width: 50%;">
                         <span style="font-size: 12px;">| <i><%= milestone.start.strftime("%b %d,%Y") %> - <%= milestone.finish.strftime("%b %d,%Y") %></i></span>
@@ -323,7 +326,7 @@
                 <div><b><%= User.find_by(email:email).first_name %></b></div>
                 <!-- Rocks-->
                 <% ProjectWorkspace.find(params[:ws_id]).rocks.order(finish: :asc, created_at: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
-                  <div class="d-flex">
+                  <div class="d-flex align-items-center">
                     <div style="width: 50%;">
                       <span><%= index + 1 %>. </span>
                       <% if current_user.admin == true || current_user.first_name == @scribe || current_user.email == "jpbocatija@cem-inc.org.ph" %>
@@ -361,9 +364,10 @@
                   </div> 
                   <!-- Milestones-->
                   <% rock.milestones.order(finish: :asc, created_at: :asc).each_with_index do |milestone, index| %>
-                    <div class="view-milestones">
-                      <div style="width: 50%;">
-                        <span> - <%= milestone.task_name %></span>
+                    <div class="view-milestones align-items-center">
+                      <div style="width: 50%;" class="d-flex">
+                        <div class="mx-2"> - </div>
+                        <div><%= milestone.task_name %></div>
                       </div>
                       <div style="width: 50%;">
                         <span style="font-size: 12px;">| <i><%= milestone.start.strftime("%b %d,%Y") %> - <%= milestone.finish.strftime("%b %d,%Y") %></i></span>

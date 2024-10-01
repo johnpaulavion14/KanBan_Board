@@ -286,6 +286,7 @@
         $(".rocks-navbar").addClass("btn-outline-info")
         $(this).removeClass("btn-outline-info")
         $(this).addClass("btn-info")
+
       })
     })
     $('.rocks-navbar').last().removeClass("btn-outline-info")
@@ -363,6 +364,16 @@
         $('#scribe-todo-form').attr('action', newAction);
       });
     }); 
+
+  // ---------------Scibe ROCK Section-------------------
+    $(".view-milestones").hide()
+    $(".expand-rocks").click(function(){
+      $(".view-milestones").toggleClass("d-flex")
+      $(".view-milestones").toggle()
+      $(".rock-task-name").toggleClass("rock-task-name-bold");
+    });
+
+    //-----------------------------------------------------------------------------------------
  
     // Addlist feature
     $(".clickAddList").click(function(){
