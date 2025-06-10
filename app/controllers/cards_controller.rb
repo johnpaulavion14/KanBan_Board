@@ -12,9 +12,13 @@ class CardsController < ApplicationController
     @scribe = HostScribe.where('date <= ?',Date.today) == [] ? "" : HostScribe.where('date <= ?',Date.today).order("date asc").last.scribe
 
     # Attendance
-    @attendance_view = @cards.where(card_title:"Attendance").last.addcards.last.desc.to_s.gsub(/\n/, '<br/>').html_safe
+    # @attendance_view = @cards.where(card_title:"Attendance").last.addcards.last.desc.to_s.gsub(/\n/, '<br/>').html_safe
+    @attendance_view = (@cards.where(card_title: "Attendance").last&.addcards&.last&.desc.to_s.gsub(/\n/, '<br>') || "").html_safe
+
     # Segue
-    @segue_view = @cards.where("card_title ILIKE ?", "%segue%").last.addcards.last.desc.to_s.gsub(/\n/, '<br/>').html_safe
+    # @segue_view = @cards.where("card_title ILIKE ?", "%segue%").last.addcards.last.desc.to_s.gsub(/\n/, '<br/>').html_safe
+    @segue_view = (@cards.where("card_title ILIKE ?", "%segue%").last&.addcards&.last&.desc.to_s.gsub(/\n/, '<br>') || "").html_safe
+
     #Rocks
     @workspace_head = ["lvcagadas@cem-inc.org.ph"]
     @workspace_isu = ["rcjamilano@cem-inc.org.ph", "rmina@cem-inc.org.ph", "jpbocatija@cem-inc.org.ph"]
@@ -31,23 +35,36 @@ class CardsController < ApplicationController
     end
     @scribe = HostScribe.where('date <= ?',Date.today) == [] ? "" : HostScribe.where('date <= ?',Date.today).order("date asc").last.scribe
     # Headlines
-    @headlines_view = @cards.where("card_title ILIKE ?", "%headlines%").last.addcards.last.desc.to_s.gsub(/\n/, '<br/>').html_safe
+    # @headlines_view = @cards.where("card_title ILIKE ?", "%headlines%").last.addcards.last.desc.to_s.gsub(/\n/, '<br/>').html_safe
+    @headlines_view = (@cards.where("card_title ILIKE ?", "%headlines%").last&.addcards&.last&.desc.to_s.gsub(/\n/, '<br/>') || "").html_safe
+
 
     # Todo
-    @todo_addcard = @cards.where("card_title ILIKE ?", "todo's").last.addcards.last
-    @todo_list = @todo_addcard.todos.order("created_at asc")
+    # @todo_addcard = @cards.where("card_title ILIKE ?", "todo's").last.addcards.last
+    @todo_addcard = @cards.where("card_title ILIKE ?", "todo's").last&.addcards&.last
+
+    # @todo_list = @todo_addcard.todos.order("created_at asc")
+    @todo_list = @todo_addcard&.todos&.order("created_at asc") || []
     # IDS
-    @ids_addcard = @cards.where("card_title ILIKE ?", "ids").last.addcards.last
-    @ids_list = @ids_addcard.identifies.order("created_at asc")
-    @ids_card_id = @cards.where("card_title ILIKE ?", "ids").last.id
-    @ids_addcard_id = @cards.where("card_title ILIKE ?", "ids").last.addcards.last.id
+    # @ids_addcard = @cards.where("card_title ILIKE ?", "ids").last.addcards.last
+    @ids_addcard = @cards.where("card_title ILIKE ?", "ids").last&.addcards&.last
+
+    # @ids_list = @ids_addcard.identifies.order("created_at asc")
+    @ids_list = @ids_addcard&.identifies&.order("created_at asc") || []
+
+    # @ids_card_id = @cards.where("card_title ILIKE ?", "ids").last.id
+    @ids_card_id = @cards.where("card_title ILIKE ?", "ids").last&.id
+    # @ids_addcard_id = @cards.where("card_title ILIKE ?", "ids").last.addcards.last.id
+    @ids_addcard_id = @cards.where("card_title ILIKE ?", "ids").last&.addcards&.last&.id
 
 
     #Conclusion
     #names must not have spaces
     @conclusion_lists = ["Larry","Ralph","JohnPaul","George","Jess","Reyn","Vice"].shuffle()
-    @conclusion_card_id = @cards.where("card_title ILIKE ?", "conclusion").last.id
-    @conclusion_addcard_id = @cards.where("card_title ILIKE ?", "conclusion").last.addcards.last.id
+    # @conclusion_card_id = @cards.where("card_title ILIKE ?", "conclusion").last.id
+    @conclusion_card_id = @cards.where("card_title ILIKE ?", "conclusion").last&.id
+    # @conclusion_addcard_id = @cards.where("card_title ILIKE ?", "conclusion").last.addcards.last.id
+    @conclusion_addcard_id = @cards.where("card_title ILIKE ?", "conclusion").last&.addcards&.last&.id
   end
 
   # GET /cards/1 or /cards/1.json
