@@ -60,7 +60,7 @@ class CardsController < ApplicationController
 
     #Conclusion
     #names must not have spaces
-    @conclusion_lists = ["Larry","Ralph","JohnPaul","George","Jess","Reyn","Vice"].shuffle()
+    @conclusion_lists = ["Larry","Ralph","JohnPaul","George","Jess","Reyn","Vice","Aldwin"].shuffle()
     # @conclusion_card_id = @cards.where("card_title ILIKE ?", "conclusion").last.id
     @conclusion_card_id = @cards.where("card_title ILIKE ?", "conclusion").last&.id
     # @conclusion_addcard_id = @cards.where("card_title ILIKE ?", "conclusion").last.addcards.last.id

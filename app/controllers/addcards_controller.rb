@@ -34,7 +34,7 @@ class AddcardsController < ApplicationController
       end
     end
     #names must not have spaces
-    @conclusion_lists = ["Larry","Ralph","JohnPaul","George","Jess","Reyn","Vice"].shuffle()
+    @conclusion_lists = ["Larry","Ralph","JohnPaul","George","Jess","Reyn","Vice","Aldwin"].shuffle()
     #Host and Scribe
     @hostscribe_date = Addcard.find(params[:id]).host_scribes.pluck(:date)
     @hosts_list = Addcard.find(params[:id]).host_scribes.pluck(:host)
@@ -216,7 +216,7 @@ class AddcardsController < ApplicationController
   def update_conclusion
     desc = ""
     params_value = params[:addcard]
-    average = (params_value["JohnPaul 3"].to_i + params_value["Jess 3"].to_i + params_value["Vice 3"].to_i  + params_value["Larry 3"].to_i  + params_value["George 3"].to_i  + params_value["Reyn 3"].to_i  + params_value["Ralph 3"].to_i) / 7.00
+    average = (params_value["JohnPaul 3"].to_i + params_value["Jess 3"].to_i + params_value["Vice 3"].to_i  + params_value["Larry 3"].to_i  + params_value["George 3"].to_i  + params_value["Reyn 3"].to_i  + params_value["Ralph 3"].to_i + params_value["Aldwin 3"].to_i) / 8.00
     average_score= "<div class='btn btn-success' style='font-weight:bold'>" + "AVERAGE SCORE = " + sprintf('%.2f', average) + "</div>"
     jp = "John Paul - " + params_value["JohnPaul 0"] + ", " + params_value["JohnPaul 1"] + ", " + params_value["JohnPaul 2"] + " = " + params_value["JohnPaul 3"] + "\n"
     jess = "Jess - " + params_value["Jess 0"] + ", " + params_value["Jess 1"] + ", " + params_value["Jess 2"] + " = " + params_value["Jess 3"] + "\n"
@@ -225,6 +225,7 @@ class AddcardsController < ApplicationController
     george = "George - " + params_value["George 0"] + ", " + params_value["George 1"] + ", " + params_value["George 2"] + " = " + params_value["George 3"] + "\n"
     reyn = "Reyn - " + params_value["Reyn 0"] + ", " + params_value["Reyn 1"] + ", " + params_value["Reyn 2"] + " = " + params_value["Reyn 3"] + "\n"
     ralph = "Ralph - " + params_value["Ralph 0"] + ", " + params_value["Ralph 1"] + ", " + params_value["Ralph 2"] + " = " + params_value["Ralph 3"] + "\n"
+    aldwin = "Aldwin - " + params_value["Aldwin 0"] + ", " + params_value["Aldwin 1"] + ", " + params_value["Aldwin 2"] + " = " + params_value["Aldwin 3"] + "\n"
     params_value[:conclusion_lists].split(" ").each do |name|
       case 
         when name == "JohnPaul"
@@ -241,6 +242,8 @@ class AddcardsController < ApplicationController
           desc += george
         when name == "Jess"
           desc += jess
+        when name == "Aldwin"
+          desc += aldwin
         else
       end
     end
