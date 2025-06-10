@@ -322,7 +322,7 @@
             <hr style="margin: 2px 0;"> 
             <!-- Other Members -->
             <% ProjectWorkspace.find(params[:ws_id]).assigned.each do |email| %>
-              <% if !["gsibayan@cem-inc.org.ph","fviceral@cem-inc.org.ph","jpbocatija@cem-inc.org.ph","rmina@cem-inc.org.ph","rcjamilano@cem-inc.org.ph","lvcagadas@cem-inc.org.ph","jcaniedo@cem-inc.org.ph"].include?(email) %>
+              <% if !["gsibayan@cem-inc.org.ph","fviceral@cem-inc.org.ph","jpbocatija@cem-inc.org.ph","rmina@cem-inc.org.ph","rcjamilano@cem-inc.org.ph","lvcagadas@cem-inc.org.ph","jcaniedo@cem-inc.org.ph","acalilong@cem-inc.org.ph"].include?(email) %>
                 <div><b><%= User.find_by(email:email).first_name %></b></div>
                 <!-- Rocks-->
                 <% ProjectWorkspace.find(params[:ws_id]).rocks.order(finish: :asc, created_at: :asc).where(user_id:User.find_by(email:email).id).where(archived:false).each_with_index do |rock, index| %>
