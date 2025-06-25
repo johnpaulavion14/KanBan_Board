@@ -28,6 +28,15 @@ development:
   password: asdf
   host: localhost
 
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: kanban_board_production
+  pool: 5
+  username: postgres
+  password: asdf
+  host: localhost
+  port: 5432
 # development:
 #   adapter: postgresql
 #   encoding: unicode
