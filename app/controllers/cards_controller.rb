@@ -21,7 +21,7 @@ class CardsController < ApplicationController
 
     #Rocks
     @workspace_head = ["lvcagadas@cem-inc.org.ph"]
-    @workspace_isu = ["rcjamilano@cem-inc.org.ph", "rmina@cem-inc.org.ph", "jpbocatija@cem-inc.org.ph"]
+    @workspace_isu = ["acalilong@cem-inc.org.ph","rcjamilano@cem-inc.org.ph", "rmina@cem-inc.org.ph", "jpbocatija@cem-inc.org.ph"]
     @workspace_nssu = ["gsibayan@cem-inc.org.ph", "fviceral@cem-inc.org.ph","jcaniedo@cem-inc.org.ph"]
     if params[:ws_id]
       ProjectWorkspace.find(params[:ws_id]).assigned.each do |user|

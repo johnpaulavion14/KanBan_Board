@@ -36,7 +36,7 @@
         <!-- Segue -->
         <% if params[:scribe_section_view] == "segue" %>
           <div class="d-flex justify-content-center">
-            <div class="mt-5" style="max-width: 70%;min-width: 50%;">
+            <div class="mt-5" style="max-width: 80%;min-width: 80%;font-size: 30px;">
               <div class="h3 fw-bolder text-center text-decoration-underline mb-3">Intro/Segue</div>
               <div class="rounded-2 bg-light py-3 px-5" style="height: 600px; overflow-y: auto;">
                 <div><%= raw(@segue_view.gsub('<br/>', '<br/><br/>'))%></div>
@@ -54,7 +54,7 @@
             <% end %>
           </div>
           <% ProjectWorkspace.order("created_at asc").all.each_with_index do |workspace,rock_index| %>
-            <div style="margin-bottom: 5rem; width: 100%;" class="d-none rocks-content-<%= rock_index %> rock-content w3-animate-top">
+            <div style="margin-bottom: 5rem; width: 100%; font-size: 20px;" class="d-none rocks-content-<%= rock_index %> rock-content w3-animate-top">
               <!-- Head -->
               <div class="d-flex justify-content-between align-items-center">
                 <h5><b>* Head *</b></h5>
@@ -74,7 +74,7 @@
                           <span class="rock-task-name"><%= rock.task_name %></span>
                         <% end %>
                       </div>
-                      <div style="width: 50%; padding-left:75px;">
+                      <div style="width: 50%; padding-left:40px;">
                         <span style="font-size: 12px;">| <i><%= rock.start.strftime("%b %d,%Y") %> - <%= rock.finish.strftime("%b %d,%Y") %></i></span>
                         <span style="font-size: 12px; font-weight: bold;"> |
                         <%= (rock.start.to_date..rock.finish.to_date).count do |date|
@@ -107,7 +107,7 @@
                           <div class="mx-2"> - </div>
                           <div><%= milestone.task_name %></div>
                         </div>
-                        <div style="width: 50%; padding-left:75px;">
+                        <div style="width: 50%; padding-left:40px;">
                           <span style="font-size: 12px;">| <i><%= milestone.start.strftime("%b %d,%Y") %> - <%= milestone.finish.strftime("%b %d,%Y") %></i></span>
                           <span style="font-size: 12px; font-weight: bold;"> |
                           <%= (milestone.start.to_date..milestone.finish.to_date).count do |date|
@@ -158,7 +158,7 @@
                           <span class="rock-task-name"><%= rock.task_name %></span>
                         <% end %>                        
                       </div>
-                      <div style="width: 50%;padding-left:75px;">
+                      <div style="width: 50%;padding-left:40px;">
                         <span style="font-size: 12px;">| <i><%= rock.start.strftime("%b %d,%Y") %> - <%= rock.finish.strftime("%b %d,%Y") %></i></span>
                         <span style="font-size: 12px; font-weight: bold;"> |
                         <%= (rock.start.to_date..rock.finish.to_date).count do |date|
@@ -191,7 +191,7 @@
                           <div class="mx-2"> - </div>
                           <div><%= milestone.task_name %></div>
                         </div>
-                        <div style="width: 50%; padding-left:75px;">
+                        <div style="width: 50%; padding-left:40px;">
                           <span style="font-size: 12px;">| <i><%= milestone.start.strftime("%b %d,%Y") %> - <%= milestone.finish.strftime("%b %d,%Y") %></i></span>
                           <span style="font-size: 12px; font-weight: bold;"> |
                           <%= (milestone.start.to_date..milestone.finish.to_date).count do |date|
@@ -242,7 +242,7 @@
                           <span class="rock-task-name"><%= rock.task_name %></span>
                         <% end %>
                       </div>
-                      <div style="width: 50%; padding-left:75px;">
+                      <div style="width: 50%; padding-left:40px;">
                         <span style="font-size: 12px;">| <i><%= rock.start.strftime("%b %d,%Y") %> - <%= rock.finish.strftime("%b %d,%Y") %></i></span>
                         <span style="font-size: 12px; font-weight: bold;"> |
                         <%= (rock.start.to_date..rock.finish.to_date).count do |date|
@@ -275,7 +275,7 @@
                           <div class="mx-2"> - </div>
                           <div><%= milestone.task_name %></div>
                         </div>
-                        <div style="width: 50%; padding-left:75px;">
+                        <div style="width: 50%; padding-left:40px;">
                           <span style="font-size: 12px;">| <i><%= milestone.start.strftime("%b %d,%Y") %> - <%= milestone.finish.strftime("%b %d,%Y") %></i></span>
                           <span style="font-size: 12px; font-weight: bold;"> |
                           <%= (milestone.start.to_date..milestone.finish.to_date).count do |date|
@@ -324,7 +324,7 @@
                           <span class="rock-task-name"><%= rock.task_name %></span>
                         <% end %>                        
                       </div>
-                      <div style="width: 50%; padding-left:75px;">
+                      <div style="width: 50%; padding-left:40px;">
                         <span style="font-size: 12px;">| <i><%= rock.start.strftime("%b %d,%Y") %> - <%= rock.finish.strftime("%b %d,%Y") %></i></span>
                         <span style="font-size: 12px; font-weight: bold;"> |
                         <%= (rock.start.to_date..rock.finish.to_date).count do |date|
@@ -357,7 +357,7 @@
                           <div class="mx-2"> - </div>
                           <div><%= milestone.task_name %></div>
                         </div>
-                        <div style="width: 50%; padding-left:75px;">
+                        <div style="width: 50%; padding-left:40px;">
                           <span style="font-size: 12px;">| <i><%= milestone.start.strftime("%b %d,%Y") %> - <%= milestone.finish.strftime("%b %d,%Y") %></i></span>
                           <span style="font-size: 12px; font-weight: bold;"> |
                           <%= (milestone.start.to_date..milestone.finish.to_date).count do |date|
@@ -396,7 +396,7 @@
         <!-- Headlines -->
         <% elsif params[:scribe_section_view] == "headline"%>
           <div class="d-flex justify-content-center">
-            <div class="mt-2" style="max-width: 70%;min-width: 50%;">
+            <div class="mt-2" style="max-width: 70%;min-width: 50%;font-size: 30px;">
               <div class="h3 fw-bolder text-center text-decoration-underline mb-3">People Headlines</div>
               <div class="rounded-2 bg-light py-3 px-5" style="height: 650px; overflow-y: auto;">
                 <div><%= raw(@headlines_view.gsub('<br/>', '<br/><br/>'))%></div>
@@ -420,7 +420,7 @@
             </div>
           <% end %>
         </div>
-          <div class="px-5 mt-2">
+          <div class="px-5 mt-2" style="font-size: 20px;">
             <div class="h3 fw-bolder text-center text-decoration-underline mb-3">Todo's</div>
             <div class="rounded-2 bg-light p-3" style="height: 650px; overflow-y: auto;">
               <% User.all.each do |user| %>
@@ -433,7 +433,7 @@
                     <% if user.id == list.user_id  %>
                       <div class="d-flex justify-content-between align-items-center task-date">
                         <div class="task-section d-flex justify-content-between w-100">
-                          <div class="d-flex align-items-start">
+                          <div class="d-flex align-items-center">
                             <input disabled type="checkbox" id="myCheckbox<%= list.id %>" class="check-boxes <%= list.id %> mx-2" style="margin-top:6px;" role="button" <%= list.done ? 'checked':'' %>>
                             <label class="<%= list.done ? 'text-decoration-line-through' : '' %> scribe-task-text" role="button"><%= list.task %></label> 
                             <div class="d-none"><%= list.id %></div> 
@@ -458,7 +458,7 @@
           </div>
         <!-- IDS -->
         <% elsif params[:scribe_section_view] == "ids"%>
-          <div class="px-5">
+          <div class="px-5" style="font-size: 20px;">
             <div class="h3 fw-bolder text-center text-decoration-underline mb-3">IDS</div>
             <div class="rounded-2 bg-light p-3" style="height: 650px; overflow-y: auto;">
               <% User.all.each do |user| %>
@@ -467,7 +467,7 @@
                   <% if user.id == list.user_id  %>
                     <div class="d-flex justify-content-between ids-list">
                       <div class="task-section d-flex justify-content-between w-100">
-                        <div class="d-flex align-items-start">
+                        <div class="d-flex align-items-center">
                           <input type="checkbox" class="identify-check-boxes <%= list.id %> mx-2" style="margin-top:6px;" role="button" <%= current_user.id == list.user_id ? '':'disabled' %> <%= list.done ? 'checked':'' %>>
                           <label class="<%= list.done ? 'text-decoration-line-through' : '' %> solution-text" role="button"><%= list.task %></label> 
                         </div>
@@ -498,12 +498,12 @@
           </div>
         <!-- Conclusion -->
         <% elsif params[:scribe_section_view] == "conclusion"%>
-          <div class="px-5">
+          <div class="px-5" style="font-size: 20px;">
             <div class="h3 fw-bolder text-center text-decoration-underline mb-3">Conclusion</div>
             <div class="rounded-2 bg-light p-3">
               <%= form_with scope: :addcard, url:update_conclusion_path(card_id:@conclusion_card_id,id:@conclusion_addcard_id,from:"scribe_view"),class:"conclusion-scribe-form", method: :patch, local:true do |form| %>
                 <%= form.hidden_field :conclusion_lists, value: @conclusion_lists %>
-                <div style="border:1px solid black; width:80%; padding:1rem; padding-left:3.5rem" class="m-auto">
+                <div style="border:1px solid black; width:90%; padding:1rem;" class="m-auto">
                   <% @conclusion_lists.each do |user| %>
                     <div class="mb-2 d-flex">
                       <div style="width:80px"><b><%= user %>:</b></div>
